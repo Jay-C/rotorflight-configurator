@@ -552,8 +552,6 @@ TABS.pid_tuning.initialize = function (callback) {
         } else {
             $('.vbatSagCompensation').hide();
             $('.thrustLinearization').hide();
-            $('.feedforwardMaxRateLimit').hide();
-            $('.feedforwardJitterFactor').hide();
 
             if (semver.gte(FC.CONFIG.apiVersion, API_VERSION_1_40)) {
                 $('.pid_tuning .ROLL input[name="f"]').val(FC.ADVANCED_TUNING.feedforwardRoll > 0 ? FC.ADVANCED_TUNING.feedforwardRoll : PID_DEFAULT[4]);
