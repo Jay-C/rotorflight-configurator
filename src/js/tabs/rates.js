@@ -1,8 +1,6 @@
 'use strict';
 
 TABS.rates = {
-    dirty: false,
-    updating: true,
     activeSubtab: null,
     currentRateProfile: null,
     currentRatesType: null,
@@ -175,6 +173,9 @@ TABS.rates.initialize = function (callback) {
 
     function process_html() {
 
+        // Hide the buttons toolbar
+        $('.tab-rates').addClass('toolbar_hidden');
+
         // translate to user-selected language
         i18n.localizePage();
 
@@ -182,10 +183,8 @@ TABS.rates.initialize = function (callback) {
 
         function activateRateProfile(profile) {
             FC.CONFIG.rateProfile = profile;
-            self.updating = true;
             MSP.promise(MSPCodes.MSP_SELECT_SETTING, [profile + self.RATE_PROFILE_MASK]).then(function () {
                 self.refresh(function () {
-                    self.updating = false;
                     GUI.log(i18n.getMessage('rateSetupActivateProfile', [profile + 1]));
                 });
             });
@@ -193,6 +192,15 @@ TABS.rates.initialize = function (callback) {
 
 
         // UI Hooks
+
+        let toolbarHidden = true;
+
+        function showToolbar() {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-rates').removeClass('toolbar_hidden');
+            }
+        }
 
         self.TAB_NAMES.forEach(function(element, index) {
             $('.tab-rates .tab-container .' + element).on('click', () => activateRateProfile(index));
@@ -303,52 +311,48 @@ TABS.rates.initialize = function (callback) {
             });
         });
 
-        $('a.refresh').click(function () {
-            self.refresh(function () {
+        $('.subtab-rates').change(function () {
+            showToolbar();
+        });
+
+        $('a.revert').click(function () {
+            self.refresh(() => {
                 GUI.log(i18n.getMessage('rateSetupDataRefreshed'));
             });
         });
 
-        // update == save.
-        $('a.update').click(function () {
+        $('a.save').click(function () {
             form_to_data();
-            self.updating = true;
-            Promise.resolve(true).then(function () {
-                return MSP.promise(MSPCodes.MSP_SET_PID_ADVANCED, mspHelper.crunch(MSPCodes.MSP_SET_PID_ADVANCED));
-            }).then(function () {
-                return MSP.promise(MSPCodes.MSP_SET_RC_TUNING, mspHelper.crunch(MSPCodes.MSP_SET_RC_TUNING));
-            }).then(function () {
-                return MSP.promise(MSPCodes.MSP_EEPROM_WRITE);
-            }).then(function () {
-                self.updating = false;
-                self.setDirty(false);
-                GUI.log(i18n.getMessage('rateSetupEepromSaved'));
-                self.refresh();
-            });
+            Promise.resolve(true)
+                .then(() => MSP.promise(MSPCodes.MSP_SET_PID_ADVANCED, mspHelper.crunch(MSPCodes.MSP_SET_PID_ADVANCED)))
+                .then(() => MSP.promise(MSPCodes.MSP_SET_RC_TUNING, mspHelper.crunch(MSPCodes.MSP_SET_RC_TUNING)))
+                .then(() => MSP.promise(MSPCodes.MSP_EEPROM_WRITE))
+                .then(() => {
+                    GUI.log(i18n.getMessage('eepromSaved'));
+                    self.refresh();
+                });
         });
 
         // Setup model for rates preview
         self.initRatesPreview();
         self.renderModel();
 
-        self.updating = false;
+        function getStatusData() {
+            MSP.send_message(MSPCodes.MSP_STATUS, false, false);
+        }
+
+        function getReceiverData() {
+            MSP.send_message(MSPCodes.MSP_RC, false, false);
+        }
 
         // enable RC data pulling for rates preview
-        GUI.interval_add('receiver_pull', self.getReceiverData, true);
+        GUI.interval_add('receiver_pull', getReceiverData, true);
 
         // status data pulled via separate timer with static speed
-        GUI.interval_add('status_pull', self.getStatusData, 250, true);
+        GUI.interval_add('status_pull', getStatusData, 250, true);
 
         GUI.content_ready(callback);
     }
-};
-
-TABS.rates.getStatusData = function () {
-    MSP.send_message(MSPCodes.MSP_STATUS, false, false);
-};
-
-TABS.rates.getReceiverData = function () {
-    MSP.send_message(MSPCodes.MSP_RC, false, false);
 };
 
 TABS.rates.initRatesPreview = function () {
@@ -433,26 +437,8 @@ TABS.rates.refresh = function (callback) {
 
     GUI.tab_switch_cleanup(function () {
         self.initialize();
-        self.setDirty(false);
         if (callback) callback();
     });
-};
-
-TABS.rates.setDirty = function (isDirty) {
-    const self = this;
-    self.dirty = isDirty;
-};
-
-TABS.rates.checkUpdateProfile = function (updateRateProfile) {
-    const self = this;
-
-    if (GUI.active_tab === 'rates') {
-        if (!self.updating && !self.dirty) {
-            if (updateRateProfile && self.currentRateProfile !== FC.CONFIG.rateProfile) {
-                self.refresh();
-            }
-        }
-    }
 };
 
 TABS.rates.checkRC = function() {
@@ -895,9 +881,6 @@ TABS.rates.initRatesSystem = function() {
     rc_rate_input_c.attr({"max":rcRateMax, "min":rcRateMin, "step":rcRateStep}).change();
     rate_input_c.attr({"max":rateMax, "min":rateMin, "step":rateStep}).change();
     expo_input_c.attr({"max":expoMax, "min":expoMin, "step":expoStep}).change();
-
-    if (self.previousRatesType === self.currentRatesType)
-        self.setDirty(false);
 
     self.previousRatesType = self.currentRatesType;
 };
