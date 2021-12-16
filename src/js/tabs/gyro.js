@@ -1,8 +1,6 @@
 'use strict';
 
 TABS.gyro = {
-    dirty: false,
-    updating: true,
     FILTER_TYPE_NAMES: [
         "PT1",
         "BIQUAD",
@@ -368,8 +366,22 @@ TABS.gyro.initialize = function (callback) {
 
     function process_html() {
 
+        // Hide the buttons toolbar
+        $('.tab-gyro').addClass('toolbar_hidden');
+
         // translate to user-selected language
         i18n.localizePage();
+
+        // UI Hooks
+
+        let toolbarHidden = true;
+
+        function showToolbar() {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-gyro').removeClass('toolbar_hidden');
+            }
+        }
 
         function populateFilterTypeSelector(name, selectValues) {
             const filterSelect = $('select[name="' + name + '"]');
@@ -398,43 +410,29 @@ TABS.gyro.initialize = function (callback) {
         data_to_form();
 
 
-        // UI Hooks
+        $('.gyro_filter').change(function () {
+            showToolbar();
+        });
 
-        $('a.refresh').click(function () {
+        $('a.revert').click(function () {
             self.refresh(function () {
                 GUI.log(i18n.getMessage('gyroDataRefreshed'));
             });
         });
 
-        $('.gyro_filter').find('input').each(function (k, item) {
-            $(item).change(function () {
-                self.dirty = true;
-            });
-        });
-
-        $('a.update').click(function () {
+        $('a.save').click(function () {
             form_to_data();
-            self.updating = true;
-            Promise.resolve(true).then(function () {
-                return MSP.promise(MSPCodes.MSP_SET_FILTER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FILTER_CONFIG));
-            }).then(function () {
-                return MSP.promise(MSPCodes.MSP_EEPROM_WRITE);
-            }).then(function () {
-                self.updating = false;
-                self.dirty = false;
-                GUI.log(i18n.getMessage('gyroEepromSaved'));
-                self.refresh();
-            });
+            Promise.resolve(true)
+                .then(() => MSP.promise(MSPCodes.MSP_SET_FILTER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FILTER_CONFIG)))
+                .then(() => MSP.promise(MSPCodes.MSP_EEPROM_WRITE))
+                .then(() => {
+                    GUI.log(i18n.getMessage('eepromSaved'));
+                    self.refresh();
+                });
         });
-
-        self.updating = false;
 
         GUI.content_ready(callback);
     }
-
-    function status_pull() {
-    }
-
 };
 
 
@@ -449,7 +447,6 @@ TABS.gyro.refresh = function (callback) {
 
     GUI.tab_switch_cleanup(function () {
         self.initialize();
-        self.dirty = false;
         if (callback) callback();
     });
 };
