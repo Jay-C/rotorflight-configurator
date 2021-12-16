@@ -25,6 +25,21 @@ TABS.servos.initialize = function (callback) {
 
     function process_html() {
 
+        // Hide the buttons toolbar
+        $('.tab-servos').addClass('toolbar_hidden');
+
+        // translate to user-selected language
+        i18n.localizePage();
+
+        let toolbarHidden = true;
+
+        function showToolbar() {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-servos').removeClass('toolbar_hidden');
+            }
+        }
+
         function process_override(servoIndex) {
 
             const servoOverride = $('#tab-servos-templates .servoOverrideTemplate tr').clone();
@@ -151,7 +166,8 @@ TABS.servos.initialize = function (callback) {
 
             mspHelper.sendServoConfigurations(function () {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
-                    GUI.log(i18n.getMessage('servosEepromSave'));
+                    GUI.log(i18n.getMessage('eepromSaved'));
+                    self.refresh();
                 });
             });
         }
@@ -193,12 +209,6 @@ TABS.servos.initialize = function (callback) {
             MSP.send_message(MSPCodes.MSP_STATUS);
         }
 
-
-        $('a.save').click(function () {
-            save_servo_configuration();
-        });
-
-
         $('.tab-servos .override').toggle(!FC.CONFIG.servoOverrideDisabled);
 
         // Initialize servos
@@ -208,8 +218,24 @@ TABS.servos.initialize = function (callback) {
                 process_override(index);
         }
 
-        // translate to user-selected language
-        i18n.localizePage();
+        self.prevConfig = self.cloneConfig(FC.SERVO_CONFIG);
+
+        $('.configuration').change(function () {
+            showToolbar();
+        });
+
+        $('a.revert').click(function () {
+            FC.SERVO_CONFIG = self.prevConfig;
+            mspHelper.sendServoConfigurations(() => {
+                self.refresh();
+            });
+        });
+
+        $('a.save').click(function () {
+            save_servo_configuration(() => {
+                GUI.log(i18n.getMessage('eepromSaved'));
+            });
+        });
 
         // UI hooks for dynamically generated elements
         GUI.interval_add('servo_pull', update_servos, 100);
@@ -223,4 +249,29 @@ TABS.servos.cleanup = function (callback) {
     if (callback) {
         callback();
     }
+};
+
+TABS.servos.refresh = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        self.initialize();
+
+        if (callback) callback();
+    });
+};
+
+TABS.servos.cloneServo = function (a) {
+    return { mid: a.mid, min: a.min, max: a.max, rate: a.rate, trim: a.trim, speed: a.speed, };
+};
+
+TABS.servos.cloneConfig = function (servos) {
+    const self = this;
+    const clone = [];
+
+    servos.forEach(function (item) {
+        clone.push(self.cloneServo(item));
+    });
+
+    return clone;
 };
