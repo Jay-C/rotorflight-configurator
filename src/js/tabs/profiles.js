@@ -1,9 +1,8 @@
 'use strict';
 
 TABS.profiles = {
-    updating: true,
-    currentProfile: null,
     activeSubtab: null,
+    currentProfile: null,
     isGovEnabled: false,
     tabNames: [ 'profile1', 'profile2', 'profile3', 'profile4', 'profile5', 'profile6' ],
     pidNames: [ 'ROLL', 'PITCH', 'YAW' ],
@@ -128,7 +127,6 @@ TABS.profiles.initialize = function (callback) {
         else {
             $('.tab-profiles .gov_config').hide();
         }
-
     }
 
     function form_to_data() {
@@ -188,27 +186,35 @@ TABS.profiles.initialize = function (callback) {
 
     function process_html() {
 
+        // Hide the buttons toolbar
+        $('.tab-profiles').addClass('toolbar_hidden');
+
         // translate to user-selected language
         i18n.localizePage();
+
+        let toolbarHidden = true;
+
+        function showToolbar() {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-profiles').removeClass('toolbar_hidden');
+            }
+        }
 
         data_to_form();
 
         function activateProfile(profile) {
             FC.CONFIG.profile = profile;
-            self.updating = true;
             MSP.promise(MSPCodes.MSP_SELECT_SETTING, [profile]).then(function () {
                 self.refresh(function () {
-                    self.updating = false;
                     GUI.log(i18n.getMessage('profilesActivateProfile', [profile + 1]));
                 });
             });
         }
 
         function resetProfile() {
-            self.updating = true;
             MSP.promise(MSPCodes.MSP_SET_RESET_CURR_PID).then(function () {
                 self.refresh(function () {
-                    self.updating = false;
                     GUI.log(i18n.getMessage('profilesResetProfile'));
                 });
             });
@@ -251,28 +257,29 @@ TABS.profiles.initialize = function (callback) {
             });
         });
 
-        $('a.refresh').click(function () {
-            self.refresh(function () {
+        $('.tab-area').change(function () {
+            showToolbar();
+        });
+
+        $('a.revert').click(function () {
+            self.refresh(() => {
                 GUI.log(i18n.getMessage('profilesDataRefreshed'));
             });
         });
 
-        // update == save.
-        $('a.update').click(function () {
+        $('a.save').click(function () {
             form_to_data();
-            self.updating = true;
+
             Promise.resolve(true)
                 .then(() => MSP.promise(MSPCodes.MSP_SET_PID, mspHelper.crunch(MSPCodes.MSP_SET_PID)))
                 .then(() => MSP.promise(MSPCodes.MSP_SET_PID_ADVANCED, mspHelper.crunch(MSPCodes.MSP_SET_PID_ADVANCED)))
                 .then(() => MSP.promise(MSPCodes.MSP_SET_GOVERNOR, mspHelper.crunch(MSPCodes.MSP_SET_GOVERNOR)))
                 .then(() => MSP.promise(MSPCodes.MSP_EEPROM_WRITE))
                 .then(() => {
-                    self.updating = false;
-                    self.refresh(() => { GUI.log(i18n.getMessage('profilesEepromSaved')); });
+                    GUI.log(i18n.getMessage('eepromSaved'));
+                    self.refresh();
                 });
         });
-
-        self.updating = false;
 
         GUI.content_ready(callback);
     }
