@@ -5,7 +5,6 @@ TABS.motors = {
     isEscSensorEnabled: false,
     isGovEnabled: false,
     isDshot: false,
-    isDirty: false,
 };
 
 TABS.motors.initialize = function (callback) {
@@ -32,30 +31,20 @@ TABS.motors.initialize = function (callback) {
 
     function process_html() {
 
+        // Hide the buttons toolbar
+        $('.tab-motors').addClass('toolbar_hidden');
+
         // translate to user-selected language
         i18n.localizePage();
 
-        function setContentToolbarButtons() {
-            if (self.isDirty) {
-                $('.tool-buttons').hide();
-                $('.save_btn').show();
-            } else {
-                $('.save_btn').hide();
+        let toolbarHidden = true;
+
+        function showToolbar() {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-motors').removeClass('toolbar_hidden');
             }
         }
-
-        setContentToolbarButtons();
-
-        function disableHandler(event) {
-            if (event.target !== event.currentTarget) {
-                self.isDirty = true;
-                setContentToolbarButtons();
-            }
-            event.stopPropagation();
-        }
-
-        // Add EventListener for configuration changes
-        document.querySelectorAll('.configuration').forEach(elem => elem.addEventListener('change', disableHandler));
 
         const escProtocols = EscProtocols.GetAvailableProtocols(FC.CONFIG.apiVersion);
         const escProtocolSelect = $('select.escProtocol');
@@ -355,6 +344,13 @@ TABS.motors.initialize = function (callback) {
 
         GUI.interval_add('battery_info_pull', get_battery_info, 1000, true);
 
+	$('.configuration').change(function () {
+	    showToolbar();
+	});
+
+	$('a.revert').on('click', function() {
+            self.refresh();
+	});
 
         $('a.save').on('click', function() {
 
@@ -388,12 +384,10 @@ TABS.motors.initialize = function (callback) {
                 .then(() => { return MSP.promise(MSPCodes.MSP_SET_ADVANCED_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_ADVANCED_CONFIG)); })
                 .then(() => { return MSP.promise(MSPCodes.MSP_EEPROM_WRITE); })
                 .then(() => {
-                    GUI.log(i18n.getMessage('configurationEepromSaved'));
+                    GUI.log(i18n.getMessage('eepromSaved'));
                     MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
                     reinitialiseConnection(self);
                 });
-
-            self.isDirty = false;
         });
 
         GUI.content_ready(callback);
@@ -403,3 +397,14 @@ TABS.motors.initialize = function (callback) {
 TABS.motors.cleanup = function (callback) {
     if (callback) callback();
 };
+
+TABS.motors.refresh = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        self.initialize();
+
+        if (callback) callback();
+    });
+};
+
