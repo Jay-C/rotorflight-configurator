@@ -298,6 +298,9 @@ TABS.mixer.initialize = function (callback) {
 
     function process_html() {
 
+        // Hide the buttons toolbar
+        $('.tab-mixer').addClass('toolbar_hidden');
+
         // translate to user-selected language
         i18n.localizePage();
 
@@ -309,16 +312,30 @@ TABS.mixer.initialize = function (callback) {
 
         // UI Hooks
 
+        let toolbarHidden = true;
+
+        function updateToolbar() {
+            if (toolbarHidden) {
+                if (self.MIXER_CONFIG_dirty || self.MIXER_INPUTS_dirty || self.MIXER_RULES_dirty) {
+                    toolbarHidden = false;
+                    $('.tab-mixer').removeClass('toolbar_hidden');
+                }
+            }
+        }
+
         $('.mixerConfigs').change(function () {
             self.MIXER_CONFIG_dirty = true;
+            updateToolbar();
         });
 
         $('.mixerInputs').change(function () {
             self.MIXER_INPUTS_dirty = true;
+            updateToolbar();
         });
 
         $('.mixerRules').change(function () {
             self.MIXER_RULES_dirty = true;
+            updateToolbar();
         });
 
         $('a.revert').click(function () {
