@@ -70,6 +70,19 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
     load_rx_config();
 
     function process_html() {
+
+        // Hide the buttons toolbar
+        $('.tab-failsafe').addClass('toolbar_hidden');
+
+        let toolbarHidden = true;
+
+        function showToolbar() {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-failsafe').removeClass('toolbar_hidden');
+            }
+        }
+
         // fill stage 2 fields
         function toggleStage2(doShow) {
             if (doShow) {
@@ -327,8 +340,13 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
             $('.pro4').hide();
         }
 
+        $('.tab-failsafe .content_wrapper').change(function () {
+            showToolbar();
+        });
 
-
+        $('a.revert').click(function () {
+            self.refresh();
+        });
 
         $('a.save').click(function () {
             // gather data that doesn't have automatic change event bound
@@ -400,7 +418,7 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
             }
 
             function reboot() {
-                GUI.log(i18n.getMessage('configurationEepromSaved'));
+                GUI.log(i18n.getMessage('eepromSaved'));
 
                 GUI.tab_switch_cleanup(function() {
                     MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
@@ -426,3 +444,14 @@ TABS.failsafe.initialize = function (callback, scrollPosition) {
 TABS.failsafe.cleanup = function (callback) {
     if (callback) callback();
 };
+
+TABS.failsafe.refresh = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        self.initialize();
+
+        if (callback) callback();
+    });
+};
+
