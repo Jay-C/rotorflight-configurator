@@ -328,6 +328,22 @@ TABS.power.initialize = function (callback) {
 
         }
 
+        const saveButton = $('.content_toolbar .save_btn');
+        const revertButton = $('.content_toolbar .revert_btn');
+
+        updateToolbar(false);
+
+        function updateToolbar(visible) {
+            if (visible) {
+                saveButton.show();
+                revertButton.show();
+            } else {
+                saveButton.hide();
+                revertButton.hide();
+            }
+        }
+
+
         //calibration manager
         let calibrationconfirmed = false;
         GUI.calibrationManager = new jBox('Modal', {
@@ -340,7 +356,7 @@ TABS.power.initialize = function (callback) {
             content: $('#calibrationmanagercontent'),
             onCloseComplete: function() {
                 if (!calibrationconfirmed) {
-                    TABS.power.initialize();
+                    TABS.power.refresh();
                 }
             },
         });
@@ -480,6 +496,14 @@ TABS.power.initialize = function (callback) {
             save_power_config();
         });
 
+        $('a.revert').click(function () {
+            self.refresh();
+        });
+
+        $('.tab-power .content_wrapper').change(function () {
+            updateToolbar(true);
+        });
+
         GUI.interval_add('setup_data_pull_slow', get_slow_data, 200, true); // 5hz
     }
 
@@ -509,9 +533,8 @@ TABS.power.initialize = function (callback) {
         }
 
         function save_completed() {
-            GUI.log(i18n.getMessage('configurationEepromSaved'));
-
-            TABS.power.initialize();
+            GUI.log(i18n.getMessage('eepromSaved'));
+            TABS.power.refresh();
         }
 
         save_battery_config();
@@ -539,3 +562,14 @@ TABS.power.cleanup = function (callback) {
         GUI.calibrationManagerConfirmation.destroy();
     }
 };
+
+TABS.power.refresh = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        self.initialize();
+
+        if (callback) callback();
+    });
+};
+
