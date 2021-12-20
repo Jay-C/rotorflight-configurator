@@ -6,6 +6,10 @@ TABS.receiver = {
     deadband: 0,
     yawDeadband: 0,
     needReboot: false,
+    bindButton: false,
+    stickButton: false,
+    saveButtons: false,
+    toolbarVisible: false,
 };
 
 TABS.receiver.initialize = function (callback) {
@@ -57,12 +61,43 @@ TABS.receiver.initialize = function (callback) {
 
     function process_html() {
 
-        const featuresElement = $('.tab-receiver .features');
+        // Hide the buttons toolbar
+        $('.tab-receiver').addClass('toolbar_hidden');
 
+        const featuresElement = $('.tab-receiver .features');
         FC.FEATURE_CONFIG.features.generateElements(featuresElement);
 
         // translate to user-selected language
         i18n.localizePage();
+
+        // UI Hooks
+
+        tab.saveButtons = false;
+        tab.bindButton = false;
+        tab.stickButton = false;
+        tab.needReboot = false;
+        tab.toolbarVisible = false;
+
+        const bindBtn = $('.bind_btn');
+        const stickBtn = $('.sticks_btn');
+        const saveBtn = $('.save_btn');
+        const rebootBtn = $('.reboot_btn');
+
+        function updateButtons(reboot) {
+            if (reboot)
+                tab.needReboot = true;
+
+            if (tab.saveButtons || tab.bindButton || tab.stickButton) {
+                if (!tab.toolbarVisible) {
+                    $('.tab-receiver').removeClass('toolbar_hidden');
+                    tab.toolbarVisible = true;
+                }
+                bindBtn.toggle(tab.bindButton);
+                stickBtn.toggle(tab.stickButton);
+                saveBtn.toggle(!tab.needReboot);
+                rebootBtn.toggle(tab.needReboot);
+            }
+        }
 
         if (semver.lt(FC.CONFIG.apiVersion, "1.15.0")) {
             $('.deadband').hide();
@@ -267,7 +302,7 @@ TABS.receiver.initialize = function (callback) {
             let newValue;
             if (serialRxValue !== FC.RX_CONFIG.serialrx_provider) {
                 newValue = $(this).find('option:selected').text();
-                updateSaveButton(true);
+                updateButtons(true);
             }
 
             FC.RX_CONFIG.serialrx_provider = serialRxValue;
@@ -280,7 +315,7 @@ TABS.receiver.initialize = function (callback) {
         serialRxInvertedElement.change(function () {
             const inverted = $(this).is(':checked') ? 1 : 0;
             if (FC.RX_CONFIG.serialrx_inverted !== inverted) {
-                updateSaveButton(true);
+                updateButtons(true);
             }
             FC.RX_CONFIG.serialrx_inverted = inverted;
         });
@@ -291,7 +326,7 @@ TABS.receiver.initialize = function (callback) {
         serialRxHalfDuplexElement.change(function () {
             const halfduplex = $(this).is(':checked') ? 1 : 0;
             if (FC.RX_CONFIG.serialrx_halfduplex !== halfduplex) {
-                updateSaveButton(true);
+                updateButtons(true);
             }
             FC.RX_CONFIG.serialrx_halfduplex = halfduplex;
         });
@@ -352,7 +387,7 @@ TABS.receiver.initialize = function (callback) {
                 let newValue = undefined;
                 if (value !== FC.RX_CONFIG.rxSpiProtocol) {
                     newValue = $(this).find('option:selected').text();
-                    updateSaveButton(true);
+                    updateButtons(true);
                 }
 
                 FC.RX_CONFIG.rxSpiProtocol = value;
@@ -363,21 +398,6 @@ TABS.receiver.initialize = function (callback) {
         }
 
 
-        // UI Hooks
-
-        function updateSaveButton(reboot=false) {
-            if (reboot) {
-                tab.needReboot = true;
-            }
-            if (tab.needReboot) {
-                $('.update_btn').hide();
-                $('.save_btn').show();
-            } else {
-                $('.update_btn').show();
-                $('.save_btn').hide();
-            }
-        }
-
         $('input.feature', featuresElement).change(function () {
             const element = $(this);
 
@@ -385,7 +405,7 @@ TABS.receiver.initialize = function (callback) {
             updateTabList(FC.FEATURE_CONFIG.features);
 
             if (element.attr('name') === "RSSI_ADC") {
-                updateSaveButton(true);
+                updateButtons(true);
             }
         });
 
@@ -412,19 +432,13 @@ TABS.receiver.initialize = function (callback) {
             if (element.attr('name') === 'rxMode') {
                 checkShowSerialRxBox();
                 checkShowSpiRxBox();
-                updateSaveButton(true);
+                updateButtons(true);
             }
         });
 
         checkShowSerialRxBox();
         checkShowSpiRxBox();
-        updateSaveButton();
-
-        $('a.refresh').click(function () {
-            tab.refresh(function () {
-                GUI.log(i18n.getMessage('receiverDataRefreshed'));
-            });
-        });
+        updateButtons();
 
         function saveConfiguration(boot=false) {
 
@@ -454,7 +468,6 @@ TABS.receiver.initialize = function (callback) {
 
             // catch rssi aux
             FC.RSSI_CONFIG.channel = parseInt($('select[name="rssi_channel"]').val());
-
 
             if (semver.gte(FC.CONFIG.apiVersion, "1.20.0")) {
                 FC.RX_CONFIG.rcInterpolation = parseInt($('select[name="rcInterpolation-select"]').val());
@@ -504,26 +517,20 @@ TABS.receiver.initialize = function (callback) {
             }
 
             function reboot() {
-                GUI.log(i18n.getMessage('configurationEepromSaved'));
+                GUI.log(i18n.getMessage('eepromSaved'));
                 if (boot) {
                     GUI.tab_switch_cleanup(function() {
                         MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
                         reinitialiseConnection(tab);
                     });
                 }
+                else {
+                    tab.refresh();
+                }
             }
 
             MSP.send_message(MSPCodes.MSP_SET_RX_MAP, mspHelper.crunch(MSPCodes.MSP_SET_RX_MAP), false, save_rssi_config);
         }
-
-        $('a.update').click(function () {
-            saveConfiguration(false);
-        });
-
-        $('a.save').click(function () {
-            saveConfiguration(true);
-            tab.needReboot = false;
-        });
 
         $("a.sticks").click(function() {
             const windowWidth = 370;
@@ -555,17 +562,18 @@ TABS.receiver.initialize = function (callback) {
             });
         });
 
-        let showBindButton = false;
         if (semver.gte(FC.CONFIG.apiVersion, API_VERSION_1_43)) {
-            showBindButton = bit_check(FC.CONFIG.targetCapabilities, FC.TARGET_CAPABILITIES_FLAGS.SUPPORTS_RX_BIND);
+            tab.bindButton = bit_check(FC.CONFIG.targetCapabilities, FC.TARGET_CAPABILITIES_FLAGS.SUPPORTS_RX_BIND);
+            updateButtons();
 
             $("a.bind").click(function() {
                 MSP.send_message(MSPCodes.MSP2_BETAFLIGHT_BIND);
-
                 GUI.log(i18n.getMessage('receiverButtonBindMessage'));
             });
         }
-        $(".bind_btn").toggle(showBindButton);
+
+        // Only show the MSP control sticks if the MSP Rx feature is enabled
+        tab.stickButton = FC.FEATURE_CONFIG.features.isEnabled('RX_MSP');
 
         // RC Smoothing
         if (semver.gte(FC.CONFIG.apiVersion, API_VERSION_1_40)) {
@@ -660,12 +668,27 @@ TABS.receiver.initialize = function (callback) {
             $('.tab-receiver .rcSmoothing-auto-smoothness').hide();
         }
 
-        // Only show the MSP control sticks if the MSP Rx feature is enabled
-        $(".sticks_btn").toggle(FC.FEATURE_CONFIG.features.isEnabled('RX_MSP'));
-
-        // Setup model for preview
         tab.initModelPreview();
         tab.renderModel();
+
+        $('a.save').click(function () {
+            saveConfiguration(false);
+        });
+
+        $('a.reboot').click(function () {
+            saveConfiguration(true);
+        });
+
+        $('a.revert').click(function () {
+            tab.refresh(function () {
+                GUI.log(i18n.getMessage('receiverDataRefreshed'));
+            });
+        });
+
+        $('.content_wrapper').change(function () {
+            tab.saveButtons = true;
+            updateButtons();
+        });
 
         // receiver data pulled
         GUI.interval_add('receiver_pull', function () {
