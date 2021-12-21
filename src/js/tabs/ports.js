@@ -144,6 +144,9 @@ TABS.ports.initialize = function (callback, scrollPosition) {
 
         $(".tab-ports").addClass("supported");
 
+        // Hide the buttons toolbar
+        $('.tab-ports').addClass('toolbar_hidden');
+
         const VCP_PORT_IDENTIFIER = 20;
 
         const portIdentifierToNameMapping = {
@@ -332,6 +335,15 @@ TABS.ports.initialize = function (callback, scrollPosition) {
             }
         });
         pheripheralsSelectElement.change();
+
+        let toolbarHidden = true;
+
+        $('.content_wrapper').change(function () {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-ports').removeClass('toolbar_hidden');
+            }
+        });
     }
 
     function on_tab_loaded_handler() {
@@ -341,6 +353,10 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         update_ui();
 
         $('a.save').click(on_save_handler);
+
+        $('a.revert').click(function () {
+            self.refresh();
+        });
 
         // status data pulled via separate timer with static speed
         GUI.interval_add('status_pull', function status_pull() {
@@ -408,12 +424,8 @@ TABS.ports.initialize = function (callback, scrollPosition) {
         }
 
         function on_saved_handler() {
-            GUI.log(i18n.getMessage('configurationEepromSaved'));
-
-            GUI.tab_switch_cleanup(function() {
-                MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
-                reinitialiseConnection(self);
-            });
+            GUI.log(i18n.getMessage('eepromSaved'));
+            self.reboot();
         }
     }
 };
@@ -421,3 +433,23 @@ TABS.ports.initialize = function (callback, scrollPosition) {
 TABS.ports.cleanup = function (callback) {
     if (callback) callback();
 };
+
+TABS.ports.refresh = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        self.initialize();
+        if (callback) callback();
+    });
+};
+
+TABS.ports.reboot = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
+        reinitialiseConnection(self);
+        if (callback) callback();
+    });
+};
+
