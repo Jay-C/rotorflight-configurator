@@ -201,6 +201,18 @@ TABS.adjustments.initialize = function (callback) {
 
     function process_html() {
 
+        // Hide the buttons toolbar
+        $('.tab-adjustments').addClass('toolbar_hidden');
+
+        let toolbarHidden = true;
+
+        function showToolbar() {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-adjustments').removeClass('toolbar_hidden');
+            }
+        }
+
         const selectFunction = $('#functionSelectionSelect');
         let functions = [];
 
@@ -220,6 +232,14 @@ TABS.adjustments.initialize = function (callback) {
 
         // translate to user-selected language
         i18n.localizePage();
+
+        $('.content_wrapper').change(function () {
+            showToolbar();
+        });
+
+        $('a.revert').on('click', function() {
+            self.refresh();
+        });
 
         // UI Hooks
         $('a.save').click(function () {
@@ -276,7 +296,8 @@ TABS.adjustments.initialize = function (callback) {
 
             function save_to_eeprom() {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
-                    GUI.log(i18n.getMessage('adjustmentsEepromSaved'));
+                    GUI.log(i18n.getMessage('epromSaved'));
+                    self.refresh();
                 });
             }
 
@@ -356,5 +377,15 @@ TABS.adjustments.initialize = function (callback) {
 
 TABS.adjustments.cleanup = function (callback) {
     if (callback) callback();
+};
+
+TABS.adjustments.refresh = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        self.initialize();
+
+        if (callback) callback();
+    });
 };
 
