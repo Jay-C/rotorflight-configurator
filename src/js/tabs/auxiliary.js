@@ -24,6 +24,15 @@ TABS.auxiliary.initialize = function (callback) {
         $('#content').load("./tabs/auxiliary.html", process_html);
     }
 
+    let toolbarHidden = true;
+
+    function showToolbar() {
+        if (toolbarHidden) {
+            toolbarHidden = false;
+            $('.tab-auxiliary').removeClass('toolbar_hidden');
+        }
+    }
+
     function createMode(modeIndex, modeId) {
         const modeTemplate = $('#tab-auxiliary-templates .mode');
         const newMode = modeTemplate.clone();
@@ -187,6 +196,8 @@ TABS.auxiliary.initialize = function (callback) {
             if (siblings.length == 1) {
                 siblings.eq(0).find('.logic').hide();
             }
+
+            showToolbar();
         });
 
         $(rangeElement).find('.channel').val(auxChannelIndex);
@@ -228,6 +239,8 @@ TABS.auxiliary.initialize = function (callback) {
             if (siblings.length == 1) {
                 siblings.eq(0).find('.logic').hide();
             }
+
+            showToolbar();
         });
 
         $(linkElement).find('.linkedTo').val(linkedTo);
@@ -235,6 +248,10 @@ TABS.auxiliary.initialize = function (callback) {
     }
 
     function process_html() {
+
+        // Hide the buttons toolbar
+        $('.tab-auxiliary').addClass('toolbar_hidden');
+
         let auxChannelCount = FC.RC.active_channels - self.PRIMARY_CHANNEL_COUNT;
 
         configureRangeTemplate(auxChannelCount);
@@ -286,18 +303,25 @@ TABS.auxiliary.initialize = function (callback) {
             const modeElement = $(this).data('modeElement');
             // auto select AUTO option; default to 'OR' logic
             addRangeToMode(modeElement, -1, 0);
+            showToolbar();
         });
 
         $('a.addLink').click(function () {
             const modeElement = $(this).data('modeElement');
             // default to 'OR' logic and no link selected
             addLinkedToMode(modeElement, 0, 0);
+            showToolbar();
         });
 
         // translate to user-selected language
         i18n.localizePage();
 
         // UI Hooks
+
+        $('a.revert').on('click', function() {
+            self.refresh();
+        });
+
         $('a.save').click(function () {
 
             // update internal data structures based on current UI elements
@@ -384,7 +408,8 @@ TABS.auxiliary.initialize = function (callback) {
 
             function save_to_eeprom() {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function () {
-                    GUI.log(i18n.getMessage('auxiliaryEepromSaved'));
+                    GUI.log(i18n.getMessage('eepromSaved'));
+                    self.refresh();
                 });
             }
         });
@@ -519,6 +544,10 @@ TABS.auxiliary.initialize = function (callback) {
                 .change();
         });
 
+        $('.modes').change(function () {
+            showToolbar();
+        });
+
         // update ui instantly on first load
         update_ui();
 
@@ -539,3 +568,14 @@ TABS.auxiliary.initialize = function (callback) {
 TABS.auxiliary.cleanup = function (callback) {
     if (callback) callback();
 };
+
+TABS.auxiliary.refresh = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        self.initialize();
+
+        if (callback) callback();
+    });
+};
+
