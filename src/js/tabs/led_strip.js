@@ -7,6 +7,12 @@ TABS.led_strip = {
 
 
 TABS.led_strip.initialize = function (callback, scrollPosition) {
+    const self = this;
+
+    if (GUI.active_tab != 'led_strip') {
+        GUI.active_tab = 'led_strip';
+    }
+
     let selectedColorIndex = null;
     let selectedModeColor = null;
     const functionTag = '.function-';
@@ -26,10 +32,6 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
     }
 
     TABS.led_strip.wireMode = false;
-
-    if (GUI.active_tab != 'led_strip') {
-        GUI.active_tab = 'led_strip';
-    }
 
     function load_led_config() {
         MSP.send_message(MSPCodes.MSP_LED_STRIP_CONFIG, false, false, load_led_colors);
@@ -68,6 +70,18 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
     function process_html() {
 
         i18n.localizePage();
+
+        // Hide the buttons toolbar
+        $('.tab-led-strip').addClass('toolbar_hidden');
+
+        let toolbarHidden = true;
+
+        function showToolbar() {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-led-strip').removeClass('toolbar_hidden');
+            }
+        }
 
         // Build Grid
         const theHTML = [];
@@ -125,6 +139,7 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
 
             $('.controls button').removeClass('btnOn');
             updateBulkCmd();
+            showToolbar();
         });
 
         // Clear All button
@@ -134,9 +149,9 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
             });
             $('.gPoint .wire').html('');
 
-            updateBulkCmd();
-
             $('.controls button').removeClass('btnOn');
+            updateBulkCmd();
+            showToolbar();
         });
 
         function removeFunctionsAndDirections(element) {
@@ -305,11 +320,13 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
                 }
                 updateBulkCmd();
             });
+            showToolbar();
         });
 
         $('.funcWireClear').click(function() {
             $('.gPoint .wire').html('');
             updateBulkCmd();
+            showToolbar();
         });
 
         $('.mainGrid').selectable({
@@ -594,7 +611,8 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
 
             function save_to_eeprom() {
                 MSP.send_message(MSPCodes.MSP_EEPROM_WRITE, false, false, function() {
-                    GUI.log(i18n.getMessage('ledStripEepromSaved'));
+                    GUI.log(i18n.getMessage('eepromSaved'));
+                    self.refresh();
                 });
             }
 
@@ -613,13 +631,16 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
             $('.mainGrid, .gridSections').css('zoom', gridZoom);
         }
 
+        $('.controls').change(function () {
+            showToolbar();
+        });
+
+        $('a.revert').on('click', function() {
+            self.refresh();
+        });
+
         GUI.content_ready(callback);
     }
-
-
-
-
-
 
 
     function findLed(x, y) {
@@ -1149,3 +1170,14 @@ TABS.led_strip.initialize = function (callback, scrollPosition) {
 TABS.led_strip.cleanup = function (callback) {
     if (callback) callback();
 };
+
+TABS.led_strip.refresh = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        self.initialize();
+
+        if (callback) callback();
+    });
+};
+
