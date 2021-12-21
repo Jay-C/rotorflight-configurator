@@ -41,12 +41,24 @@ TABS.configuration.initialize = function (callback) {
     function process_html() {
         self.analyticsChanges = {};
 
+        // Hide the buttons toolbar
+        $('.tab-configuration').addClass('toolbar_hidden');
+
         const features_e = $('.tab-configuration .features');
 
         FC.FEATURE_CONFIG.features.generateElements(features_e);
 
         // translate to user-selected language
         i18n.localizePage();
+
+        let toolbarHidden = true;
+
+        function showToolbar() {
+            if (toolbarHidden) {
+                toolbarHidden = false;
+                $('.tab-configuration').removeClass('toolbar_hidden');
+            }
+        }
 
         const alignments = [
             'CW 0°',
@@ -342,6 +354,14 @@ TABS.configuration.initialize = function (callback) {
         });
 
 
+        $('.content_wrapper').change(function () {
+            showToolbar();
+        });
+
+        $('a.revert').click(function () {
+            self.refresh();
+        });
+
         $('a.save').on('click', function() {
             // gather data that doesn't have automatic change event bound
             FC.BOARD_ALIGNMENT_CONFIG.roll = parseInt($('input[name="board_align_roll"]').val());
@@ -411,7 +431,7 @@ TABS.configuration.initialize = function (callback) {
             }
 
             function reboot() {
-                GUI.log(i18n.getMessage('configurationEepromSaved'));
+                GUI.log(i18n.getMessage('eepromSaved'));
 
                 GUI.tab_switch_cleanup(function() {
                     MSP.send_message(MSPCodes.MSP_SET_REBOOT, false, false);
@@ -433,3 +453,13 @@ TABS.configuration.initialize = function (callback) {
 TABS.configuration.cleanup = function (callback) {
     if (callback) callback();
 };
+
+TABS.configuration.refresh = function (callback) {
+    const self = this;
+
+    GUI.tab_switch_cleanup(function () {
+        self.initialize();
+        if (callback) callback();
+    });
+};
+
