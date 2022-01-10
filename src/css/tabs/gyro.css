@@ -52,7 +52,7 @@
     border-right: 1px solid var(--subtleAccent);
 }
 
-.tab-gyro table tr td.border {
+.tab-gyro table tr.border td {
     padding-bottom: 5px;
     border-bottom: 1px solid var(--subtleAccent);
 }
