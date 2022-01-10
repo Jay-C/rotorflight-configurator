@@ -23,6 +23,8 @@ TABS.gyro.initialize = function (callback) {
         MSP.promise(MSPCodes.MSP_STATUS)
             .then(() => MSP.promise(MSPCodes.MSP_FEATURE_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_FILTER_CONFIG))
+            .then(() => MSP.promise(MSPCodes.MSP_MOTOR_CONFIG))
+            .then(() => MSP.promise(MSPCodes.MSP_RPM_FILTER))
             .then(callback);
     }
 
@@ -391,6 +393,12 @@ TABS.gyro.initialize = function (callback) {
 
         // UI Hooks
         data_to_form();
+
+        const mainRatio = FC.MOTOR_CONFIG.main_rotor_gear_ratio[1] / FC.MOTOR_CONFIG.main_rotor_gear_ratio[0];
+        const tailRatio = FC.MOTOR_CONFIG.tail_rotor_gear_ratio[1] / FC.MOTOR_CONFIG.tail_rotor_gear_ratio[0];
+
+        RPMFilter.initialize(1, mainRatio, 1, mainRatio / tailRatio);
+        RPMFilter.parseAdvancedConfig(FC.RPM_FILTER_CONFIG);
 
         // Hide the buttons toolbar
         $('.tab-gyro').addClass('toolbar_hidden');
