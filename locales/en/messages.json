@@ -3043,6 +3043,19 @@
         "message": "Stop motors"
     },
 
+    "mainGearRatio": {
+        "message": "Main rotor gear ratio (x1000)"
+    },
+    "mainGearRatioHelp": {
+        "message": "Gearing ratio between the motor and the main rotor (x1000)"
+    },
+    "tailGearRatio": {
+        "message": "Tail rotor gear ratio (x1000)"
+    },
+    "tailGearRatioHelp": {
+        "message": "Gearing ratio between the main and the tail rotor (x1000)"
+    },
+
     "govFeatures": {
         "message": "Governor Features"
     },
@@ -3057,12 +3070,6 @@
     },
     "govModeHelp": {
         "message": "The governor maintains the main rotor speed constant. The algorithm used in the control loop is selected with this setting."
-    },
-    "govGearRatio": {
-        "message": "Main rotor gear ratio (x1000)"
-    },
-    "govGearRatioHelp": {
-        "message": "Gearing ratio between the motor and the main rotor (x1000)"
     },
     "govSpoolupTime": {
         "message": "Spoolup time (x0.1s)"

@@ -117,8 +117,10 @@ TABS.motors.initialize = function (callback) {
 
         govModeSelect.val(FC.GOVERNOR.gov_mode);
 
+        $('input[id="mainGearRatio"]').val(FC.GOVERNOR.main_gear_ratio);
+        $('input[id="tailGearRatio"]').val(FC.GOVERNOR.tail_gear_ratio);
+
         if (FC.GOVERNOR.gov_mode > 0) {
-            $('input[id="govGearRatio"]').val(FC.GOVERNOR.gov_gear_ratio);
             $('input[id="govSpoolupTime"]').val(FC.GOVERNOR.gov_spoolup_time);
             $('input[id="govTrackingTime"]').val(FC.GOVERNOR.gov_tracking_time);
             $('input[id="govRecoveryTime"]').val(FC.GOVERNOR.gov_recovery_time);
@@ -353,6 +355,7 @@ TABS.motors.initialize = function (callback) {
             FC.MOTOR_CONFIG.mincommand = parseInt($('input[id="mincommand"]').val());
             FC.MOTOR_CONFIG.minthrottle = parseInt($('input[id="minthrottle"]').val());
             FC.MOTOR_CONFIG.maxthrottle = parseInt($('input[id="maxthrottle"]').val());
+
             FC.MOTOR_CONFIG.use_dshot_telemetry = dshotBidirSwitch.is(':checked') ? 1 : 0;
 
             for (let i = 0; i < FC.CONFIG.motorCount; i++)
@@ -362,10 +365,12 @@ TABS.motors.initialize = function (callback) {
             FC.MOTOR_CONFIG.use_unsynced_pwm = pwmFreqSwitch.is(':checked');
             FC.MOTOR_CONFIG.motor_pwm_rate = parseInt($('input[id="pwmFreq"]').val());
 
+            FC.GOVERNOR.main_gear_ratio = parseInt($('input[id="mainGearRatio"]').val());
+            FC.GOVERNOR.tail_gear_ratio = parseInt($('input[id="tailGearRatio"]').val());
+
             if (self.isGovEnabled) {
                 FC.GOVERNOR.gov_mode = govModeSelect.val();
                 if (FC.GOVERNOR.gov_mode > 0) {
-                    FC.GOVERNOR.gov_gear_ratio = parseInt($('input[id="govGearRatio"]').val());
                     FC.GOVERNOR.gov_spoolup_time = parseInt($('input[id="govSpoolupTime"]').val());
                     FC.GOVERNOR.gov_tracking_time = parseInt($('input[id="govTrackingTime"]').val());
                     FC.GOVERNOR.gov_recovery_time = parseInt($('input[id="govRecoveryTime"]').val());
