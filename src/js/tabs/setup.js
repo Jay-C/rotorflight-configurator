@@ -5,10 +5,6 @@ TABS.setup = {};
 TABS.setup.initialize = function (callback) {
     const self = this;
 
-    if (GUI.active_tab !== 'setup') {
-        GUI.active_tab = 'setup';
-    }
-
     load_data(load_html);
 
     function load_data(callback) {
