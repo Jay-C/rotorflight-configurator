@@ -396,3 +396,4 @@ const Mixer = {
 
 };
 
+Mixer.initialize();

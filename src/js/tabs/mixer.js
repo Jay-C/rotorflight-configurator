@@ -418,9 +418,6 @@ TABS.mixer.initialize = function (callback) {
         // translate to user-selected language
         i18n.localizePage();
 
-        // Initialize mixer helper
-        Mixer.initialize();
-
         // UI Hooks
         data_to_form();
 
