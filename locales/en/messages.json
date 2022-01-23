@@ -4389,6 +4389,42 @@
     "gyroRpmFilterSettings": {
         "message": "Gyro RPM Filter Settings"
     },
+    "gyroRpmFilterSetup": {
+        "message": "Setup Type"
+    },
+    "gyroRpmFilterSetupBasic": {
+        "message": "Basic"
+    },
+    "gyroRpmFilterSetupAdvanced": {
+        "message": "Advanced"
+    },
+    "gyroRpmFilterSetupCustom": {
+        "message": "Custom"
+    },
+    "gyroRpmFilterCustomNote": {
+        "message": "<strong>Note!</strong>Custom RPM Notch Filtering is enabled.<br>Please use the CLI to configure the RPM filter settings."
+    },
+    "gyroRpmFilterVibrationLevel": {
+        "message": "Vibration Level"
+    },
+    "gyroRpmFilterVibrationLow": {
+        "message": "Low"
+    },
+    "gyroRpmFilterVibrationMedium": {
+        "message": "Medium"
+    },
+    "gyroRpmFilterVibrationHigh": {
+        "message": "High"
+    },
+    "gyroRpmFilterMainRotorMinRPM": {
+        "message": "Main Rotor Minimum RPM"
+    },
+    "gyroRpmFilterTailRotorMinRPM": {
+        "message": "Tail Rotor Minimum RPM"
+    },
+    "gyroRpmFilterBanks": {
+        "message": "Gyro RPM Filter Banks"
+    },
     "gyroRpmFilterHelp": {
         "message": "RPM filtering is a bank of notch filters on gyro which use the RPM telemetry data to remove motor noise with surgical precision.<br /><br /><b><span class=\"message-positive\">IMPORTANT</span>: The ESC must support the Bidirectional DShot protocol and the value of the $t(configurationMotorPoles.message) in the $t(tabMotors.message) tab must be correct for this filter to work.</b>",
         "description": "Header text for the RPM Filter group"

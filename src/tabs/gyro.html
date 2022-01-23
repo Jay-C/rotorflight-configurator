@@ -393,6 +393,78 @@
                             <div class="spacer_box_title" i18n="gyroRpmFilterSettings"></div>
                         </div>
                         <div class="spacer_box">
+                            <div class="note">
+                                <p i18n="gyroRpmFilterCustomNote"></p>
+                            </div>
+                            <table class="rpmFilterTable">
+                                <tr>
+                                    <td>
+                                        <span class="groupSwitchValue">
+                                            <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterEnable" class="toggle"></input></span>
+                                            <span class="inputSelect"><select id="gyroRpmFilterSetup">
+                                                <option value="1" i18n="gyroRpmFilterSetupBasic"></option>
+                                                <option value="2" i18n="gyroRpmFilterSetupAdvanced"></option>
+                                                <option value="3" i18n="gyroRpmFilterSetupCustom"></option>
+                                            </select></span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <label>
+                                                <span i18n="gyroRpmFilterSetup"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <td>
+                                        <span class="inputSelect"><select id="gyroRpmFilterVibrationLevel">
+                                            <option value="1" i18n="gyroRpmFilterVibrationLow"></option>
+                                            <option value="2" i18n="gyroRpmFilterVibrationMedium"></option>
+                                            <option value="3" i18n="gyroRpmFilterVibrationHigh"></option>
+                                        </select></span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <label>
+                                                <span i18n="gyroRpmFilterVibrationLevel"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <td>
+                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterMainRotorMinRPM"></input></span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <label>
+                                                <span i18n="gyroRpmFilterMainRotorMinRPM"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <td>
+                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterTailRotorMinRPM"></input></span>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <label>
+                                                <span i18n="gyroRpmFilterTailRotorMinRPM"></span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="gui_box grey">
+                        <div class="gui_box_titlebar">
+                            <div class="spacer_box_title" i18n="gyroRpmFilterBanks"></div>
+                        </div>
+                        <div class="spacer_box">
                             <table class="rpmFilterTable">
                                 <tr>
                                     <th colspan="2">
@@ -402,7 +474,6 @@
                                         </div>
                                     </th>
                                 </tr>
-
                                 <tr>
                                     <td>
                                         <span class="groupSwitchValue">
