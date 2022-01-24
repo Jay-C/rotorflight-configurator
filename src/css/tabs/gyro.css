@@ -14,6 +14,10 @@
     color: #626262;
 }
 
+.tab-gyro .gyroRpmFilterCustomNote {
+    margin-bottom: 3px;
+}
+
 .tab-gyro input[type="number"]::-webkit-inner-spin-button {
     border: 0;
 }
@@ -31,6 +35,7 @@
 .tab-gyro table th {
     height: 10px;
     font-weight: normal;
+    text-align: left;
     text-overflow: ellipsis;
     overflow: hidden;
     border: 0;

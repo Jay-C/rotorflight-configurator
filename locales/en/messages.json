@@ -4402,7 +4402,7 @@
         "message": "Custom"
     },
     "gyroRpmFilterCustomNote": {
-        "message": "<strong>Note!</strong>Custom RPM Notch Filtering is enabled.<br>Please use the CLI to configure the RPM filter settings."
+        "message": "<strong>Note!</strong> Custom RPM Notch Filtering is enabled.<br>Please use the CLI to configure the RPM filter settings."
     },
     "gyroRpmFilterVibrationLevel": {
         "message": "Vibration Level"
