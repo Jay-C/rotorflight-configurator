@@ -23,6 +23,7 @@ TABS.gyro.initialize = function (callback) {
         MSP.promise(MSPCodes.MSP_STATUS)
             .then(() => MSP.promise(MSPCodes.MSP_FEATURE_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_FILTER_CONFIG))
+            .then(() => MSP.promise(MSPCodes.MSP_RPM_FILTER))
             .then(callback);
     }
 
