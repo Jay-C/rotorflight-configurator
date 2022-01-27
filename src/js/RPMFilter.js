@@ -6,7 +6,7 @@ const RPMFilter = {
 
     aboutEQ: function(a,b,tol)
     {
-        return (Math.abs(a - b) < a * tol);
+        return Math.abs(a - b) < tol;
     },
 
     nullNotch: function ()
@@ -37,10 +37,9 @@ const RPMFilter = {
                 a.max_hz      == 0 );
     },
 
-    deleteNotch : function(bank, a)
+    eraseNotch : function(bank, index)
     {
-        if (a != undefined)
-            bank[a] = undefined;
+        bank[index] = this.nullNotch();
     },
 
     cloneBank : function (a)
@@ -82,6 +81,8 @@ const RPMFilter = {
     {
         const self = this;
 
+        console.log(`findNotchBetween ${motor} ${ratioLow} ${ratioHigh}`);
+
         for (let i=0; i<bank.length; i++) {
             if (bank[i].motor_index == motor && bank[i].gear_ratio > ratioLow && bank[i].gear_ratio < ratioHigh)
                 return i;
@@ -97,6 +98,8 @@ const RPMFilter = {
         const ratio1 = Math.floor(ratio) - 1;
         const ratio2 = Math.ceil(ratio) + 1;
 
+        console.log(`findSingleNotch ${motor} ${ratio}`);
+
         return self.findNotchBetween(bank, motor, ratio1, ratio2);
     },
 
@@ -104,18 +107,22 @@ const RPMFilter = {
     {
         const self = this;
 
-        const index1 = self.findNotchBetween(bank, motor, ratio * 0.95, ratio * 0.999);
-        const index2 = self.findNotchBetween(bank, motor, ratio * 1.001, ratio * 1.05);
+        const index1 = self.findNotchBetween(bank, motor, ratio * 1.001, ratio * 1.05);
+        const index2 = self.findNotchBetween(bank, motor, ratio * 0.95, ratio * 0.999);
 
         if (index1 != undefined && index2 != undefined && index2 == index1 + 1) {
-            const dist1 = (ratio - bank[index1].gear_ratio) / ratio;
-            const dist2 = (bank[index2].gear_ratio - ratio) / ratio;
+            const dist1 = (bank[index1].gear_ratio - ratio) /  ratio;
+            const dist2 = (bank[index2].gear_ratio - ratio) / -ratio;
 
-            if (bank[index1].notch_q == bank[index2].notch_q) {
+            console.log(`findDoubleNotch ${motor} ${dist1} ${dist2}`);
+
+            if (bank[index1].notch_q == bank[index2].notch_q &&
+                self.aboutEQ(dist1, 0.005, 0.0001) &&
+                self.aboutEQ(dist2, 0.005, 0.0001)) {
                 return index1;
             }
         }
-        
+
         return undefined;
     },
 
@@ -123,25 +130,28 @@ const RPMFilter = {
     {
         const self = this;
 
-        let index = self.findDoubleNotch(bank, motor, ratio);
+        console.log(`findHarmonic: ${motor} ${ratio} ${harm}`);
+
+        let index = self.findDoubleNotch(bank, motor, ratio/harm);
         if (index != undefined) {
             const notch = {
                 harmonic: harm,
                 count: 2,
                 notch_q: bank[index].notch_q,
-                separation: (bank[index].gear_ratio - bank[index + 1].gear_ratio) / ratio,
+                separation: (bank[index].gear_ratio - bank[index + 1].gear_ratio) / (ratio / harm),
                 min_hz: bank[index].min_hz,
                 max_hz: bank[index].max_hz,
-                min_rpm: bank[index].min_hz / harm * 60,
-                max_rpm: bank[index].max_hz / harm * 60,
             };
-            self.deleteNotch(bank, index);
-            self.deleteNotch(bank, index+1);
+
+            self.eraseNotch(bank, index);
+            self.eraseNotch(bank, index+1);
+
+            console.log('findHarmonicDouble: ', notch);
 
             return notch;
         }
 
-        index = self.findSingleNotch(bank, motor, ratio);
+        index = self.findSingleNotch(bank, motor, ratio/harm);
         if (index != undefined) {
             const notch = {
                 harmonic: harm,
@@ -150,10 +160,11 @@ const RPMFilter = {
                 separation: 0,
                 min_hz: bank[index].min_hz,
                 max_hz: bank[index].max_hz,
-                min_rpm: bank[index].min_hz / harm * 60,
-                max_rpm: bank[index].max_hz / harm * 60,
-                };
-            self.deleteNotch(bank, index);
+            };
+
+            self.eraseNotch(bank, index);
+
+            console.log('findHarmonicSingle: ', notch);
 
             return notch;
         }
@@ -185,7 +196,7 @@ const RPMFilter = {
 
     },
 
-    findAdvancedConfig : function(bank)
+    parseAdvancedConfig : function(bank)
     {
         const self = this;
 
@@ -197,20 +208,17 @@ const RPMFilter = {
             tailRotor: [],
         };
 
-        config.mainMotor[1] = this.findHarmonic(notches, self.mainMotor, 1,  1);
+        config.mainMotor[1] = this.findHarmonic(notches, self.mainMotor, 1000,  1);
 
-        config.mainRotor[1] = this.findHarmonic(notches, self.mainMotor, self.mainGearRatio * 1,  1);
-        config.mainRotor[2] = this.findHarmonic(notches, self.mainMotor, self.mainGearRatio * 2,  2);
-        config.mainRotor[3] = this.findHarmonic(notches, self.mainMotor, self.mainGearRatio * 3,  3);
-        config.mainRotor[4] = this.findHarmonic(notches, self.mainMotor, self.mainGearRatio * 4,  4);
+        for (let i=1; i<9; i++)
+            config.mainRotor[i] = this.findHarmonic(notches, self.mainMotor, self.mainGearRatio,  i);
 
-        config.tailRotor[1] = this.findHarmonic(notches, self.tailMotor, self.tailGearRatio * 1,  1);
-        config.tailRotor[2] = this.findHarmonic(notches, self.tailMotor, self.tailGearRatio * 2,  2);
+        for (let i=1; i<5; i++)
+            config.tailRotor[i] = this.findHarmonic(notches, self.tailMotor, self.tailGearRatio,  i);
 
         console.log('Main Motor harmonics: ', config.mainMotor);
         console.log('Main Rotor harmonics: ', config.mainRotor);
         console.log('Tail Rotor harmonics: ', config.tailRotor);
-
 
     },
 
@@ -221,8 +229,8 @@ const RPMFilter = {
         self.mainMotor = mainMotor;
         self.tailMotor = tailMotor;
 
-        self.mainGearRatio = mainGearRatio;
-        self.tailGearRatio = tailGearRatio;
+        self.mainGearRatio = mainGearRatio * 1000;
+        self.tailGearRatio = tailGearRatio * 1000;
 
         console.log(`main motor: ${mainMotor}`);
         console.log(`main motor ratio: ${mainGearRatio}`);
