@@ -2,7 +2,7 @@
 
 const RPMFilter = {
 
-    BANK_COUNT: 16,
+    NOTCH_COUNT: 16,
 
     nullNotch: function ()
     {
@@ -16,20 +16,26 @@ const RPMFilter = {
 
     compareNotch : function (a, b)
     {
-        return( a.motor_index === b.motor_index &&
-                a.gear_ratio  === b.gear_ratio &&
-                a.notch_q     === b.notch_q &&
-                a.min_hz      === b.min_hz &&
-                a.max_hz      === b.max_hz );
+        return( a.motor_index == b.motor_index &&
+                a.gear_ratio  == b.gear_ratio &&
+                a.notch_q     == b.notch_q &&
+                a.min_hz      == b.min_hz &&
+                a.max_hz      == b.max_hz );
     },
 
     isNullNotch : function (a)
     {
-        return( a.motor_index === 0 &&
-                a.gear_ratio  === 0 &&
-                a.notch_q     === 0 &&
-                a.min_hz      === 0 &&
-                a.max_hz      === 0 );
+        return( a.motor_index == 0 &&
+                a.gear_ratio  == 0 &&
+                a.notch_q     == 0 &&
+                a.min_hz      == 0 &&
+                a.max_hz      == 0 );
+    },
+
+    deleteNotch : function(bank, a)
+    {
+        if (a != undefined)
+            bank[a] = undefined;
     },
 
     cloneBank : function (a)
@@ -48,14 +54,14 @@ const RPMFilter = {
     {
         const self = this;
 
-        for (let i=0; i<self.BANK_COUNT; i++)
+        for (let i=0; i<self.NOTCH_COUNT; i++)
             if (!self.compareNotch(a[i],b[i]))
                 return false;
 
         return true;
     },
 
-    findNotchAtRatio : function(bank, motor, ratio)
+    findNotchAt : function(bank, motor, ratio)
     {
         const self = this;
 
@@ -64,51 +70,132 @@ const RPMFilter = {
                 return i;
         }
 
-        return null;
+        return undefined;
     },
 
-    findSingleNotch : function(bank, motor, ratio, notch_q)
+    findNotchBetween : function(bank, motor, ratioLow, ratioHigh)
     {
         const self = this;
 
-        const ratio1 = Math.floor(ratio);
-        const ratio2 = Math.ceil(ratio);
-
-        const index0 = self.findNotchAtRatio(bank, motor, ratio1 - 1);
-        const index1 = self.findNotchAtRatio(bank, motor, ratio1);
-        const index2 = self.findNotchAtRatio(bank, motor, ratio2);
-        const index3 = self.findNotchAtRatio(bank, motor, ratio2 + 1);
-
-        let index = null;
-
-        if (index1 !== null)
-            index = index1;
-        else if (index2 !== null)
-            index = index2;
-        else if (index0 !== null)
-            index = index0;
-        else if (index3 !== null)
-            index = index3;
-
-        if (index !== null) {
-            if (bank[index].notch_q == notch_q) {
-                return index;
-            }
+        for (let i=0; i<bank.length; i++) {
+            if (bank[i].motor_index == motor && bank[i].gear_ratio > ratioLow && bank[i].gear_ratio < ratioHigh)
+                return i;
         }
 
-        return null;
+        return undefined;
     },
 
-    findDoubleNotch : function(bank, motor, ratio, notch_q)
-    {
-        
-
-    },
-
-    initialize : function ()
+    findSingleNotch : function(bank, motor, ratio)
     {
         const self = this;
 
+        const ratio1 = Math.floor(ratio) - 1;
+        const ratio2 = Math.ceil(ratio) + 1;
+
+        return self.findNotchBetween(bank, motor, ratio1, ratio2);
+    },
+
+    findDoubleNotch : function(bank, motor, ratio)
+    {
+        const self = this;
+
+        const index1 = self.findNotchBetween(bank, motor, ratio * 0.95, ratio * 0.999);
+        const index2 = self.findNotchBetween(bank, motor, ratio * 1.001, ratio * 1.05);
+
+        if (index1 != undefined && index2 != undefined &&
+            index2 == index1 + 1 &&
+            bank[index1].notch_q == bank[index2].notch_q)
+            return index1;
+
+        
+        return undefined;
+    },
+
+    findHarmonic : function(bank, motor, ratio, harm)
+    {
+        const self = this;
+
+        let index = self.findDoubleNotch(bank, motor, ratio);
+        if (index != undefined) {
+            const notch = {
+                harmonic: harm,
+                count: 2,
+                notch_q: notches[index].notch_q,
+                separation: (bank[index].gear_ratio - bank[index + 1].gear_ratio) / ratio,
+                min_hz: bank[index].min_hz,
+                max_hz: bank[index].max_hz,
+                min_rpm: bank[index].min_hz / ratio * 60,
+                max_rpm: bank[index].max_hz / ratio * 60,
+            };
+            self.deleteNotch(bank, index);
+            self.deleteNotch(bank, index+1);
+
+            return notch;
+        }
+
+        index = self.findSingleNotch(bank, motor, ratio);
+        if (index != undefined) {
+            const notch = {
+                harmonic: harm,
+                count: 1,
+                notch_q: notches[index].notch_q,
+                separation: 0,
+                min_hz: bank[index].min_hz,
+                max_hz: bank[index].max_hz,
+                min_rpm: bank[index].min_hz / ratio * 60,
+                max_rpm: bank[index].max_hz / ratio * 60,
+                };
+            self.deleteNotch(bank, index);
+
+            return notch;
+        }
+
+        return undefined;
+    },
+
+    findAdvancedConfig : function(bank)
+    {
+        const self = this;
+
+        const notches = self.cloneBank(bank);
+
+        const config = {
+            mainMotor: [],
+            mainRotor: [],
+            tailRotor: [],
+        };
+
+        config.mainMotor[1] = this.findHarmonic(notches, self.mainMotor, 1,  1);
+
+        config.mainRotor[1] = this.findHarmonic(notches, self.mainMotor, self.mainGearRatio * 1,  1);
+        config.mainRotor[2] = this.findHarmonic(notches, self.mainMotor, self.mainGearRatio * 2,  2);
+        config.mainRotor[3] = this.findHarmonic(notches, self.mainMotor, self.mainGearRatio * 3,  3);
+        config.mainRotor[4] = this.findHarmonic(notches, self.mainMotor, self.mainGearRatio * 4,  4);
+
+        config.tailRotor[1] = this.findHarmonic(notches, self.tailMotor, self.tailGearRatio * 1,  1);
+        config.tailRotor[2] = this.findHarmonic(notches, self.tailMotor, self.tailGearRatio * 2,  2);
+
+        console.log('Main Motor harmonics: ', config.mainMotor);
+        console.log('Main Rotor harmonics: ', config.mainRotor);
+        console.log('Tail Rotor harmonics: ', config.tailRotor);
+
+
+    },
+
+    initialize : function (mainMotor, mainGearRatio, tailMotor, tailGearRatio)
+    {
+        const self = this;
+
+        self.mainMotor = mainMotor;
+        self.tailMotor = tailMotor;
+
+        self.mainGearRatio = mainGearRatio;
+        self.tailGearRatio = tailGearRatio;
+
+        console.log(`main motor: ${mainMotor}`);
+        console.log(`main motor ratio: ${mainGearRatio}`);
+        console.log(`tail motor: ${tailMotor}`);
+        console.log(`tail gear ratio: ${tailGearRatio}`);
     },
 
 };
