@@ -2579,6 +2579,18 @@
         "message": "135&deg Rear Elevator"
     },
     "mixerSwashType7": {
+        "message": "90&deg Fixed Pitch"
+    },
+    "mixerSwashType8": {
+        "message": "45&deg Fixed Pitch"
+    },
+    "mixerSwashType9": {
+        "message": "90&deg Coaxial"
+    },
+    "mixerSwashType10": {
+        "message": "45&deg Coaxial"
+    },
+    "mixerSwashType11": {
         "message": "H-1 Passthrough"
     },
     "mixerSwashRing": {

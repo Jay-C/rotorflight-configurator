@@ -101,7 +101,6 @@ const RPMFilter = {
 
     findDoubleNotch : function(bank, motor, ratio, notch_q)
     {
-        
 
     },
 
