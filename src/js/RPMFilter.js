@@ -4,6 +4,11 @@ const RPMFilter = {
 
     NOTCH_COUNT: 16,
 
+    aboutEQ: function(a,b,tol)
+    {
+        return (Math.abs(a - b) < a * tol);
+    },
+
     nullNotch: function ()
     {
         return { motor_index: 0, gear_ratio: 0, notch_q: 0, min_hz: 0, max_hz: 0, };
@@ -102,11 +107,14 @@ const RPMFilter = {
         const index1 = self.findNotchBetween(bank, motor, ratio * 0.95, ratio * 0.999);
         const index2 = self.findNotchBetween(bank, motor, ratio * 1.001, ratio * 1.05);
 
-        if (index1 != undefined && index2 != undefined &&
-            index2 == index1 + 1 &&
-            bank[index1].notch_q == bank[index2].notch_q)
-            return index1;
+        if (index1 != undefined && index2 != undefined && index2 == index1 + 1) {
+            const dist1 = (ratio - bank[index1].gear_ratio) / ratio;
+            const dist2 = (bank[index2].gear_ratio - ratio) / ratio;
 
+            if (bank[index1].notch_q == bank[index2].notch_q) {
+                return index1;
+            }
+        }
         
         return undefined;
     },
@@ -120,12 +128,12 @@ const RPMFilter = {
             const notch = {
                 harmonic: harm,
                 count: 2,
-                notch_q: notches[index].notch_q,
+                notch_q: bank[index].notch_q,
                 separation: (bank[index].gear_ratio - bank[index + 1].gear_ratio) / ratio,
                 min_hz: bank[index].min_hz,
                 max_hz: bank[index].max_hz,
-                min_rpm: bank[index].min_hz / ratio * 60,
-                max_rpm: bank[index].max_hz / ratio * 60,
+                min_rpm: bank[index].min_hz / harm * 60,
+                max_rpm: bank[index].max_hz / harm * 60,
             };
             self.deleteNotch(bank, index);
             self.deleteNotch(bank, index+1);
@@ -138,12 +146,12 @@ const RPMFilter = {
             const notch = {
                 harmonic: harm,
                 count: 1,
-                notch_q: notches[index].notch_q,
+                notch_q: bank[index].notch_q,
                 separation: 0,
                 min_hz: bank[index].min_hz,
                 max_hz: bank[index].max_hz,
-                min_rpm: bank[index].min_hz / ratio * 60,
-                max_rpm: bank[index].max_hz / ratio * 60,
+                min_rpm: bank[index].min_hz / harm * 60,
+                max_rpm: bank[index].max_hz / harm * 60,
                 };
             self.deleteNotch(bank, index);
 
@@ -151,6 +159,30 @@ const RPMFilter = {
         }
 
         return undefined;
+    },
+
+    findGlobalMinHz : function(config)
+    {
+
+
+    },
+
+    findGlobalMaxHz : function(config)
+    {
+
+
+    },
+
+    findGlobalMinRPM : function(config)
+    {
+
+
+    },
+
+    findGlobalMaxRPM : function(config)
+    {
+
+
     },
 
     findAdvancedConfig : function(bank)
