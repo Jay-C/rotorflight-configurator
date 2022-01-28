@@ -5,12 +5,12 @@ const RPMFilter = {
     MAX_NOTCH_COUNT: 16,
 
     MAIN_MOTOR_NOTCH_COUNT: 1,
-    TAIL_MOTOR_NOTCH_COUNT: 2,
+    TAIL_MOTOR_NOTCH_COUNT: 0,
 
     MAIN_ROTOR_NOTCH_COUNT: 4,
     TAIL_ROTOR_NOTCH_COUNT: 4,
 
-    DOUBLE_NOTCH_SEPARATION: 0.01,
+    DOUBLE_NOTCH_SEPARATION: 1,
 
 
     aboutEQ: function(a,b,tol)
@@ -48,8 +48,10 @@ const RPMFilter = {
 
     eraseNotches : function(bank, index)
     {
+        const self = this;
+
         index.forEach(function (item) {
-            bank[item] = this.nullNotch();
+            bank[item] = self.nullNotch();
         });
     },
 
@@ -103,10 +105,11 @@ const RPMFilter = {
     {
         const self = this;
 
-        console.log(`findNotchBetween ${motor} ${ratioLow} ${ratioHigh}`);
+        //console.log(`findNotchBetween ${motor} ${ratioLow} ${ratioHigh}`);
 
         for (let i=0; i<bank.length; i++) {
-            if (bank[i].motor_index == motor && bank[i].gear_ratio > ratioLow && bank[i].gear_ratio < ratioHigh)
+            //console.log(`* [${i}] compare motor:${bank[i].motor_index} ratio:${bank[i].gear_ratio}`);
+            if (bank[i].motor_index == motor && bank[i].gear_ratio >= ratioLow && bank[i].gear_ratio <= ratioHigh)
                 return i;
         }
 
@@ -137,20 +140,19 @@ const RPMFilter = {
         const index1 = self.findNotchBetween(bank, motor, ratio * 1.001, ratio * 1.05);
         const index2 = self.findNotchBetween(bank, motor, ratio * 0.95, ratio * 0.999);
 
-        if (index1 != undefined && index2 != undefined)
+        if (index1 != undefined && index2 != undefined && index1 != index2)
         {
             if (bank[index1].notch_q == bank[index2].notch_q &&
                 bank[index1].min_hz  == bank[index2].min_hz &&
-                bank[index1].max_hz  == bank[index2].max_hz) 
-            {
+                bank[index1].max_hz  == bank[index2].max_hz) {
                 const dist1 = (bank[index1].gear_ratio - ratio) /  ratio;
                 const dist2 = (bank[index2].gear_ratio - ratio) / -ratio;
-    
+
                 const separ = self.DOUBLE_NOTCH_SEPARATION / bank[index1].notch_q;
 
-                console.log(`findDoubleNotch ${motor} ${index1}:${dist1} ${index2}:${dist2}`);
+                console.log(`findDoubleNotch ${motor} ${index1}:${dist1} ${index2}:${dist2} ${separ}`);
 
-                if (self.aboutEQ(dist1, separ, 0.0001) && self.aboutEQ(dist2, separ, 0.0001))
+                if (self.aboutEQ(dist1, separ, 0.0005) && self.aboutEQ(dist2, separ, 0.0005))
                     return [index1, index2];
             }
         }
@@ -172,7 +174,6 @@ const RPMFilter = {
                 harmonic: harm,
                 count: 2,
                 notch_q: bank[index[0]].notch_q,
-                separation: (bank[index[0]].gear_ratio - bank[index[1]].gear_ratio) / (ratio / harm),
                 min_hz: bank[index[0]].min_hz,
                 max_hz: bank[index[0]].max_hz,
             };
@@ -190,7 +191,6 @@ const RPMFilter = {
                 harmonic: harm,
                 count: 1,
                 notch_q: bank[index[0]].notch_q,
-                separation: 0,
                 min_hz: bank[index[0]].min_hz,
                 max_hz: bank[index[0]].max_hz,
             };
@@ -258,7 +258,7 @@ const RPMFilter = {
             for (let i=0; i<self.TAIL_MOTOR_NOTCH_COUNT; i++)
                 config.tailMotor[i] = this.findHarmonic(banksy, self.tailMotor, 1000,  i + 1);
         }
-    
+
         console.log('Main Motor harmonics: ', config.mainMotor);
         console.log('Main Rotor harmonics: ', config.mainRotor);
         console.log('Tail Motor harmonics: ', config.tailMotor);
