@@ -304,6 +304,13 @@ TABS.gyro.initialize = function (callback) {
         $('input[id="dtermLowpass2Enabled"]').prop('checked', FC.FILTER_CONFIG.dterm_lowpass2_hz != 0).change();
 
         $('input[id="dtermNotchEnabled"]').prop('checked', FC.FILTER_CONFIG.dterm_notch_hz != 0).change();
+
+
+
+
+
+
+
     }
 
     function form_to_data() {

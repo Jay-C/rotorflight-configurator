@@ -229,11 +229,22 @@ const RPMFilter = {
 
     },
 
-    parseAdvancedConfig : function(bank)
+    generateAdvancedConfig : function(config)
     {
         const self = this;
 
-        const banksy = self.cloneBank(bank);
+        const bank = [];
+
+
+
+
+    },
+
+    parseAdvancedConfig : function(rpm_filter)
+    {
+        const self = this;
+
+        const bank = self.cloneBank(rpm_filter);
 
         const config = {
             mainMotor: [],
@@ -243,20 +254,20 @@ const RPMFilter = {
         };
 
         for (let i=0; i<self.MAIN_ROTOR_NOTCH_COUNT; i++)
-            config.mainRotor[i] = this.findHarmonic(banksy, self.mainMotor, self.mainGearRatio,  i + 1);
+            config.mainRotor[i] = this.findHarmonic(bank, self.mainMotor, self.mainGearRatio,  i + 1);
 
         for (let i=0; i<self.TAIL_ROTOR_NOTCH_COUNT; i++)
-            config.tailRotor[i] = this.findHarmonic(banksy, self.tailMotor, self.tailGearRatio,  i + 1);
+            config.tailRotor[i] = this.findHarmonic(bank, self.tailMotor, self.tailGearRatio,  i + 1);
 
 
         if (self.mainGearRatio != 1000) {
             for (let i=0; i<self.MAIN_MOTOR_NOTCH_COUNT; i++)
-                config.mainMotor[i] = this.findHarmonic(banksy, self.mainMotor, 1000,  i + 1);
+                config.mainMotor[i] = this.findHarmonic(bank, self.mainMotor, 1000,  i + 1);
         }
 
         if (self.mainMotor != self.tailMotor && self.tailGearRatio != 1000) {
             for (let i=0; i<self.TAIL_MOTOR_NOTCH_COUNT; i++)
-                config.tailMotor[i] = this.findHarmonic(banksy, self.tailMotor, 1000,  i + 1);
+                config.tailMotor[i] = this.findHarmonic(bank, self.tailMotor, 1000,  i + 1);
         }
 
         console.log('Main Motor harmonics: ', config.mainMotor);
@@ -264,6 +275,7 @@ const RPMFilter = {
         console.log('Tail Motor harmonics: ', config.tailMotor);
         console.log('Tail Rotor harmonics: ', config.tailRotor);
 
+        return config;
     },
 
     initialize : function (mainMotor, mainGearRatio, tailMotor, tailGearRatio)
