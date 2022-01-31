@@ -7,7 +7,7 @@ TABS.gyro = {
         "BIQUAD",
     ],
     RPM_FILTER_TYPES: [
-        'NONE',
+        null,
         'SINGLE',
         'DOUBLE',
     ],
@@ -51,7 +51,8 @@ TABS.gyro.initialize = function (callback) {
             $('select.' + name).each(function () {
                 const select = $(this);
                 values.forEach(function(value, key) {
-                    select.append('<option value="' + key + '">' + value + '</option>');
+                    if (value)
+                       select.append('<option value="' + key + '">' + value + '</option>');
                 });
             });
         }
@@ -306,20 +307,60 @@ TABS.gyro.initialize = function (callback) {
 
         $('input[id="dtermNotchEnabled"]').prop('checked', FC.FILTER_CONFIG.dterm_notch_hz != 0).change();
 
+
+        if (FC.FEATURE_CONFIG.features.isEnabled('RPM_FILTER')) {
+            $('.gyro_rpm_filter_settings').show();
+            $('.gyro_rpm_filter_notches').show();
+        } else {
+            $('.gyro_rpm_filter_settings').hide();
+            $('.gyro_rpm_filter_notches').hide();
+        }
+
         populateSelector('rpmFilterTypes', self.RPM_FILTER_TYPES);
 
-        $('input[id="gyroRpmFilterMainRotorSw1"]').prop('checked', self.rpmFilter.mainRotor[0].count > 0).change();
-        $('input[id="gyroRpmFilterMainRotorSw2"]').prop('checked', self.rpmFilter.mainRotor[1].count > 0).change();
-        $('input[id="gyroRpmFilterMainRotorSw3"]').prop('checked', self.rpmFilter.mainRotor[2].count > 0).change();
-        $('input[id="gyroRpmFilterMainRotorSw4"]').prop('checked', self.rpmFilter.mainRotor[3].count > 0).change();
+        $('input[id="gyroRpmFilterMainRotorSw1"]').change(function() {
+            const checked = $(this).is(':checked');
+            $('input[id="gyroRpmFilterMainRotorQ1"]').attr('disabled', !checked);
+            $('select[id="gyroRpmFilterMainRotorNotch1"]').attr('disabled', !checked);
+            if (!checked)
+                $('select[id="gyroRpmFilterMainRotorNotch1"]').val(0);
+            else
+                $('select[id="gyroRpmFilterMainRotorNotch1"]').val(self.rpmFilter.mainRotor[0].count);
+        });
 
         $('input[id="gyroRpmFilterMainRotorQ1"]').val(self.rpmFilter.mainRotor[0].notch_q / 100).change();
-        $('input[id="gyroRpmFilterMainRotorQ2"]').val(self.rpmFilter.mainRotor[1].notch_q / 100).change();
-        $('input[id="gyroRpmFilterMainRotorQ3"]').val(self.rpmFilter.mainRotor[2].notch_q / 100).change();
-        $('input[id="gyroRpmFilterMainRotorQ4"]').val(self.rpmFilter.mainRotor[3].notch_q / 100).change();
+        $('input[id="gyroRpmFilterMainRotorSw1"]').prop('checked', self.rpmFilter.mainRotor[0].count > 0).change();
 
-        $('select[id="gyroRpmFilterMainRotorNotch1"]').val(self.rpmFilter.mainRotor[0].count).change();
-        $('select[id="gyroRpmFilterMainRotorNotch2"]').val(self.rpmFilter.mainRotor[1].count).change();
+        $('input[id="gyroRpmFilterMainRotorSw2"]').change(function() {
+            const checked = $(this).is(':checked');
+            $('input[id="gyroRpmFilterMainRotorQ2"]').attr('disabled', !checked);
+            $('select[id="gyroRpmFilterMainRotorNotch2"]').attr('disabled', !checked);
+            if (!checked)
+                $('select[id="gyroRpmFilterMainRotorNotch2"]').val(0);
+            else
+                $('select[id="gyroRpmFilterMainRotorNotch2"]').val(self.rpmFilter.mainRotor[1].count);
+        });
+
+        $('input[id="gyroRpmFilterMainRotorQ2"]').val(self.rpmFilter.mainRotor[1].notch_q / 100).change();
+        $('input[id="gyroRpmFilterMainRotorSw2"]').prop('checked', self.rpmFilter.mainRotor[1].count > 0).change();
+
+        $('input[id="gyroRpmFilterMainRotorSw3"]').change(function() {
+            const checked = $(this).is(':checked');
+            $('input[id="gyroRpmFilterMainRotorQ3"]').attr('disabled', !checked);
+        });
+
+        $('input[id="gyroRpmFilterMainRotorQ3"]').val(self.rpmFilter.mainRotor[2].notch_q / 100).change();
+        $('input[id="gyroRpmFilterMainRotorSw3"]').prop('checked', self.rpmFilter.mainRotor[2].count > 0).change();
+
+        $('input[id="gyroRpmFilterMainRotorSw4"]').change(function() {
+            const checked = $(this).is(':checked');
+            $('input[id="gyroRpmFilterMainRotorQ4"]').attr('disabled', !checked);
+        });
+
+        $('input[id="gyroRpmFilterMainRotorQ4"]').val(self.rpmFilter.mainRotor[3].notch_q / 100).change();
+        $('input[id="gyroRpmFilterMainRotorSw4"]').prop('checked', self.rpmFilter.mainRotor[3].count > 0).change();
+
+
 
         $('input[id="gyroRpmFilterTailRotorSw1"]').prop('checked', self.rpmFilter.tailRotor[0].count > 0).change();
         $('input[id="gyroRpmFilterTailRotorSw2"]').prop('checked', self.rpmFilter.tailRotor[1].count > 0).change();
@@ -336,6 +377,12 @@ TABS.gyro.initialize = function (callback) {
 
         $('input[id="gyroRpmFilterMainMotorSw1"]').prop('checked', self.rpmFilter.mainMotor[0].count > 0).change();
         $('input[id="gyroRpmFilterMainMotorQ1"]').val(self.rpmFilter.mainMotor[0].notch_q / 100).change();
+
+        $('input[id="gyroRpmFilterMainRotorSw2"]').change(function() {
+            const checked = $(this).is(':checked');
+            $('input[id="gyroRpmFilterMainRotorQ2"]').attr('disabled', !checked);
+            $('select[id="gyroRpmFilterMainRotorNotch2"]').attr('disabled', !checked);
+        });
 
     }
 

@@ -197,9 +197,9 @@ const RPMFilter = {
             source:    source,
             harmonic:  harm,
             count:     0,
-            notch_q:   0,
-            min_hz:    0,
-            max_hz:    0,
+            notch_q:   250,
+            min_hz:    20,
+            max_hz:    4000,
         };
 
         //console.log(`findHarmonic: ${source} ${harm}`);
@@ -247,14 +247,18 @@ const RPMFilter = {
     },
 
     generateNotch : function(bank, harm) {
-        if (harm.count == 2)
-            self.generateDoubleNotch(bank, notch);
-        else
-            self.generateSingleNotch(bank, notch);
+        switch (harm.count) {
+            case 2:
+                self.generateDoubleNotch(bank, notch);
+                break;
+            case 1:
+                self.generateSingleNotch(bank, notch);
+                break;
+            default:
+        }
     },
 
-    generateAdvancedConfig : function(config)
-    {
+    generateAdvancedConfig : function(config) {
         const self = this;
         const bank = [];
 
@@ -266,8 +270,7 @@ const RPMFilter = {
         return self.fillUpBank(bank);
     },
 
-    parseAdvancedConfig : function(rpm_filter)
-    {
+    parseAdvancedConfig : function(rpm_filter) {
         const self = this;
 
         const bank = self.cloneBank(rpm_filter);
@@ -296,8 +299,7 @@ const RPMFilter = {
         return config;
     },
 
-    initialize : function ()
-    {
+    initialize : function () {
         const self = this;
 
         self.mainRotorHarmonics = self.MAIN_ROTOR_HARMONICS;
@@ -305,24 +307,6 @@ const RPMFilter = {
 
         self.tailRotorHarmonics = self.TAIL_ROTOR_HARMONICS;
         self.tailMotorHarmonics = self.TAIL_MOTOR_HARMONICS;
-
-        // Initialise all, and let the FC choose which to use
-        if (false) {
-            const mainGearRatio = FC.MOTOR_CONFIG.main_rotor_gear_ratio[0] /
-                                  FC.MOTOR_CONFIG.main_rotor_gear_ratio[1];
-
-            if (mainGearRatio == 1.0)
-                self.mainMotorHarmonics = 0;
-
-            const tailGearRatio = FC.MOTOR_CONFIG.tail_rotor_gear_ratio[0] /
-                                  FC.MOTOR_CONFIG.tail_rotor_gear_ratio[1];
-
-            if (tailGearRatio == 1.0 && FC.MIXER_CONFIG.tail_rotor_mode > 0)
-                self.tailMotorHarmonics = 0;
-
-            if (FC.MIXER_CONFIG.tail_rotor_mode == 0)
-                self.tailMotorHarmonics = 0;
-        }
     },
 
 };
