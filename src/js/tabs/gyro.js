@@ -6,6 +6,11 @@ TABS.gyro = {
         "PT1",
         "BIQUAD",
     ],
+    RPM_FILTER_TYPES: [
+        'NONE',
+        'SINGLE',
+        'DOUBLE',
+    ],
 };
 
 TABS.gyro.initialize = function (callback) {
@@ -42,20 +47,16 @@ TABS.gyro.initialize = function (callback) {
 
     function data_to_form() {
 
-        function populateFilterTypeSelector(name, selectValues) {
-            const filterSelect = $('select[name="' + name + '"]');
-            selectValues.forEach(function(value, key) {
-                filterSelect.append('<option value="' + key + '">' + value + '</option>');
+        function populateSelector(name, values) {
+            $('select.' + name).each(function () {
+                const select = $(this);
+                values.forEach(function(value, key) {
+                    select.append('<option value="' + key + '">' + value + '</option>');
+                });
             });
         }
 
-        populateFilterTypeSelector('gyroLowpassType', self.FILTER_TYPE_NAMES);
-        populateFilterTypeSelector('gyroLowpassDynType', self.FILTER_TYPE_NAMES);
-        populateFilterTypeSelector('gyroLowpass2Type', self.FILTER_TYPE_NAMES);
-
-        populateFilterTypeSelector('dtermLowpassType', self.FILTER_TYPE_NAMES);
-        populateFilterTypeSelector('dtermLowpass2Type', self.FILTER_TYPE_NAMES);
-        populateFilterTypeSelector('dtermLowpassDynType', self.FILTER_TYPE_NAMES);
+        populateSelector('lowpassTypes', self.FILTER_TYPE_NAMES);
 
         $('.gyro_filter select[name="gyroLowpassType"]').val(FC.FILTER_CONFIG.gyro_lowpass_type);
         $('.gyro_filter input[name="gyroLowpassFrequency"]').val(FC.FILTER_CONFIG.gyro_lowpass_hz);
@@ -305,11 +306,36 @@ TABS.gyro.initialize = function (callback) {
 
         $('input[id="dtermNotchEnabled"]').prop('checked', FC.FILTER_CONFIG.dterm_notch_hz != 0).change();
 
+        populateSelector('rpmFilterTypes', self.RPM_FILTER_TYPES);
 
+        $('input[id="gyroRpmFilterMainRotorSw1"]').prop('checked', self.rpmFilter.mainRotor[0].count > 0).change();
+        $('input[id="gyroRpmFilterMainRotorSw2"]').prop('checked', self.rpmFilter.mainRotor[1].count > 0).change();
+        $('input[id="gyroRpmFilterMainRotorSw3"]').prop('checked', self.rpmFilter.mainRotor[2].count > 0).change();
+        $('input[id="gyroRpmFilterMainRotorSw4"]').prop('checked', self.rpmFilter.mainRotor[3].count > 0).change();
 
+        $('input[id="gyroRpmFilterMainRotorQ1"]').val(self.rpmFilter.mainRotor[0].notch_q / 100).change();
+        $('input[id="gyroRpmFilterMainRotorQ2"]').val(self.rpmFilter.mainRotor[1].notch_q / 100).change();
+        $('input[id="gyroRpmFilterMainRotorQ3"]').val(self.rpmFilter.mainRotor[2].notch_q / 100).change();
+        $('input[id="gyroRpmFilterMainRotorQ4"]').val(self.rpmFilter.mainRotor[3].notch_q / 100).change();
 
+        $('select[id="gyroRpmFilterMainRotorNotch1"]').val(self.rpmFilter.mainRotor[0].count).change();
+        $('select[id="gyroRpmFilterMainRotorNotch2"]').val(self.rpmFilter.mainRotor[1].count).change();
 
+        $('input[id="gyroRpmFilterTailRotorSw1"]').prop('checked', self.rpmFilter.tailRotor[0].count > 0).change();
+        $('input[id="gyroRpmFilterTailRotorSw2"]').prop('checked', self.rpmFilter.tailRotor[1].count > 0).change();
+        $('input[id="gyroRpmFilterTailRotorSw3"]').prop('checked', self.rpmFilter.tailRotor[2].count > 0).change();
+        $('input[id="gyroRpmFilterTailRotorSw4"]').prop('checked', self.rpmFilter.tailRotor[3].count > 0).change();
 
+        $('input[id="gyroRpmFilterTailRotorQ1"]').val(self.rpmFilter.tailRotor[0].notch_q / 100).change();
+        $('input[id="gyroRpmFilterTailRotorQ2"]').val(self.rpmFilter.tailRotor[1].notch_q / 100).change();
+        $('input[id="gyroRpmFilterTailRotorQ3"]').val(self.rpmFilter.tailRotor[2].notch_q / 100).change();
+        $('input[id="gyroRpmFilterTailRotorQ4"]').val(self.rpmFilter.tailRotor[3].notch_q / 100).change();
+
+        $('select[id="gyroRpmFilterTailRotorNotch1"]').val(self.rpmFilter.tailRotor[0].count).change();
+        $('select[id="gyroRpmFilterTailRotorNotch2"]').val(self.rpmFilter.tailRotor[1].count).change();
+
+        $('input[id="gyroRpmFilterMainMotorSw1"]').prop('checked', self.rpmFilter.mainMotor[0].count > 0).change();
+        $('input[id="gyroRpmFilterMainMotorQ1"]').val(self.rpmFilter.mainMotor[0].notch_q / 100).change();
 
     }
 
@@ -398,14 +424,12 @@ TABS.gyro.initialize = function (callback) {
         // translate to user-selected language
         i18n.localizePage();
 
+        // Load RPM filter configuration
+        RPMFilter.initialize();
+        self.rpmFilter = RPMFilter.parseAdvancedConfig(FC.RPM_FILTER_CONFIG);
+
         // UI Hooks
         data_to_form();
-
-        const mainRatio = FC.MOTOR_CONFIG.main_rotor_gear_ratio[1] / FC.MOTOR_CONFIG.main_rotor_gear_ratio[0];
-        const tailRatio = FC.MOTOR_CONFIG.tail_rotor_gear_ratio[1] / FC.MOTOR_CONFIG.tail_rotor_gear_ratio[0];
-
-        RPMFilter.initialize(1, mainRatio, 1, mainRatio / tailRatio);
-        RPMFilter.parseAdvancedConfig(FC.RPM_FILTER_CONFIG);
 
         // Hide the buttons toolbar
         $('.tab-gyro').addClass('toolbar_hidden');

@@ -27,7 +27,7 @@
                                     <td>
                                         <span class="groupSwitchValue">
                                             <span class="inputSwitch"><input type="checkbox" id="gyroLowpassEnabled" class="toggle" /></span>
-                                            <span class="inputSelect"><select name="gyroLowpassType"></select></span>
+                                            <span class="inputSelect"><select name="gyroLowpassType" class="lowpassTypes"></select></span>
                                         </span>
                                     </td>
                                     <td>
@@ -85,7 +85,7 @@
                                     <td>
                                         <span class="groupSwitchValue">
                                             <span class="inputSwitch"><input type="checkbox" id="gyroLowpass2Enabled" class="toggle" /></span>
-                                            <span class="inputSelect"><select name="gyroLowpass2Type"></select></span>
+                                            <span class="inputSelect"><select name="gyroLowpass2Type" class="lowpassTypes"></select></span>
                                         </span>
                                     </td>
                                     <td>
@@ -260,7 +260,7 @@
                                     <td>
                                         <span class="groupSwitchValue">
                                             <span class="inputSwitch"><input type="checkbox" id="dtermLowpassEnabled" class="toggle" /></span>
-                                            <span class="inputSelect"><select name="dtermLowpassType"></select></span>
+                                            <span class="inputSelect"><select name="dtermLowpassType" class="lowpassTypes"></select></span>
                                         </span>
                                     </td>
                                     <td>
@@ -317,7 +317,7 @@
                                     <td>
                                         <span class="groupSwitchValue">
                                             <span class="inputSwitch"><input type="checkbox" id="dtermLowpass2Enabled" class="toggle" /></span>
-                                            <span class="inputSelect"><select name="dtermLowpass2Type"></select></span>
+                                            <span class="inputSelect"><select name="dtermLowpass2Type" class="lowpassTypes"></select></span>
                                         </span>
                                     </td>
                                     <td>
@@ -481,7 +481,7 @@
                                 <td>
                                     <span class="groupSwitchValue">
                                         <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterMainRotorSw1" class="toggle"></input></span>
-                                        <span class="inputSelect"><select id="gyroRpmFilterMainRotorNotch1"></select></span>
+                                        <span class="inputSelect"><select id="gyroRpmFilterMainRotorNotch1" class="rpmFilterTypes"></select></span>
                                     </span>
                                 </td>
                                 <td>
@@ -494,7 +494,7 @@
                             </tr>
                             <tr class="border">
                                 <td>
-                                    <span class="inputNumber"><input type="number" id="gyroRpmFilterMainRotorQ1"></input></span>
+                                    <span class="inputNumber"><input type="number" id="gyroRpmFilterMainRotorQ1" min="0.5" max="5.0" step="0.1"></input></span>
                                 </td>
                                 <td>
                                     <div>
@@ -509,7 +509,7 @@
                                 <td>
                                     <span class="groupSwitchValue">
                                         <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterMainRotorSw2" class="toggle"></input></span>
-                                        <span class="inputSelect"><select id="gyroRpmFilterMainRotorNotch2"></select></span>
+                                        <span class="inputSelect"><select id="gyroRpmFilterMainRotorNotch2" class="rpmFilterTypes"></select></span>
                                     </span>
                                 </td>
                                 <td>
@@ -522,7 +522,7 @@
                             </tr>
                             <tr class="border">
                                 <td>
-                                    <span class="inputNumber"><input type="number" id="gyroRpmFilterMainRotorQ2"></input></span>
+                                    <span class="inputNumber"><input type="number" id="gyroRpmFilterMainRotorQ2" min="0.5" max="5.0" step="0.1"></input></span>
                                 </td>
                                 <td>
                                     <div>
@@ -537,7 +537,7 @@
                                 <td>
                                     <span class="groupSwitchValue">
                                         <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterMainRotorSw3" class="toggle"></input></span>
-                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterMainRotorQ3"></input></span>
+                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterMainRotorQ3" min="0.5" max="5.0" step="0.1"></input></span>
                                     </span>
                                 </td>
                                 <td>
@@ -553,7 +553,7 @@
                                 <td>
                                     <span class="groupSwitchValue">
                                         <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterMainRotorSw4" class="toggle"></input></span>
-                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterMainRotorQ4"></input></span>
+                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterMainRotorQ4" min="0.5" max="5.0" step="0.1"></input></span>
                                     </span>
                                 </td>
                                 <td>
@@ -578,7 +578,7 @@
                                 <td>
                                     <span class="groupSwitchValue">
                                         <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterTailRotorSw1" class="toggle"></input></span>
-                                        <span class="inputSelect"><select id="gyroRpmFilterTailRotorNotch1"></select></span>
+                                        <span class="inputSelect"><select id="gyroRpmFilterTailRotorNotch1" class="rpmFilterTypes"></select></span>
                                     </span>
                                 </td>
                                 <td>
@@ -591,7 +591,7 @@
                             </tr>
                             <tr class="border">
                                 <td>
-                                    <span class="inputNumber"><input type="number" id="gyroRpmFilterTailRotorQ1"></input></span>
+                                    <span class="inputNumber"><input type="number" id="gyroRpmFilterTailRotorQ1" min="0.5" max="5.0" step="0.1"></input></span>
                                 </td>
                                 <td>
                                     <div>
@@ -606,7 +606,7 @@
                                 <td>
                                     <span class="groupSwitchValue">
                                         <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterTailRotorSw2" class="toggle"></input></span>
-                                        <span class="inputSelect"><select id="gyroRpmFilterTailRotorNotch2"></select></span>
+                                        <span class="inputSelect"><select id="gyroRpmFilterTailRotorNotch2" class="rpmFilterTypes"></select></span>
                                     </span>
                                 </td>
                                 <td>
@@ -619,7 +619,7 @@
                             </tr>
                             <tr class="border">
                                 <td>
-                                    <span class="inputNumber"><input type="number" id="gyroRpmFilterTailRotorQ2"></input></span>
+                                    <span class="inputNumber"><input type="number" id="gyroRpmFilterTailRotorQ2" min="0.5" max="5.0" step="0.1"></input></span>
                                 </td>
                                 <td>
                                     <div>
@@ -634,7 +634,7 @@
                                 <td>
                                     <span class="groupSwitchValue">
                                         <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterTailRotorSw3" class="toggle"></input></span>
-                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterTailRotorQ3"></input></span>
+                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterTailRotorQ3" min="0.5" max="5.0" step="0.1"></input></span>
                                     </span>
                                 </td>
                                 <td>
@@ -650,7 +650,7 @@
                                 <td>
                                     <span class="groupSwitchValue">
                                         <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterTailRotorSw4" class="toggle"></input></span>
-                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterTailRotorQ4"></input></span>
+                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterTailRotorQ4" min="0.5" max="5.0" step="0.1"></input></span>
                                     </span>
                                 </td>
                                 <td>
@@ -675,7 +675,7 @@
                                 <td>
                                     <span class="groupSwitchValue">
                                         <span class="inputSwitch"><input type="checkbox" id="gyroRpmFilterMainMotorSw1" class="toggle"></input></span>
-                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterMainMotorQ1"></input></span>
+                                        <span class="inputNumber"><input type="number" id="gyroRpmFilterMainMotorQ1" min="0.5" max="5.0" step="0.1"></input></span>
                                     </span>
                                 </td>
                                 <td>
