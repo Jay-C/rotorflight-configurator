@@ -153,7 +153,7 @@ const RPMFilter = {
         const index = self.findNotchBetween(bank, source, ratio1, ratio2);
 
         if (index != undefined) {
-            console.log(`findSingleNotch ${source} ${index} ${ratio}`);
+            //console.log(`findSingleNotch ${source} ${index} ${ratio}`);
             return [index];
         }
 
@@ -232,27 +232,33 @@ const RPMFilter = {
     },
 
     generateSingleNotch : function(bank, harm) {
+        const self = this;
+
         const ratio = Math.round(10000 / harm.harmonic);
 
-        bank.push( newNotch(harm.source, ratio, harm.notch_q, harm.min_hz, harm.max_hz) );
+        bank.push( self.newNotch(harm.source, ratio, harm.notch_q, harm.min_hz, harm.max_hz) );
     },
 
     generateDoubleNotch : function(bank, harm) {
+        const self = this;
+
         const ratio  = 10000 / harm.harmonic;
         const ratio1 = Math.round(ratio * (1.0 - self.doubleNotchSeparation / harm.notch_q));
         const ratio2 = Math.round(ratio * (1.0 + self.doubleNotchSeparation / harm.notch_q));
 
-        bank.push( newNotch(harm.source, ratio1, harm.notch_q, harm.min_hz, harm.max_hz),
-                   newNotch(harm.source, ratio2, harm.notch_q, harm.min_hz, harm.max_hz) );
+        bank.push( self.newNotch(harm.source, ratio1, harm.notch_q, harm.min_hz, harm.max_hz),
+                   self.newNotch(harm.source, ratio2, harm.notch_q, harm.min_hz, harm.max_hz) );
     },
 
     generateNotch : function(bank, harm) {
+        const self = this;
+
         switch (harm.count) {
             case 2:
-                self.generateDoubleNotch(bank, notch);
+                self.generateDoubleNotch(bank, harm);
                 break;
             case 1:
-                self.generateSingleNotch(bank, notch);
+                self.generateSingleNotch(bank, harm);
                 break;
             default:
         }
