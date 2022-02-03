@@ -2,6 +2,7 @@
 
 TABS.gyro = {
     isDirty: false,
+    rpmFilterDirty: false,
     FILTER_TYPE_NAMES: [
         "PT1",
         "BIQUAD",
@@ -34,7 +35,13 @@ TABS.gyro.initialize = function (callback) {
     }
 
     function save_data(callback) {
-        function save_filter() {
+        function save_rpm_filter() {
+            if (self.rpmFilterDirty)
+                mspHelper.sendRPMFilters(save_gyro_filter);
+            else
+                save_gyro_filter();
+        }
+        function save_gyro_filter() {
             Promise.resolve(true)
                 .then(() => MSP.promise(MSPCodes.MSP_SET_FILTER_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FILTER_CONFIG)))
                 .then(() => MSP.promise(MSPCodes.MSP_EEPROM_WRITE))
@@ -45,7 +52,7 @@ TABS.gyro.initialize = function (callback) {
                     reinitialiseConnection(callback);
                 });
         }
-        mspHelper.sendRPMFilters(save_filter);
+        save_rpm_filter();
     };
 
     function data_to_form() {
@@ -630,8 +637,9 @@ TABS.gyro.initialize = function (callback) {
         }
 
         if (!self.rpmFilter.custom) {
-            console.log('Generate rpm filter: ', self.rpmFilter);
+            //console.log('Generate rpm filter: ', self.rpmFilter);
             FC.RPM_FILTER_CONFIG = RPMFilter.generateConfig(self.rpmFilter);
+            self.rpmFilterDirty = true;
         }
     }
 
@@ -642,6 +650,7 @@ TABS.gyro.initialize = function (callback) {
 
         // Load RPM filter configuration
         self.rpmFilter = RPMFilter.parseConfig(FC.RPM_FILTER_CONFIG);
+        self.rpmFilterDirty = false;
 
         // UI Hooks
         data_to_form();
