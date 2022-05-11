@@ -2640,7 +2640,7 @@ TABS.osd.initialize = function(callback) {
                                 timerTableRow.append(`<td>${tim.index + 1}</td>`);
 
                                 // Source
-                                const sourceTimerTableData = $('<td class="osd_tip"></td>');
+                                const sourceTimerTableData = $('<td class="timer-detail osd_tip"></td>');
                                 sourceTimerTableData.attr('title', i18n.getMessage('osdTimerSourceTooltip'));
                                 sourceTimerTableData.append(`<label for="timerSource_${tim.index}" class="char-label">${i18n.getMessage('osdTimerSource')}</label>`);
                                 const src = $(`<select class="timer-option" id="timerSource_${tim.index}"></select>`);
@@ -2663,7 +2663,7 @@ TABS.osd.initialize = function(callback) {
                                 // Precision
                                 timerTableRow = $('<tr />');
                                 timerTable.append(timerTableRow);
-                                const precisionTimerTableData = $('<td class="osd_tip"></td>');
+                                const precisionTimerTableData = $('<td class="timer-detail osd_tip"></td>');
                                 precisionTimerTableData.attr('title', i18n.getMessage('osdTimerPrecisionTooltip'));
                                 precisionTimerTableData.append(`<label for="timerPrec_${tim.index}" class="char-label">${i18n.getMessage('osdTimerPrecision')}</label>`);
                                 const precision = $(`<select class="timer-option osd_tip" id="timerPrec_${tim.index}"></select>`);
@@ -2687,7 +2687,7 @@ TABS.osd.initialize = function(callback) {
                                 // Alarm
                                 timerTableRow = $('<tr />');
                                 timerTable.append(timerTableRow);
-                                const alarmTimerTableData = $('<td class="osd_tip"></td>');
+                                const alarmTimerTableData = $('<td class="timer-detail osd_tip"></td>');
                                 alarmTimerTableData.attr('title', i18n.getMessage('osdTimerAlarmTooltip'));
                                 alarmTimerTableData.append(`<label for="timerAlarm_${tim.index}" class="char-label">${i18n.getMessage('osdTimerAlarm')}</label>`);
                                 const alarm = $(`<input class="timer-option osd_tip" name="alarm" type="number" min=0 id="timerAlarm_${tim.index}"/>`);
