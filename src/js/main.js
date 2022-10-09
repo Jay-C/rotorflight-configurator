@@ -40,7 +40,7 @@ function appReady() {
 }
 
 function setupAnalytics(result) {
-    let userId = result.userId;
+    let userId = 'RotorflightFC'; //result.userId;
 
     if (!userId) {
         const uid = new ShortUniqueId();
@@ -432,7 +432,7 @@ function setDarkTheme(enabled) {
 }
 
 function checkForConfiguratorUpdates() {
-    const releaseChecker = new ReleaseChecker('configurator', 'https://api.github.com/repos/rotorflight/rotorflight-configurator/releases');
+    const releaseChecker = new ReleaseChecker('configurator', 'https://api.github.com/repos/jay-c/configuration/releases');
 
     releaseChecker.loadReleaseData(notifyOutdatedVersion);
 }
