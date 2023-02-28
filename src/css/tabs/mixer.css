@@ -78,7 +78,10 @@
 
 .tab-mixer .mixerConfigs tr:not(:last-child) td {
     padding-bottom: 5px;
-    border-bottom: 1px dotted var(--superSubtleAccent);
+}
+
+.tab-mixer .mixerConfigs tr.border td {
+    border-top: 1px dotted var(--superSubtleAccent);
 }
 
 .tab-mixer .mixerInputs {
