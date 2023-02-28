@@ -13,6 +13,9 @@ TABS.mixer = {
     MIXER_OVERRIDE_OFF:  2501,
 
     swashType: 0,
+    swashPhase: 0,
+    swashTrim: [ 0, 0, 0 ],
+
     tailMode: 0,
 
     prevInputs: null,
@@ -70,9 +73,9 @@ TABS.mixer.initialize = function (callback) {
                 send_mixer_rules();
         }
         function send_mixer_rules() {
-            if (self.MIXER_RULES_dirty)
-                mspHelper.sendMixerRules(save_eeprom);
-            else
+            //if (self.MIXER_RULES_dirty)
+            //    mspHelper.sendMixerRules(save_eeprom);
+            //else
                 save_eeprom();
         }
         function save_eeprom() {
@@ -112,9 +115,9 @@ TABS.mixer.initialize = function (callback) {
                 send_mixer_rules();
         }
         function send_mixer_rules() {
-            if (self.MIXER_RULES_dirty)
-                mspHelper.sendMixerRules(revert_done);
-            else
+            //if (self.MIXER_RULES_dirty)
+            //    mspHelper.sendMixerRules(revert_done);
+            //else
                 revert_done();
         }
         function revert_done() {
@@ -307,26 +310,16 @@ TABS.mixer.initialize = function (callback) {
         self.MIXER_INPUTS_dirty = false;
         self.MIXER_RULES_dirty = false;
 
-        self.tailMode = FC.MIXER_CONFIG.tail_rotor_mode;
-
-        Mixer.initialize(self.tailMode);
-
-        self.swashType = Mixer.findMixer(FC.MIXER_RULES);
-        self.prevRules = Mixer.cloneRules(FC.MIXER_RULES);
+        //self.prevRules = Mixer.cloneRules(FC.MIXER_RULES);
         self.prevInputs = Mixer.cloneInputs(FC.MIXER_INPUTS);
 
         const mixerSwashType = $('.tab-mixer #mixerSwashType');
-        const mixerTailMode = $('.tab-mixer #mixerTailRotorMode');
-
-        if (self.swashType == -1)
-            mixerSwashType.append($('<option value="-1" disabled>[Select]</option>'));
-        if (self.swashType == 0)
-            mixerSwashType.append($('<option value="0" disabled>' + i18n.getMessage(Mixer.swashTypes[0]) + '</option>'));
 
         Mixer.swashTypes.forEach(function(name,index) {
-            if (index > 0)
-                mixerSwashType.append($(`<option value="${index}">` + i18n.getMessage(name) + '</option>'));
+            mixerSwashType.append($(`<option value="${index}">` + i18n.getMessage(name) + '</option>'));
         });
+
+        const mixerTailMode = $('.tab-mixer #mixerTailRotorMode');
 
         const mixerRuleOpers   = $('.mixerRuleTemplate #oper');
         const mixerRuleInputs  = $('.mixerRuleTemplate #input');
@@ -335,11 +328,9 @@ TABS.mixer.initialize = function (callback) {
         Mixer.operNames.forEach(function(name,index) {
             mixerRuleOpers.append($(`<option value="${index}">` + i18n.getMessage(name)  + '</option>'));
         });
-
         Mixer.inputNames.forEach(function(name,index) {
             mixerRuleInputs.append($(`<option value="${index}">` + i18n.getMessage(name)  + '</option>'));
         });
-
         Mixer.outputNames.forEach(function(name,index) {
             mixerRuleOutputs.append($(`<option value="${index}">` + i18n.getMessage(name) + '</options>'));
         });
@@ -356,59 +347,39 @@ TABS.mixer.initialize = function (callback) {
 
         $('.tab-mixer .override').toggle(!FC.CONFIG.mixerOverrideDisabled);
 
-        mixerSwashType.change(function () {
-            const swashType = parseInt($(this).val());
-            if (swashType != 0) {
-                $('.mixerCustomNote').hide();
-                if (self.swashType == 0) {
-                    $('.dialogMixerReset')[0].showModal();
-                }
-            }
-        });
-
-        $('.dialogMixerReset-acceptbtn').click(function() {
-            $('.dialogMixerReset')[0].close();
-        });
-        $('.dialogMixerReset-revertbtn').click(function() {
-            $('.dialogMixerReset')[0].close();
-            mixerSwashType.val(0);
-        });
-
         mixerTailMode.change(function () {
             const val = $(this).val();
             $('.tailRotorMotorized').toggle( val != 0 );
             $('.mixerBidirNote').toggle( val == 2 );
         });
 
-        $('.mixerCustomNote').toggle( self.swashType == 0 );
-        $('.mixerBidirNote').toggle( self.tailMode == 2 );
-        $('.tailRotorMotorized').toggle( self.tailMode != 0 );
+        $('.tab-mixer #mixerSwashType').val(FC.MIXER_CONFIG.swash_type);
+        $('.tab-mixer #mixerSwashRing').val(FC.MIXER_CONFIG.swash_ring);
+        $('.tab-mixer #mixerSwashPhase').val(FC.MIXER_CONFIG.swash_phase);
+
+        $('.tab-mixer #mixerSwashTrim1').val(FC.MIXER_CONFIG.swash_trim[0]);
+        $('.tab-mixer #mixerSwashTrim2').val(FC.MIXER_CONFIG.swash_trim[1]);
+        $('.tab-mixer #mixerSwashTrim3').val(FC.MIXER_CONFIG.swash_trim[2]);
 
         $('.tab-mixer #mixerMainRotorDirection').val(FC.MIXER_CONFIG.main_rotor_dir);
-        $('.tab-mixer #mixerSwashType').val(self.swashType);
-        $('.tab-mixer #mixerSwashRing').val(FC.MIXER_CONFIG.swash_ring);
 
-        $('.tab-mixer #mixerTailRotorMode').val(self.tailMode);
+        $('.tab-mixer #mixerTailRotorMode').val(FC.MIXER_CONFIG.tail_rotor_mode).change();
         $('.tab-mixer #mixerTailMotorIdle').val(FC.MIXER_CONFIG.tail_motor_idle / 10).change();
     }
 
     function form_to_data() {
 
-        const swashType = parseInt($('.tab-mixer #mixerSwashType').val());
-        const tailMode  = parseInt($('.tab-mixer #mixerTailRotorMode').val());
+        FC.MIXER_CONFIG.swash_type = parseInt($('.tab-mixer #mixerSwashType').val());
+        FC.MIXER_CONFIG.swash_ring = parseInt($('.tab-mixer #mixerSwashRing').val());
+        FC.MIXER_CONFIG.swash_phase = parseInt($('.tab-mixer #mixerSwashPhase').val());
 
-        if (swashType != self.swashType || tailMode != self.tailMode) {
-            if (swashType != 0) {
-                Mixer.initialize(tailMode);
-                FC.MIXER_RULES = Mixer.getMixer(swashType);
-                self.MIXER_RULES_dirty = true;
-            }
-        }
+        FC.MIXER_CONFIG.swash_trim[0] = parseInt($('.tab-mixer #mixerSwashTrim1').val());
+        FC.MIXER_CONFIG.swash_trim[1] = parseInt($('.tab-mixer #mixerSwashTrim2').val());
+        FC.MIXER_CONFIG.swash_trim[2] = parseInt($('.tab-mixer #mixerSwashTrim3').val());
 
         FC.MIXER_CONFIG.main_rotor_dir = parseInt($('.tab-mixer #mixerMainRotorDirection').val());
-        FC.MIXER_CONFIG.swash_ring = parseInt($('.tab-mixer #mixerSwashRing').val());
 
-        FC.MIXER_CONFIG.tail_rotor_mode = tailMode;
+        FC.MIXER_CONFIG.tail_rotor_mode = parseInt($('.tab-mixer #mixerTailRotorMode').val());
         FC.MIXER_CONFIG.tail_motor_idle = $('.tab-mixer #mixerTailMotorIdle').val() * 10;
     }
 
@@ -456,8 +427,8 @@ TABS.mixer.initialize = function (callback) {
         };
 
         self.revert = function (callback) {
-            if (self.MIXER_RULES_dirty)
-                FC.MIXER_RULES = self.prevRules;
+            //if (self.MIXER_RULES_dirty)
+            //    FC.MIXER_RULES = self.prevRules;
             if (self.MIXER_INPUTS_dirty)
                 FC.MIXER_INPUTS = self.prevInputs;
             revert_data(callback);
