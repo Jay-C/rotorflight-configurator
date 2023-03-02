@@ -2093,10 +2093,10 @@
         "message": "Looking from the top of the helicopter, what direction is the main rotor turning? For the majority of helicopters this is clockwise"
     },
     "mixerClockwise": {
-        "message": "Clockwise"
+        "message": "CW"
     },
     "mixerCounterClockwise": {
-        "message": "Counter-Clockwise"
+        "message": "CCW"
     },
     "mixerSwashType": {
         "message": "Swashplate type"
@@ -2140,14 +2140,20 @@
     "mixerSwashRingHelp": {
         "message": "The swashring limits the maximum angle the swashplate can reach in order to prevent binding. Pitch and Roll axis should be configured individually (via the Mixer input and scaling) to the desired pitch angles (without binding). If however, both the maximum Pitch and Roll are commanded <strong>at the same time</strong>, the Swashplate will have to deflect to a larger angle than either axis individually. This may result in the swashplate binding on the main shaft.<br><br>Increasing the value of Swashring will limit the maximum Swashplate angle when both Pitch and Roll are maximum."
     },
+    "mixerSwashPhase": {
+        "message": "Swashplate phase angle"
+    },
+    "mixerSwashPhaseHelp": {
+        "message": "The phase offset for the swashplate controls."
+    },
     "mixerCyclicCalibration": {
-        "message": "Cyclic calibration"
+        "message": "Cyclic calibration [%]"
     },
     "mixerCyclicCalibrationHelp": {
         "message": "Adjust the cyclic gain to match the mechanical gain in the head design."
     },
     "mixerCollectiveCalibration": {
-        "message": "Collective calibration"
+        "message": "Collective calibration [%]"
     },
     "mixerCollectiveCalibrationHelp": {
         "message": "Adjust the collective gain to match the mechanical gain in the head design."
@@ -2207,22 +2213,22 @@
         "message": "This is the minimum throttle signal sent to the tail motor. This should be set just high enough that the motor does not stop"
     },
     "mixerTailRotorCalibration": {
-        "message": "Tail rotor calibration"
+        "message": "Yaw calibration [%]"
     },
     "mixerTailRotorCalibrationHelp": {
         "message": "Adjust the yaw gain to match the mechanical gain. Usually around 50-150% for servo driven tails, but can be wildly different for motorised tail rotors."
     },
-    "mixerTailRotorMin": {
-        "message": "Tail rotor low limit"
+    "mixerTailRotorYawMin": {
+        "message": "Yaw CW limit"
     },
-    "mixerTailRotorMinHelp": {
-        "message": "The low limit for the yaw control, i.e. the minimum value for the tail rotor control."
+    "mixerTailRotorYawMinHelp": {
+        "message": "A limit for the clockwise yaw."
     },
-    "mixerTailRotorMax": {
-        "message": "Tail rotor high limit"
+    "mixerTailRotorYawMax": {
+        "message": "Yaw CCW limit"
     },
-    "mixerTailRotorMaxHelp": {
-        "message": "The high limit for the yaw control, i.e. the maximum value for the tail rotor control."
+    "mixerTailRotorYawMaxHelp": {
+        "message": "A limit for the counter-clockwise yaw."
     },
     "mixerInputChannels": {
         "message": "Mixer Control Inputs"

@@ -72,13 +72,16 @@
 }
 
 .tab-mixer .mixerConfigs tr td:first-child {
-    width: 140px;
+    width: 120px;
     padding-right: 10px;
 }
 
 .tab-mixer .mixerConfigs tr:not(:last-child) td {
     padding-bottom: 5px;
-    border-bottom: 1px dotted var(--superSubtleAccent);
+}
+
+.tab-mixer .mixerConfigs tr.border td {
+    border-top: 1px dotted var(--superSubtleAccent);
 }
 
 .tab-mixer .mixerInputs {
