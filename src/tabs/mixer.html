@@ -57,43 +57,6 @@
                                 <tr class="border">
                                     <td>
                                         <div class="configCol1">
-                                            <input type="number" id="mixerSwashTrim1" min="-100" max="100" step="0.1" />
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="configCol2">
-                                            <span i18n="mixerSwashTrim1"></span>
-                                            <div class="helpicon cf_tip" i18n_title="mixerSwashTrimHelp"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="configCol1">
-                                            <input type="number" id="mixerSwashTrim2" min="-100" max="100" step="0.1" />
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="configCol2">
-                                            <span i18n="mixerSwashTrim2"></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="configCol1">
-                                            <input type="number" id="mixerSwashTrim3" min="-100" max="100" step="0.1" />
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="configCol2">
-                                            <span i18n="mixerSwashTrim3"></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="border">
-                                    <td>
-                                        <div class="configCol1">
                                             <input type="number" id="mixerSwashPhase" min="-90" max="90" step="0.1" />
                                         </div>
                                     </td>
@@ -105,6 +68,56 @@
                                     </td>
                                 </tr>
                                 <tr class="border">
+                                    <td>
+                                        <div class="configCol1">
+                                            <input type="checkbox" class="toggle" id="mixerAileronReverse" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerAileronReverse"></span>
+                                            <div class="helpicon cf_tip" i18n_title="mixerAileronReverseHelp"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="configCol1">
+                                            <input type="checkbox" class="toggle" id="mixerElevatorReverse" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerElevatorReverse"></span>
+                                            <div class="helpicon cf_tip" i18n_title="mixerElevatorReverseHelp"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="configCol1">
+                                            <input type="checkbox" class="toggle" id="mixerCollectiveReverse" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerCollectiveReverse"></span>
+                                            <div class="helpicon cf_tip" i18n_title="mixerCollectiveReverseHelp"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- GEOMETRY SETTINGS -->
+                    <div class="gui_box grey">
+                        <div class="gui_box_titlebar">
+                            <div class="spacer_box_title" i18n="mixerGeometrySettings"></div>
+                        </div>
+                        <div class="spacer_box">
+                            <table class="mixerConfigs">
+                                <tr>
                                     <td>
                                         <div class="configCol1">
                                             <input type="number" id="mixerCyclicCalibration" min="20" max="200" step="0.1" />
@@ -176,6 +189,55 @@
                 </div>
 
                 <div class="grid-col col6">
+
+                    <!-- SWASH LINK TRIM -->
+                    <div class="gui_box grey">
+                        <div class="gui_box_titlebar">
+                            <div class="spacer_box_title" i18n="mixerSwashLinkTrim"></div>
+                        </div>
+                        <div class="spacer_box">
+                            <table class="mixerConfigs">
+                                <tr>
+                                    <td>
+                                        <div class="configCol1">
+                                            <input type="number" id="mixerSwashTrim1" min="-100" max="100" step="0.1" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerSwashTrim1"></span>
+                                            <div class="helpicon cf_tip" i18n_title="mixerSwashTrimHelp"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="configCol1">
+                                            <input type="number" id="mixerSwashTrim2" min="-100" max="100" step="0.1" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerSwashTrim2"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="configCol1">
+                                            <input type="number" id="mixerSwashTrim3" min="-100" max="100" step="0.1" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerSwashTrim3"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
                     <!-- TAIL ROTOR SETTINGS -->
                     <div class="gui_box grey">
                         <div class="gui_box_titlebar">
@@ -255,6 +317,7 @@
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
