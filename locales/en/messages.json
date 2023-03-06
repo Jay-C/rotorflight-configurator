@@ -2134,29 +2134,29 @@
     "mixerSwashType9": {
         "message": ""
     },
-    "mixerElevatorPosition": {
-        "message": "Elevator Servo Position"
+    "mixerDirectionNormal": {
+        "message": "Normal"
     },
-    "mixerElevatorPositionHelp": {
-        "message": "Position of the elevator servo: front or rear."
+    "mixerDirectionReverse": {
+        "message": "Reverse"
     },
-    "mixerElevatorFront": {
-        "message": "Front Servo"
+    "mixerElevatorDirection": {
+        "message": "Elevator Control Direction"
     },
-    "mixerElevatorBack": {
-        "message": "Rear Servo"
+    "mixerElevatorDirectionHelp": {
+        "message": "Depending on the elevator servo position and the head design, the direction may be reversed."
     },
-    "mixerBladeGripControl": {
-        "message": "Blade Grip Control"
+    "mixerAileronDirection": {
+        "message": "Aileron Control Direction"
     },
-    "mixerBladeGripControlHelp": {
-        "message": "Position of the blade grip control arm."
+    "mixerAileronDirectionHelp": {
+        "message": "Depending on the aileron servo position and the head design, the direction may be reversed."
     },
-    "mixerLeadingEdgeControl": {
-        "message": "Leading Edge "
+    "mixerCollectiveDirection": {
+        "message": "Collective Control Direction"
     },
-    "mixerTrailingEdgeControl": {
-        "message": "Trailing Edge"
+    "mixerCollectiveDirectionHelp": {
+        "message": "Depending on the blade grip control arm position, the collective direction may be reversed. Usually trailing edge control has reversed direction."
     },
     "mixerGeometrySettings": {
         "message": "Main Rotor Geometry Settings"
@@ -2180,13 +2180,13 @@
         "message": "Maximum amount of total cyclic + collective blade pitch."
     },
     "mixerCyclicLimit": {
-        "message": "Cyclic pitch limit"
+        "message": "Cyclic blade pitch limit"
     },
     "mixerCyclicLimitHelp": {
         "message": "Maximum amount of cyclic blade pitch"
     },
     "mixerCollectiveLimit": {
-        "message": "Collective pitch limit"
+        "message": "Collective blade pitch limit"
     },
     "mixerCollectiveLimitHelp": {
         "message": "Maximum amount of collective blade pitch"
