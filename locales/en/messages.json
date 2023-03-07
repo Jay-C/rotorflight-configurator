@@ -2233,6 +2233,12 @@
     "mixerTailBidirectional": {
         "message": "Bidirectional"
     },
+    "mixerTailRotorYawDirection": {
+        "message": "Yaw Control Direction"
+    },
+    "mixerTailRotorYawDirectionHelp": {
+        "message": "Depending on the tail rotor direction and ESC/servo configuration, the yaw direction may be reversed."
+    },
     "mixerTailMotorIdle": {
         "message": "Motor idle throttle [%]"
     },

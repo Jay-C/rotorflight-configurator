@@ -14,30 +14,11 @@ TABS.mixer = {
 
     customConfig: false,
 
-    swashType: 0,
-    swashPhase: 0,
-    swashTrim: [ 0, 0, 0 ],
-
-    pitchRev: 0,
-    rollRev: 0,
-    collRev: 0,
-    yawRev: 0,
-
-    tailMode: 0,
-
     prevInputs: null,
     prevRules: null,
 
-    showInputs: [ 1,2,4,3, ],
     showOverrides: [ 1,2,4,3, ],
 
-    inputAttr: [
-        { min:-1500, max:1500, step:10,   fixed:0, scale:1.000 },
-        { min:-24,   max:24,   step:0.1,  fixed:1, scale:0.012 },
-        { min:-24,   max:24,   step:0.1,  fixed:1, scale:0.012 },
-        { min:-100,  max:100,  step:1,    fixed:0, scale:0.100 },
-        { min:-24,   max:24,   step:0.1,  fixed:1, scale:0.012 },
-    ],
     overrideAttr: [
         { min:-1500, max:1500, step:50,   fixed:0, scale:1.000 },
         { min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
@@ -325,15 +306,15 @@ TABS.mixer.initialize = function (callback) {
         const elevDir = (FC.MIXER_INPUTS[2].rate < 0) ? -1 : 1;
         const collDir = (FC.MIXER_INPUTS[4].rate < 0) ? -1 : 1;
 
-        const collectiveRate = Math.abs(FC.MIXER_INPUTS[4].rate) / 10;
-        const cyclicRate = Math.abs(FC.MIXER_INPUTS[1].rate) / 10;
+        const collectiveRate = Math.abs(FC.MIXER_INPUTS[4].rate) * 0.1;
+        const cyclicRate = Math.abs(FC.MIXER_INPUTS[1].rate) * 0.1;
 
         const collectiveMax = FC.MIXER_INPUTS[4].max * 0.012;
         const cyclicMax = FC.MIXER_INPUTS[2].max * 0.012;
-        const totalMax = FC.MIXER_CONFIG.swash_ring; // FIXME
+        const totalMax = FC.MIXER_CONFIG.blade_pitch_limit * 0.1;
 
         const yawDir = (FC.MIXER_INPUTS[3].rate < 0) ? -1 : 1;
-        const yawRate = Math.abs(FC.MIXER_INPUTS[3].rate) / 10;
+        const yawRate = Math.abs(FC.MIXER_INPUTS[3].rate) * 0.1;
         const yawScale = FC.MIXER_CONFIG.tail_rotor_mode ? 0.1 : 0.024;
         const yawMax = FC.MIXER_INPUTS[3].max * yawScale;
         const yawMin = FC.MIXER_INPUTS[3].min * yawScale;
@@ -393,7 +374,7 @@ TABS.mixer.initialize = function (callback) {
 
         const collectiveMax = $('.tab-mixer #mixerCollectiveLimit').val() / 0.012;
         const cyclicMax = $('.tab-mixer #mixerCyclicLimit').val() / 0.012;
-        const totalMax = $('.tab-mixer #mixerTotalPitchLimit').val();
+        const totalMax = $('.tab-mixer #mixerTotalPitchLimit').val() * 10;
 
         const yawMin = $('.tab-mixer #mixerTailRotorYawMin').val();
         const yawMax = $('.tab-mixer #mixerTailRotorYawMax').val();

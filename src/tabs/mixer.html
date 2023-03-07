@@ -139,7 +139,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="mixerCyclicLimitborder">
+                                <tr class="mixerCyclicLimit border">
                                     <td>
                                         <div class="configCol1">
                                             <input type="number" id="mixerCyclicLimit" min="0" max="20" step="0.1" />
@@ -271,6 +271,22 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr class="mixerTailRotorYawDirection border">
+                                    <td>
+                                        <div class="configCol1">
+                                            <select id="mixerTailRotorYawDirection">
+                                                <option value="1" i18n="mixerDirectionNormal"></option>
+                                                <option value="-1" i18n="mixerDirectionReverse"></option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerTailRotorYawDirection"></span>
+                                            <div class="helpicon cf_tip" i18n_title="mixerTailRotorYawDirectionHelp"></div>
+                                        </div>
+                                    </td>
+                                </tr>
                                 <tr class="mixerTailRotorCalibration border">
                                     <td>
                                         <div class="configCol1">
@@ -284,7 +300,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="mixerTailRotorYawMin">
+                                <tr class="mixerTailRotorYawMin border">
                                     <td>
                                         <div class="configCol1">
                                             <input type="number" id="mixerTailRotorYawMin" min="-250" max="250" step="0.1" />
