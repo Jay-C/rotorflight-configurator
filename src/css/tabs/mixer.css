@@ -44,7 +44,7 @@
     border-radius: 3px;
 }
 
-.tab-mixer .mixerConfigs {
+.tab-mixer .mixerConfigTable {
     float: left;
     width: 100%;
     margin: 0;
@@ -54,7 +54,7 @@
     border-collapse: collapse;
 }
 
-.tab-mixer .mixerConfigs th {
+.tab-mixer .mixerConfigTable th {
     height: 10px;
     font-weight: normal;
     text-overflow: ellipsis;
@@ -63,65 +63,25 @@
     padding: 5px 0 2px 0;
 }
 
-.tab-mixer .mixerConfigs td {
+.tab-mixer .mixerConfigTable td {
     padding: 5px 5px 2px 5px;
 }
 
-.tab-mixer .mixerConfigs tr td {
+.tab-mixer .mixerConfigTable tr td {
     text-align: left;
 }
 
-.tab-mixer .mixerConfigs tr td:first-child {
+.tab-mixer .mixerConfigTable tr td:first-child {
     width: 140px;
     padding-right: 10px;
 }
 
-.tab-mixer .mixerConfigs tr:not(:last-child) td {
+.tab-mixer .mixerConfigTable tr:not(:last-child) td {
     padding-bottom: 5px;
 }
 
-.tab-mixer .mixerConfigs tr.border td {
+.tab-mixer .mixerConfigTable tr.border td {
     border-top: 1px dotted var(--superSubtleAccent);
-}
-
-.tab-mixer .mixerInputs {
-    width: 100%;
-    border: 0;
-    border-collapse: collapse;
-    margin-top: 2px;
-}
-
-.tab-mixer .mixerInputs .trhead {
-    color: var(--quietText);
-    background-color: var(--button-background);
-    text-align: center;
-    font-size: 11px;
-    line-height: 16px;
-    height: 22px;
-    border-top: 1px solid var(--boxBackground);
-}
-
-.tab-mixer .mixerInputs td {
-    padding: 6px 5px 2px 5px;
-    text-align: center;
-}
-
-.tab-mixer .mixerInputs td:nth-child(1) {
-    padding-left: 12px;
-    text-align: left;
-}
-
-.tab-mixer .mixerInputs td:nth-child(2) {
-    text-align: center;
-}
-
-.tab-mixer .mixerInputs td:nth-child(3) {
-    text-align: center;
-}
-
-.tab-mixer .mixerInputs td:nth-child(4) {
-    text-align: center;
-    padding-right: 12px;
 }
 
 .tab-mixer .override .gui_box {

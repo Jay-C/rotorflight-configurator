@@ -22,10 +22,10 @@
                             <div class="spacer_box_title" i18n="mixerMainRotorSettings"></div>
                         </div>
                         <div class="spacer_box">
-                            <table class="mixerConfigs">
+                            <table class="mixerConfigTable">
                                 <tr class="mixerSwashType noborder">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerReboot">
                                             <select id="mixerSwashType">
                                                 <!-- LIST GENERATED HERE -->
                                             </select>
@@ -38,57 +38,9 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class="mixerElevatorDirection border">
-                                    <td>
-                                        <div class="configCol1">
-                                            <select id="mixerElevatorDirection">
-                                                <option value="1" i18n="mixerDirectionNormal"></option>
-                                                <option value="-1" i18n="mixerDirectionReverse"></option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="configCol2">
-                                            <span i18n="mixerElevatorDirection"></span>
-                                            <div class="helpicon cf_tip" i18n_title="mixerElevatorDirectionHelp"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="mixerAileronDirection border">
-                                    <td>
-                                        <div class="configCol1">
-                                            <select id="mixerAileronDirection">
-                                                <option value="1" i18n="mixerDirectionNormal"></option>
-                                                <option value="-1" i18n="mixerDirectionReverse"></option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="configCol2">
-                                            <span i18n="mixerAileronDirection"></span>
-                                            <div class="helpicon cf_tip" i18n_title="mixerAileronDirectionHelp"></div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="mixerCollectiveDirection border">
-                                    <td>
-                                        <div class="configCol1">
-                                            <select id="mixerCollectiveDirection">
-                                                <option value="1" i18n="mixerDirectionNormal"></option>
-                                                <option value="-1" i18n="mixerDirectionReverse"></option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="configCol2">
-                                            <span i18n="mixerCollectiveDirection"></span>
-                                            <div class="helpicon cf_tip" i18n_title="mixerCollectiveDirectionHelp"></div>
-                                        </div>
-                                    </td>
-                                </tr>
                                 <tr class="mixerMainRotorDirection border">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerReboot">
                                             <select id="mixerMainRotorDirection">
                                                 <option value="0" i18n="mixerClockwise"></option>
                                                 <option value="1" i18n="mixerCounterClockwise"></option>
@@ -102,6 +54,54 @@
                                         </div>
                                     </td>
                                 </tr>
+                                <tr class="mixerAileronDirection border">
+                                    <td>
+                                        <div class="configCol1 mixerInput1">
+                                            <select id="mixerAileronDirection">
+                                                <option value="1" i18n="mixerDirectionNormal"></option>
+                                                <option value="-1" i18n="mixerDirectionReverse"></option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerAileronDirection"></span>
+                                            <div class="helpicon cf_tip" i18n_title="mixerAileronDirectionHelp"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="mixerElevatorDirection border">
+                                    <td>
+                                        <div class="configCol1 mixerInput2">
+                                            <select id="mixerElevatorDirection">
+                                                <option value="1" i18n="mixerDirectionNormal"></option>
+                                                <option value="-1" i18n="mixerDirectionReverse"></option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerElevatorDirection"></span>
+                                            <div class="helpicon cf_tip" i18n_title="mixerElevatorDirectionHelp"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="mixerCollectiveDirection border">
+                                    <td>
+                                        <div class="configCol1 mixerInput4">
+                                            <select id="mixerCollectiveDirection">
+                                                <option value="1" i18n="mixerDirectionNormal"></option>
+                                                <option value="-1" i18n="mixerDirectionReverse"></option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="configCol2">
+                                            <span i18n="mixerCollectiveDirection"></span>
+                                            <div class="helpicon cf_tip" i18n_title="mixerCollectiveDirectionHelp"></div>
+                                        </div>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -112,10 +112,10 @@
                             <div class="spacer_box_title" i18n="mixerGeometrySettings"></div>
                         </div>
                         <div class="spacer_box">
-                            <table class="mixerConfigs">
+                            <table class="mixerConfigTable">
                                 <tr class="mixerCyclicCalibration">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerInput1 mixerInput2">
                                             <input type="number" id="mixerCyclicCalibration" min="20" max="200" step="0.1" />
                                         </div>
                                     </td>
@@ -128,7 +128,7 @@
                                 </tr>
                                 <tr class="mixerCollectiveCalibration">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerInput4">
                                             <input type="number" id="mixerCollectiveCalibration" min="20" max="200" step="0.1" />
                                         </div>
                                     </td>
@@ -141,7 +141,7 @@
                                 </tr>
                                 <tr class="mixerCyclicLimit border">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerInput4">
                                             <input type="number" id="mixerCyclicLimit" min="0" max="20" step="0.1" />
                                         </div>
                                     </td>
@@ -154,7 +154,7 @@
                                 </tr>
                                 <tr class="mixerCollectiveLimit">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerInput4">
                                             <input type="number" id="mixerCollectiveLimit" min="0" max="20" step="0.1" />
                                         </div>
                                     </td>
@@ -167,7 +167,7 @@
                                 </tr>
                                 <tr class="mixerTotalPitchLimit">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerConfig">
                                             <input type="number" id="mixerTotalPitchLimit" min="0" max="40" step="0.1" />
                                         </div>
                                     </td>
@@ -180,7 +180,7 @@
                                 </tr>
                                 <tr class="mixerSwashPhase border">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerConfig">
                                             <input type="number" id="mixerSwashPhase" min="-90" max="90" step="0.1" />
                                         </div>
                                     </td>
@@ -205,11 +205,11 @@
                             <div class="spacer_box_title" i18n="mixerSwashLinkTrim"></div>
                         </div>
                         <div class="spacer_box">
-                            <table class="mixerConfigs">
+                            <table class="mixerConfigTable">
                                 <tr class="mixerSwashTrim1">
                                     <td>
-                                        <div class="configCol1">
-                                            <input type="number" id="mixerSwashTrim1" min="-100" max="100" step="0.1" />
+                                        <div class="configCol1 mixerConfig">
+                                            <input type="number" id="mixerSwashTrim1" min="-128" max="127" step="1" />
                                         </div>
                                     </td>
                                     <td>
@@ -221,8 +221,8 @@
                                 </tr>
                                 <tr class="mixerSwashTrim2">
                                     <td>
-                                        <div class="configCol1">
-                                            <input type="number" id="mixerSwashTrim2" min="-100" max="100" step="0.1" />
+                                        <div class="configCol1 mixerConfig">
+                                            <input type="number" id="mixerSwashTrim2" min="-128" max="127" step="1" />
                                         </div>
                                     </td>
                                     <td>
@@ -233,8 +233,8 @@
                                 </tr>
                                 <tr class="mixerSwashTrim3">
                                     <td>
-                                        <div class="configCol1">
-                                            <input type="number" id="mixerSwashTrim3" min="-100" max="100" step="0.1" />
+                                        <div class="configCol1 mixerConfig">
+                                            <input type="number" id="mixerSwashTrim3" min="-128" max="127" step="1" />
                                         </div>
                                     </td>
                                     <td>
@@ -253,10 +253,10 @@
                             <div class="spacer_box_title" i18n="mixerTailRotorSettings"></div>
                         </div>
                         <div class="spacer_box">
-                            <table class="mixerConfigs">
+                            <table class="mixerConfigTable">
                                 <tr class="mixerTailRotorMode">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerReboot">
                                             <select id="mixerTailRotorMode">
                                                 <option value="0" i18n="mixerTailVariablePitch"></option>
                                                 <option value="1" i18n="mixerTailMotorized"></option>
@@ -273,7 +273,7 @@
                                 </tr>
                                 <tr class="mixerTailRotorYawDirection border">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerInput">
                                             <select id="mixerTailRotorYawDirection">
                                                 <option value="1" i18n="mixerDirectionNormal"></option>
                                                 <option value="-1" i18n="mixerDirectionReverse"></option>
@@ -289,7 +289,7 @@
                                 </tr>
                                 <tr class="mixerTailRotorCalibration border">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerInput3">
                                             <input type="number" id="mixerTailRotorCalibration" min="10" max="500" step="0.1" />
                                         </div>
                                     </td>
@@ -302,7 +302,7 @@
                                 </tr>
                                 <tr class="mixerTailRotorYawMin border">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerInput3">
                                             <input type="number" id="mixerTailRotorYawMin" min="-250" max="250" step="0.1" />
                                         </div>
                                     </td>
@@ -315,7 +315,7 @@
                                 </tr>
                                 <tr class="mixerTailRotorYawMax">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerInput3">
                                             <input type="number" id="mixerTailRotorYawMax" min="-250" max="250" step="0.1" />
                                         </div>
                                     </td>
@@ -328,7 +328,7 @@
                                 </tr>
                                 <tr class="tailRotorMotorized mixerTailMotorIdle border">
                                     <td>
-                                        <div class="configCol1">
+                                        <div class="configCol1 mixerConfig">
                                             <input type="number" id="mixerTailMotorIdle" min="0" max="25.0" step="0.1"/>
                                         </div>
                                     </td>
