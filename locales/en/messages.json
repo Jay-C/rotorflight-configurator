@@ -2111,7 +2111,7 @@
         "message": "None"
     },
     "mixerSwashType1": {
-        "message": "Passthrough"
+        "message": "Direct"
     },
     "mixerSwashType2": {
         "message": "CCPM 120&deg"
@@ -2249,13 +2249,13 @@
         "message": "Adjust the yaw gain to match the mechanical gain. Usually around 50-150% for servo driven tails, but can be wildly different for motorised tail rotors."
     },
     "mixerTailRotorMinYaw": {
-        "message": "Yaw CW limit"
+        "message": "Yaw Minimum (CW limit)"
     },
     "mixerTailRotorMinYawHelp": {
         "message": "A limit for the clockwise yaw."
     },
     "mixerTailRotorMaxYaw": {
-        "message": "Yaw CCW limit"
+        "message": "Yaw Maximum (CCW limit)"
     },
     "mixerTailRotorMaxYawHelp": {
         "message": "A limit for the counter-clockwise yaw."
