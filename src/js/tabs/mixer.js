@@ -306,16 +306,15 @@ TABS.mixer.initialize = function (callback) {
             self.showOverrides.forEach(function(index) {
                 add_override(index);
             });
+            $('.tab-mixer .override').show();
         }
-
-        $('.tab-mixer .override').toggle(!FC.CONFIG.mixerOverrideDisabled);
+        else {
+            $('.tab-mixer .override').hide();
+        }
 
         self.customConfig = false;
 
-        self.customConfig |= (FC.MIXER_INPUTS[1].rate < 0);
-        self.customConfig |= (FC.MIXER_INPUTS[3].rate < 0);
-
-        self.customConfig |= (FC.MIXER_INPUTS[1].rate != FC.MIXER_INPUTS[2].rate &&
+        self.customConfig |= (FC.MIXER_INPUTS[1].rate !=  FC.MIXER_INPUTS[2].rate &&
                               FC.MIXER_INPUTS[1].rate != -FC.MIXER_INPUTS[2].rate);
 
         self.customConfig |= (FC.MIXER_INPUTS[1].max !=  FC.MIXER_INPUTS[2].max);
@@ -323,6 +322,18 @@ TABS.mixer.initialize = function (callback) {
         self.customConfig |= (FC.MIXER_INPUTS[1].max != -FC.MIXER_INPUTS[1].min);
         self.customConfig |= (FC.MIXER_INPUTS[2].max != -FC.MIXER_INPUTS[2].min);
         self.customConfig |= (FC.MIXER_INPUTS[4].max != -FC.MIXER_INPUTS[4].min);
+
+        if (self.customConfig)
+            $('.mixerCustomNote').show();
+        else
+            $('.mixerCustomNote').hide();
+
+        self.customRules = !Mixer.isNullMixer(FC.MIXER_RULES);
+
+        if (self.customRules)
+            $('.mixerRulesNote').show();
+        else
+            $('.mixerRulsNote').hide();
 
         const ailDir = (FC.MIXER_INPUTS[1].rate < 0) ? -1 : 1;
         const elevDir = (FC.MIXER_INPUTS[2].rate < 0) ? -1 : 1;
@@ -369,8 +380,14 @@ TABS.mixer.initialize = function (callback) {
 
         $('.tab-mixer #mixerTailRotorMode').change(function () {
             const val = $(this).val();
-            $('.tailRotorMotorized').toggle( val != 0 );
-            $('.mixerBidirNote').toggle( val == 2 );
+            if (val != 0)
+                $('.tailRotorMotorized').show();
+            else
+                $('.tailRotorMotorized').hide();
+            if (val == 2)
+                $('.mixerBidirNote').show();
+            else
+                $('.mixerBidirNote').hide();
         });
 
         $('.tab-mixer #mixerTailRotorMode').val(FC.MIXER_CONFIG.tail_rotor_mode).change();

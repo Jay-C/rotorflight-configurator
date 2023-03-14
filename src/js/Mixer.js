@@ -88,7 +88,7 @@ const Mixer = {
 
     nullRule: function ()
     {
-        return { oper: 0, src: 0, dst: 0, weight: 0, offset: 0, modes: 0 };
+        return { oper: 0, src: 0, dst: 0, weight: 0, offset: 0 };
     },
 
     cloneRule: function (a)
@@ -98,8 +98,7 @@ const Mixer = {
 
     compareRule : function (a, b)
     {
-        return( a.modes  === b.modes &&
-                a.oper   === b.oper &&
+        return( a.oper   === b.oper &&
                 a.src    === b.src &&
                 a.dst    === b.dst &&
                 a.weight === b.weight &&
@@ -121,8 +120,7 @@ const Mixer = {
     },
 
     isNullRule : function (a) {
-        return( a.modes  == 0 &&
-                a.oper   == 0 &&
+        return( a.oper   == 0 &&
                 a.src    == 0 &&
                 a.dst    == 0 &&
                 a.weight == 0 &&
