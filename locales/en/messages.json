@@ -2162,7 +2162,7 @@
         "message": "Depending on the blade grip control arm position, the collective direction may be reversed. Usually trailing edge control has reversed direction."
     },
     "mixerGeometrySettings": {
-        "message": "Main Rotor Geometry Settings"
+        "message": "Main Rotor Geometry"
     },
     "mixerCyclicCalibration": {
         "message": "Cyclic calibration [%]"

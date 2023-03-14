@@ -23,6 +23,7 @@ TABS.mixer = {
         { axis: 1, slider: 1, min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
         { axis: 2, slider: 1, min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
         { axis: 4, slider: 1, min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
+        { axis: 3, slider: 2, min:-30,   max:30,   step:1,    fixed:0, scale:0.024 },
         { axis: 3, slider: 3, min:-100,  max:100,  step:1,    fixed:0, scale:0.100 },
         //{ axis: 0, slider: 0, min:-1500, max:1500, step:50,   fixed:0, scale:1.000 },
     ],
@@ -177,8 +178,8 @@ TABS.mixer.initialize = function (callback) {
             {
                 mixerSlider.noUiSlider({
                     range: {
-                        'min': -36,
-                        'max':  36,
+                        'min': -30,
+                        'max':  30,
                     },
                     start: 0,
                     step: 1,
@@ -187,8 +188,8 @@ TABS.mixer.initialize = function (callback) {
 
                 mixerOverride.find('.pips-range').noUiSlider_pips({
                     mode: 'values',
-                    values: [ -36, -30, -24, -18, -12, -6, 0, 6, 12, 18, 24, 30, 36, ],
-                    density: 100 / ((36 + 36) / 1),
+                    values: [ -30, -24, -18, -12, -6, 0, 6, 12, 18, 24, 30, ],
+                    density: 100 / ((30 + 30) / 1),
                     stepped: true,
                     format: wNumb({
                         decimals: 0,
