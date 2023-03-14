@@ -17,15 +17,12 @@ TABS.mixer = {
     MIXER_OVERRIDE_MAX:  2500,
     MIXER_OVERRIDE_OFF:  2501,
 
-    showOverrides: [ 1,2,4,3, ],
-
     overrideAxis: [
-        { axis: 1, slider: 1, min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
-        { axis: 2, slider: 1, min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
-        { axis: 4, slider: 1, min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
-        { axis: 3, slider: 2, min:-30,   max:30,   step:1,    fixed:0, scale:0.024 },
-        { axis: 3, slider: 3, min:-100,  max:100,  step:1,    fixed:0, scale:0.100 },
-        //{ axis: 0, slider: 0, min:-1500, max:1500, step:50,   fixed:0, scale:1.000 },
+        { axis: 1,  min:-18,   max:18,   step:0.1,  fixed:1,  scale:0.012,  pipstep: 1,  pipfix: 0,  pipval: [ -18, -15, -12, -9, -6, -3, 0, 3, 6, 9, 12, 15, 18, ], },
+        { axis: 2,  min:-18,   max:18,   step:0.1,  fixed:1,  scale:0.012,  pipstep: 1,  pipfix: 0,  pipval: [ -18, -15, -12, -9, -6, -3, 0, 3, 6, 9, 12, 15, 18, ], },
+        { axis: 4,  min:-18,   max:18,   step:0.1,  fixed:1,  scale:0.012,  pipstep: 1,  pipfix: 0,  pipval: [ -18, -15, -12, -9, -6, -3, 0, 3, 6, 9, 12, 15, 18, ], },
+        { axis: 3,  min:-30,   max:30,   step:1,    fixed:0,  scale:0.024,  pipstep: 1,  pipfix: 0,  pipval: [ -30, -24, -18, -12, -6, 0, 6, 12, 18, 24, 30, ], },
+        { axis: 3,  min:-100,  max:100,  step:1,    fixed:0,  scale:0.100,  pipstep: 5,  pipfix: 0,  pipval: [ -100, -75, -50, -25, 0, 25, 50, 75, 100, ], },
     ],
 };
 
@@ -147,105 +144,27 @@ TABS.mixer.initialize = function (callback) {
         mixerOverride.attr('class', `mixerOverride${inputIndex}`);
         mixerOverride.find('.mixerOverrideName').text(i18n.getMessage(Mixer.inputNames[inputIndex]));
 
-        //mixerInput.attr(attr);
+        mixerInput.attr(axis);
 
-        switch (axis.slider) {
-            case 1:
-            {
-                mixerSlider.noUiSlider({
-                    range: {
-                        'min': -18,
-                        'max':  18,
-                    },
-                    start: 0,
-                    step: 1,
-                    behaviour: 'snap-drag',
-                });
+        mixerSlider.noUiSlider({
+            range: {
+                'min': axis.min,
+                'max': axis.max,
+            },
+            start: 0,
+            step: axis.pipstep,
+            behaviour: 'snap-drag',
+        });
 
-                mixerOverride.find('.pips-range').noUiSlider_pips({
-                    mode: 'values',
-                    values: [ -18, -15, -12, -9, -6, -3, 0, 3, 6, 9, 12, 15, 18, ],
-                    density: 100 / ((18 + 18) / 1),
-                    stepped: true,
-                    format: wNumb({
-                        decimals: 0,
-                    }),
-                });
-            }
-            break;
-
-            case 2:
-            {
-                mixerSlider.noUiSlider({
-                    range: {
-                        'min': -30,
-                        'max':  30,
-                    },
-                    start: 0,
-                    step: 1,
-                    behaviour: 'snap-drag',
-                });
-
-                mixerOverride.find('.pips-range').noUiSlider_pips({
-                    mode: 'values',
-                    values: [ -30, -24, -18, -12, -6, 0, 6, 12, 18, 24, 30, ],
-                    density: 100 / ((30 + 30) / 1),
-                    stepped: true,
-                    format: wNumb({
-                        decimals: 0,
-                    }),
-                });
-            }
-            break;
-
-            case 3:
-            {
-                mixerSlider.noUiSlider({
-                    range: {
-                        'min': -100,
-                        'max':  100,
-                    },
-                    start: 0,
-                    step: 5,
-                    behaviour: 'snap-drag',
-                });
-
-                mixerOverride.find('.pips-range').noUiSlider_pips({
-                    mode: 'values',
-                    values: [ -100, -75, -50, -25, 0, 25, 50, 75, 100, ],
-                    density: 100 / ((100 + 100) / 5),
-                    stepped: true,
-                    format: wNumb({
-                        decimals: 0,
-                    }),
-                });
-            }
-            break;
-
-            default:
-            {
-                mixerSlider.noUiSlider({
-                    range: {
-                        'min': -1500,
-                        'max':  1500,
-                    },
-                    start: 0,
-                    step: 50,
-                    behaviour: 'snap-drag',
-                });
-
-                mixerOverride.find('.pips-range').noUiSlider_pips({
-                    mode: 'values',
-                    values: [ -1500, -1000, -500, 0, 500, 1000, 1500, ],
-                    density: 100 / ((1500 + 1500) / 100),
-                    stepped: true,
-                    format: wNumb({
-                        decimals: 0,
-                    }),
-                });
-            }
-            break;
-        }
+        mixerOverride.find('.pips-range').noUiSlider_pips({
+            mode: 'values',
+            values: axis.pipval,
+            density: 100 / ((axis.max - axis.min) / axis.pipstep),
+            stepped: true,
+            format: wNumb({
+                decimals: axis.pipfix,
+            }),
+        });
 
         mixerSlider.on('slide', function () {
             mixerInput.val(Number($(this).val()).toFixed(axis.fixed));
