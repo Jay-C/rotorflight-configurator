@@ -28,7 +28,7 @@
                             <table class="mixerConfigTable">
                                 <tr class="mixerSwashType noborder">
                                     <td>
-                                        <div class="configCol1 mixerReboot">
+                                        <div class="configCol1 mixerConfig mixerSwashConfig">
                                             <select id="mixerSwashType">
                                                 <!-- LIST GENERATED HERE -->
                                             </select>
@@ -259,7 +259,7 @@
                             <table class="mixerConfigTable">
                                 <tr class="mixerTailRotorMode">
                                     <td>
-                                        <div class="configCol1 mixerReboot">
+                                        <div class="configCol1 mixerConfig mixerTailConfig">
                                             <select id="mixerTailRotorMode">
                                                 <option value="0" i18n="mixerTailVariablePitch"></option>
                                                 <option value="1" i18n="mixerTailMotorized"></option>
@@ -352,23 +352,32 @@
 
         <!-- OVERRIDE -->
         <div class="override">
-            <div class="grid-row margin-top">
+            <!--div class="grid-row margin-top">
                 <div class="grid-col full-width">
                     <div class="note mixerOverrideNote">
                         <p i18n="mixerOverrideNote"></p>
                     </div>
                 </div>
-            </div>
+            </div-->
 
-            <div class="grid-row">
+            <div class="grid-row margin-top">
                 <div class="grid-col full-width">
                     <div class="gui_box">
                         <div class="gui_box_titlebar no-bottom-margin">
                             <div class="spacer_box_title" i18n="mixerOverride"></div>
                             <div class="helpicon cf_tip" i18n_title="mixerOverrideHelp"></div>
                         </div>
-                        <div>
-                            <table class="mixerOverride">
+                        <div class="spacer_box">
+                            <table class="mixerOverrideSwitch">
+                                <tr>
+                                    <td><input type="checkbox" id="mixerOverrideEnableSwitch" class="toggle" /></td>
+                                    <td><span i18n="mixerOverrideEnableSwitch"></span></td>
+                                    <td><span class="description" i18n="mixerOverrideEnableSwitchText"></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="mixerOverrideAxis">
+                            <table class="mixerOverrideTable">
                                 <thead>
                                     <tr class="trhead">
                                         <th i18n="mixerInputName"></th>
@@ -415,33 +424,6 @@
 </div>
 
 <div id="tab-mixer-templates">
-
-    <table class="mixerInputTemplate">
-        <tbody>
-            <tr class="mixerInput">
-                <td>
-                    <div>
-                        <span id="name" />
-                    </div>
-                </td>
-                <td>
-                    <div>
-                        <input id="min" type="number" min="-2000" max="2000" step="10" />
-                    </div>
-                </td>
-                <td>
-                    <div>
-                        <input id="max" type="number" min="-2000" max="2000" step="10" />
-                    </div>
-                </td>
-                <td>
-                    <div>
-                        <input id="rate" type="number" min="-2000" max="2000" step="10" />
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 
     <table class="mixerRuleTemplate">
         <tbody>

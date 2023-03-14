@@ -19,12 +19,12 @@ TABS.mixer = {
 
     showOverrides: [ 1,2,4,3, ],
 
-    overrideAttr: [
-        { min:-1500, max:1500, step:50,   fixed:0, scale:1.000 },
-        { min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
-        { min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
-        { min:-100,  max:100,  step:1,    fixed:0, scale:0.100 },
-        { min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
+    overrideAxis: [
+        { axis: 1, slider: 1, min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
+        { axis: 2, slider: 1, min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
+        { axis: 4, slider: 1, min:-18,   max:18,   step:0.1,  fixed:1, scale:0.012 },
+        { axis: 3, slider: 3, min:-100,  max:100,  step:1,    fixed:0, scale:0.100 },
+        //{ axis: 0, slider: 0, min:-1500, max:1500, step:50,   fixed:0, scale:1.000 },
     ],
 };
 
@@ -133,7 +133,7 @@ TABS.mixer.initialize = function (callback) {
         send_mixer_config();
     }
 
-    function add_override(inputIndex) {
+    function add_override(axis) {
 
         const mixerOverride = $('#tab-mixer-templates .mixerOverrideTemplate tr').clone();
 
@@ -141,17 +141,15 @@ TABS.mixer.initialize = function (callback) {
         const mixerEnable = mixerOverride.find('.mixerOverrideEnable input');
         const mixerInput  = mixerOverride.find('.mixerOverrideInput input');
 
-        const attr = self.overrideAttr[inputIndex];
+        const inputIndex = axis.axis;
 
         mixerOverride.attr('class', `mixerOverride${inputIndex}`);
         mixerOverride.find('.mixerOverrideName').text(i18n.getMessage(Mixer.inputNames[inputIndex]));
 
-        mixerInput.attr(attr);
+        //mixerInput.attr(attr);
 
-        switch (inputIndex) {
+        switch (axis.slider) {
             case 1:
-            case 2:
-            case 4:
             {
                 mixerSlider.noUiSlider({
                     range: {
@@ -167,6 +165,30 @@ TABS.mixer.initialize = function (callback) {
                     mode: 'values',
                     values: [ -18, -15, -12, -9, -6, -3, 0, 3, 6, 9, 12, 15, 18, ],
                     density: 100 / ((18 + 18) / 1),
+                    stepped: true,
+                    format: wNumb({
+                        decimals: 0,
+                    }),
+                });
+            }
+            break;
+
+            case 2:
+            {
+                mixerSlider.noUiSlider({
+                    range: {
+                        'min': -36,
+                        'max':  36,
+                    },
+                    start: 0,
+                    step: 1,
+                    behaviour: 'snap-drag',
+                });
+
+                mixerOverride.find('.pips-range').noUiSlider_pips({
+                    mode: 'values',
+                    values: [ -36, -30, -24, -18, -12, -6, 0, 6, 12, 18, 24, 30, 36, ],
+                    density: 100 / ((36 + 36) / 1),
                     stepped: true,
                     format: wNumb({
                         decimals: 0,
@@ -225,7 +247,7 @@ TABS.mixer.initialize = function (callback) {
         }
 
         mixerSlider.on('slide', function () {
-            mixerInput.val(Number($(this).val()).toFixed(attr.fixed));
+            mixerInput.val(Number($(this).val()).toFixed(axis.fixed));
         });
 
         mixerSlider.on('change', function () {
@@ -235,7 +257,7 @@ TABS.mixer.initialize = function (callback) {
         mixerInput.change(function () {
             const value = $(this).val();
             mixerSlider.val(value);
-            FC.MIXER_OVERRIDE[inputIndex] = Math.round(value / attr.scale);
+            FC.MIXER_OVERRIDE[inputIndex] = Math.round(value / axis.scale);
             mspHelper.sendMixerOverride(inputIndex);
         });
 
@@ -256,8 +278,8 @@ TABS.mixer.initialize = function (callback) {
         let value = FC.MIXER_OVERRIDE[inputIndex];
         let check = (value >= self.MIXER_OVERRIDE_MIN && value <= self.MIXER_OVERRIDE_MAX);
 
-        value *= attr.scale;
-        value = (check ? value : 0).toFixed(attr.fixed);
+        value *= axis.scale;
+        value = (check ? value : 0).toFixed(axis.fixed);
 
         mixerInput.val(value);
         mixerSlider.val(value);
@@ -266,7 +288,7 @@ TABS.mixer.initialize = function (callback) {
         mixerSlider.attr('disabled', !check);
         mixerEnable.prop('checked', check);
 
-        $('.mixerOverride tbody').append(mixerOverride);
+        $('.mixerOverrideTable tbody').append(mixerOverride);
     }
 
     function data_to_form() {
@@ -302,15 +324,27 @@ TABS.mixer.initialize = function (callback) {
         //    mixerRuleOutputs.append($(`<option value="${index}">` + i18n.getMessage(name) + '</options>'));
         //});
 
-        if (!FC.CONFIG.mixerOverrideDisabled) {
-            self.showOverrides.forEach(function(index) {
-                add_override(index);
-            });
-            $('.tab-mixer .override').show();
-        }
-        else {
-            $('.tab-mixer .override').hide();
-        }
+        self.overrideAxis.forEach(function(axis) {
+            add_override(axis);
+        });
+
+        const enableOverrideSwitch = $('#mixerOverrideEnableSwitch');
+
+        enableOverrideSwitch.change(function () {
+            const checked = enableOverrideSwitch.prop('checked');
+            FC.CONFIG.mixerOverrideDisabled = !checked;
+
+            if (checked) {
+                $('.mixerOverrideAxis').show();
+                $('.mixerOverrideAxis .mixerOverrideEnable input').prop('checked',true).change();
+            } else {
+                $('.mixerOverrideAxis').hide();
+                $('.mixerOverrideAxis .mixerOverrideEnable input').prop('checked',false).change();
+            }
+        });
+
+        enableOverrideSwitch.prop('checked', !FC.CONFIG.mixerOverrideDisabled).change();
+
 
         self.customConfig = false;
 
@@ -397,28 +431,34 @@ TABS.mixer.initialize = function (callback) {
         $('#mixerTailRotorMaxYaw').val(yawMax).change();
         $('#mixerTailMotorIdle').val(FC.MIXER_CONFIG.tail_motor_idle / 10).change();
 
-        $('.tab-mixer .mixerReboot').change(function() {
-            FC.MIXER_CONFIG.swash_type = parseInt($('#mixerSwashType').val());
-            FC.MIXER_CONFIG.tail_rotor_mode = parseInt($('#mixerTailRotorMode').val());
+        $('.tab-mixer .mixerSwashConfig').change(function() {
 
             $('.tab-mixer .mixerConfigTable select').prop('disabled', true);
             $('.tab-mixer .mixerConfigTable input').prop('disabled', true);
-            $('.tab-mixer .mixerReboot select').prop('disabled', false);
+            $('.tab-mixer .mixerSwashConfig select').prop('disabled', false);
 
-            self.MIXER_CONFIG_dirty = true;
             self.needReboot = true;
-            self.needSave = true;
-            setDirty();
+        });
+
+        $('.tab-mixer .mixerTailConfig').change(function() {
+
+            $('.tab-mixer .mixerConfigTable select').prop('disabled', true);
+            $('.tab-mixer .mixerConfigTable input').prop('disabled', true);
+            $('.tab-mixer .mixerTailConfig select').prop('disabled', false);
+
+            self.needReboot = true;
         });
 
         $('.tab-mixer .mixerConfig').change(function() {
-            FC.MIXER_CONFIG.main_rotor_dir = parseInt($('#mixerMainRotorDirection').val());
-            FC.MIXER_CONFIG.blade_pitch_limit = $('#mixerTotalPitchLimit').val() / 0.012;
+            FC.MIXER_CONFIG.swash_type = parseInt($('#mixerSwashType').val());
             FC.MIXER_CONFIG.swash_phase = parseInt($('#mixerSwashPhase').val() * 10);
             //FC.MIXER_CONFIG.swash_ring = parseInt($('#mixerSwashRing').val());
+            FC.MIXER_CONFIG.main_rotor_dir = parseInt($('#mixerMainRotorDirection').val());
+            FC.MIXER_CONFIG.blade_pitch_limit = $('#mixerTotalPitchLimit').val() / 0.012;
             FC.MIXER_CONFIG.swash_trim[0] = parseInt($('#mixerSwashTrim1').val());
             FC.MIXER_CONFIG.swash_trim[1] = parseInt($('#mixerSwashTrim2').val());
             FC.MIXER_CONFIG.swash_trim[2] = parseInt($('#mixerSwashTrim3').val());
+            FC.MIXER_CONFIG.tail_rotor_mode = parseInt($('#mixerTailRotorMode').val());
             FC.MIXER_CONFIG.tail_motor_idle = $('#mixerTailMotorIdle').val() * 10;
 
             self.MIXER_CONFIG_dirty = true;

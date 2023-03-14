@@ -2284,6 +2284,12 @@
     "mixerOverrideHelp": {
         "message": "This feature is used for setting up the rotor and is part of the <strong>Mixer Calibration</strong> process. When the bypass enable is active the mixer can be commanded to the requested positions directly."
     },
+    "mixerOverrideEnableSwitch": {
+        "message": "<strong>Enable Mixer Override</strong>"
+    },
+    "mixerOverrideEnableSwitchText": {
+        "message": "Mixer Override forces the mixer inputs to arbitrary positions for setup purposes. The override values are not saved, and will be reset in reboot."
+    },
     "mixerOverrideEnable": {
         "message": "Enable"
     },
@@ -2321,19 +2327,19 @@
         "message": "-"
     },
     "mixerInputStabilizedRoll": {
-        "message": "Stabilized Roll"
+        "message": "Roll"
     },
     "mixerInputStabilizedPitch": {
-        "message": "Stabilized Pitch"
+        "message": "Pitch"
     },
     "mixerInputStabilizedYaw": {
-        "message": "Stabilized Yaw"
+        "message": "Yaw"
     },
     "mixerInputStabilizedCollective": {
-        "message": "Stabilized Collective"
+        "message": "Collective"
     },
     "mixerInputStabilizedThrottle": {
-        "message": "Stabilized Throttle"
+        "message": "Throttle"
     },
     "mixerInputRCCommandRoll": {
         "message": "Commanded Roll"
