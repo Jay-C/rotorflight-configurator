@@ -2233,17 +2233,11 @@
     "mixerTailBidirectional": {
         "message": "Bidirectional"
     },
-    "mixerTailRotorYawDirection": {
+    "mixerTailRotorDirection": {
         "message": "Yaw Control Direction"
     },
-    "mixerTailRotorYawDirectionHelp": {
+    "mixerTailRotorDirectionHelp": {
         "message": "Depending on the tail rotor direction and ESC/servo configuration, the yaw direction may be reversed."
-    },
-    "mixerTailMotorIdle": {
-        "message": "Motor idle throttle [%]"
-    },
-    "mixerTailMotorIdleHelp": {
-        "message": "This is the minimum throttle signal sent to the tail motor. This should be set just high enough that the motor does not stop"
     },
     "mixerTailRotorCalibration": {
         "message": "Yaw calibration [%]"
@@ -2251,17 +2245,23 @@
     "mixerTailRotorCalibrationHelp": {
         "message": "Adjust the yaw gain to match the mechanical gain. Usually around 50-150% for servo driven tails, but can be wildly different for motorised tail rotors."
     },
-    "mixerTailRotorYawMin": {
+    "mixerTailRotorMinYaw": {
         "message": "Yaw CW limit"
     },
-    "mixerTailRotorYawMinHelp": {
+    "mixerTailRotorMinYawHelp": {
         "message": "A limit for the clockwise yaw."
     },
-    "mixerTailRotorYawMax": {
+    "mixerTailRotorMaxYaw": {
         "message": "Yaw CCW limit"
     },
-    "mixerTailRotorYawMaxHelp": {
+    "mixerTailRotorMaxYawHelp": {
         "message": "A limit for the counter-clockwise yaw."
+    },
+    "mixerTailMotorIdle": {
+        "message": "Motor idle throttle [%]"
+    },
+    "mixerTailMotorIdleHelp": {
+        "message": "This is the minimum throttle signal sent to the tail motor. This should be set just high enough that the motor does not stop"
     },
     "mixerSwashLinkTrim": {
         "message": "Swashplate Link Trims"

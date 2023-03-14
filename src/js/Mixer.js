@@ -93,7 +93,7 @@ const Mixer = {
 
     cloneRule: function (a)
     {
-        return { oper: a.oper, src: a.src, dst: a.dst, weight: a.weight, offset: a.offset, modes: a.modes };
+        return Object.assign({}, a);
     },
 
     compareRule : function (a, b)
@@ -152,7 +152,7 @@ const Mixer = {
 
     cloneInput : function (a)
     {
-        return { rate: a.rate, max: a.max, min: a.min, };
+        return Object.assign({}, a);
     },
 
     cloneInputs : function (a)
@@ -164,6 +164,15 @@ const Mixer = {
         });
 
         return b;
+    },
+
+    cloneConfig : function (orig)
+    {
+        const copy = Object.assign({}, orig);
+
+        copy.swash_trim = Array.from(orig.swash_trim);
+
+        return copy;
     },
 
 };
