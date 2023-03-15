@@ -2078,7 +2078,7 @@
         "message": ""
     },
     "mixerCustomNote": {
-        "message": "<span class=\"message-negative\">Warning:</span> The Mixer is configured with a <strong>custom</strong> setup that can't be presented here. Any configuration changes must be done in the CLI, with the <code>mixer</code> command."
+        "message": "<span class=\"message-negative\">Warning:</span> The Mixer is configured with a <strong>custom setup</strong> that can't be presented in the GUI. Any configuration changes must be done in the CLI, with the <code>mixer</code> command."
     },
     "mixerRulesNote": {
         "message": "<span class=\"message-negative\">Warning:</span> The Mixer is configured with <strong>custom</strong> rules. Any rule changes must be done in the CLI, with the <code>mixer rule</code> command."

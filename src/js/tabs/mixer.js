@@ -146,7 +146,9 @@ TABS.mixer.initialize = function (callback) {
         mixerOverride.addClass('mixerOverrideActive');
         mixerOverride.find('.mixerOverrideName').text(i18n.getMessage(Mixer.inputNames[inputIndex]));
 
-        mixerInput.attr(axis);
+        mixerInput.attr('min', axis.min);
+        mixerInput.attr('max', axis.max);
+        mixerInput.attr('step', axis.step);
 
         mixerSlider.noUiSlider({
             range: {
@@ -230,22 +232,6 @@ TABS.mixer.initialize = function (callback) {
         self.MIXER_INPUT4_dirty = false;
         self.MIXER_RULES_dirty = false;
 
-        //self.prevRules = Mixer.cloneRules(FC.MIXER_RULES);
-
-        //const mixerRuleOpers   = $('.mixerRuleTemplate #oper');
-        //const mixerRuleInputs  = $('.mixerRuleTemplate #input');
-        //const mixerRuleOutputs = $('.mixerRuleTemplate #output');
-
-        //Mixer.operNames.forEach(function(name,index) {
-        //    mixerRuleOpers.append($(`<option value="${index}">` + i18n.getMessage(name)  + '</option>'));
-        //});
-        //Mixer.inputNames.forEach(function(name,index) {
-        //    mixerRuleInputs.append($(`<option value="${index}">` + i18n.getMessage(name)  + '</option>'));
-        //});
-        //Mixer.outputNames.forEach(function(name,index) {
-        //    mixerRuleOutputs.append($(`<option value="${index}">` + i18n.getMessage(name) + '</options>'));
-        //});
-
         self.overrideMixer.forEach(function(axis) { add_override(axis); });
 
         const enableOverrideSwitch = $('#mixerOverrideEnableSwitch');
@@ -280,8 +266,10 @@ TABS.mixer.initialize = function (callback) {
         self.customConfig |= (FC.MIXER_INPUTS[2].max != -FC.MIXER_INPUTS[2].min);
         self.customConfig |= (FC.MIXER_INPUTS[4].max != -FC.MIXER_INPUTS[4].min);
 
-        if (self.customConfig)
+        if (self.customConfig) {
             $('.mixerCustomNote').show();
+            $('.tab-mixer .configuration input,select').prop('disabled', true);
+        }
 
         self.customRules = !Mixer.isNullMixer(FC.MIXER_RULES);
 
