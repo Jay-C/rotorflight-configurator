@@ -124,9 +124,6 @@ TABS.profiles.initialize = function (callback) {
         $('.tab-profiles input[id="itermRelaxCutoffRoll"]').val(FC.PID_PROFILE.itermRelaxCutoffRoll);
         $('.tab-profiles input[id="itermRelaxCutoffPitch"]').val(FC.PID_PROFILE.itermRelaxCutoffPitch);
         $('.tab-profiles input[id="itermRelaxCutoffYaw"]').val(FC.PID_PROFILE.itermRelaxCutoffYaw);
-        //$('.tab-profiles input[id="itermRelaxLevelRoll"]').val(FC.PID_PROFILE.itermRelaxLevelRoll);
-        //$('.tab-profiles input[id="itermRelaxLevelPitch"]').val(FC.PID_PROFILE.itermRelaxLevelPitch);
-        //$('.tab-profiles input[id="itermRelaxLevelYaw"]').val(FC.PID_PROFILE.itermRelaxLevelYaw);
 
         const itermRelaxCheck = $('.tab-profiles input[id="itermRelax"]');
         const itermRelaxType = $('.tab-profiles select[id="itermRelaxType"]');
@@ -247,9 +244,6 @@ TABS.profiles.initialize = function (callback) {
         FC.PID_PROFILE.itermRelaxCutoffRoll = parseInt($('.tab-profiles input[id="itermRelaxCutoffRoll"]').val());
         FC.PID_PROFILE.itermRelaxCutoffPitch = parseInt($('.tab-profiles input[id="itermRelaxCutoffPitch"]').val());
         FC.PID_PROFILE.itermRelaxCutoffYaw = parseInt($('.tab-profiles input[id="itermRelaxCutoffYaw"]').val());
-        //FC.PID_PROFILE.itermRelaxLevelRoll = parseInt($('.tab-profiles input[id="itermRelaxLevelRoll"]').val());
-        //FC.PID_PROFILE.itermRelaxLevelPitch = parseInt($('.tab-profiles input[id="itermRelaxLevelPitch"]').val());
-        //FC.PID_PROFILE.itermRelaxLevelYaw = parseInt($('.tab-profiles input[id="itermRelaxLevelYaw"]').val());
 
         // Yaw settings
         FC.PID_PROFILE.yawStopGainCW = $('.tab-profiles input[id="yawStopGainCW"]').val();
