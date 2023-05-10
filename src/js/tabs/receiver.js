@@ -86,9 +86,6 @@ TABS.receiver.initialize = function (callback) {
         // Hide the buttons toolbar
         $('.tab-receiver').addClass('toolbar_hidden');
 
-        const featuresElement = $('.tab-receiver .features');
-        FC.FEATURE_CONFIG.features.generateElements(featuresElement);
-
         // translate to user-selected language
         i18n.localizePage();
 
@@ -121,19 +118,20 @@ TABS.receiver.initialize = function (callback) {
             }
         }
 
-        $('.deadband input[name="deadband"]').val(FC.RC_DEADBAND_CONFIG.deadband);
-        $('.deadband input[name="yaw_deadband"]').val(FC.RC_DEADBAND_CONFIG.yaw_deadband);
+        $('input[name="cyclic_deadband"]').val(FC.RC_DEADBAND_CONFIG.deadband);
+        $('input[name="yaw_deadband"]').val(FC.RC_DEADBAND_CONFIG.yaw_deadband);
 
-        $('.deadband input[name="deadband"]').change(function () {
+        $('input[name="cyclic_deadband"]').change(function () {
             self.deadband = parseInt($(this).val());
         }).change();
-        $('.deadband input[name="yaw_deadband"]').change(function () {
+        $('input[name="yaw_deadband"]').change(function () {
             self.yawDeadband = parseInt($(this).val());
         }).change();
 
-        $('.sticks input[name="stick_min"]').val(FC.RX_CONFIG.stick_min);
-        $('.sticks input[name="stick_center"]').val(FC.RX_CONFIG.stick_center);
-        $('.sticks input[name="stick_max"]').val(FC.RX_CONFIG.stick_max);
+        $('input[name="channel_center"]').val(FC.RX_CONFIG.stick_center);
+
+        $('input[name="stick_min"]').val(FC.RX_CONFIG.stick_min);
+        $('input[name="stick_max"]').val(FC.RX_CONFIG.stick_max);
 
 
     //// Bars
@@ -340,17 +338,6 @@ TABS.receiver.initialize = function (callback) {
         // select current serial RX type
         spiRxElement.val(FC.RX_CONFIG.rxSpiProtocol);
 
-        $('input.feature', featuresElement).change(function () {
-            const element = $(this);
-
-            FC.FEATURE_CONFIG.features.updateData(element);
-            updateTabList(FC.FEATURE_CONFIG.features);
-
-            if (element.attr('name') === "RSSI_ADC") {
-                updateButtons(true);
-            }
-        });
-
         function checkShowSerialRxBox() {
             if (FC.FEATURE_CONFIG.features.isEnabled('RX_SERIAL')) {
                 $('div.serialRXBox').show();
@@ -366,17 +353,6 @@ TABS.receiver.initialize = function (callback) {
                 $('div.spiRxBox').hide();
             }
         }
-
-        $(featuresElement).filter('select').change(function () {
-            const element = $(this);
-            FC.FEATURE_CONFIG.features.updateData(element);
-            updateTabList(FC.FEATURE_CONFIG.features);
-            if (element.attr('name') === 'rxMode') {
-                checkShowSerialRxBox();
-                checkShowSpiRxBox();
-                updateButtons(true);
-            }
-        });
 
         checkShowSerialRxBox();
         checkShowSpiRxBox();
