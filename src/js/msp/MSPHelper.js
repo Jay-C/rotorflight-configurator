@@ -588,6 +588,12 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 }
                 break;
 
+            case MSPCodes.MSP_RX_CHANNELS:
+                for (let i = 0; i < data.byteLength / 2; i++) {
+                    FC.RX_CHANNELS[i] = data.readU16();
+                }
+                break;
+
             case MSPCodes.MSP_SET_RX_MAP:
                 console.log('RCMAP saved');
                 break;
