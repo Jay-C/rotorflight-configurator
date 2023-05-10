@@ -2,15 +2,94 @@
 
 TABS.receiver = {
     isDirty: false,
-    rateChartHeight: 117,
-    useSuperExpo: false,
-    deadband: 0,
-    yawDeadband: 0,
     needReboot: false,
     bindButton: false,
     stickButton: false,
     saveButtons: false,
-    rcMapLetters: ['A', 'E', 'R', 'C', 'T', '1', '2', '3'],
+    rcmap: [ 0, 1, 2, 3, 4, 5, 6, 7 ],
+    rcmapSize: 8,
+    deadband: 0,
+    yawDeadband: 0,
+    axisLetters: ['A', 'E', 'R', 'C', 'T', '1', '2', '3'],
+    axisNames: [
+        { value: 0, text: 'controlAxisRoll' },
+        { value: 1, text: 'controlAxisPitch' },
+        { value: 2, text: 'controlAxisYaw' },
+        { value: 3, text: 'controlAxisCollective' },
+        { value: 4, text: 'controlAxisThrottle' },
+        { value: 5, text: 'controlAxisAux1' },
+        { value: 6, text: 'controlAxisAux2' },
+        { value: 7, text: 'controlAxisAux3' },
+        { value: 8, text: 'controlAxisAux4' },
+        { value: 9, text: 'controlAxisAux5' },
+        { value: 10, text: 'controlAxisAux6' },
+        { value: 11, text: 'controlAxisAux7' },
+        { value: 12, text: 'controlAxisAux8' },
+        { value: 13, text: 'controlAxisAux9' },
+        { value: 14, text: 'controlAxisAux10' },
+        { value: 15, text: 'controlAxisAux11' },
+        { value: 16, text: 'controlAxisAux12' },
+        { value: 17, text: 'controlAxisAux13' },
+        { value: 18, text: 'controlAxisAux14' },
+        { value: 19, text: 'controlAxisAux15' },
+        { value: 20, text: 'controlAxisAux16' },
+        { value: 21, text: 'controlAxisAux17' },
+        { value: 22, text: 'controlAxisAux18' },
+    ],
+    rssiOptions: [
+        { value: 0,  text:'AUTO' },
+        { value: 1,  text:'ADC'  },
+        { value: 6,  text:'AUX1' },
+        { value: 7,  text:'AUX2' },
+        { value: 8,  text:'AUX3' },
+        { value: 9,  text:'AUX4' },
+        { value: 10, text:'AUX5' },
+        { value: 11, text:'AUX6' },
+        { value: 12, text:'AUX7' },
+        { value: 13, text:'AUX8' },
+    ],
+    rxProtocols: [
+        { name: 'CRSF',                 id: 9,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'S.BUS',                id: 2,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'F.PORT',               id: 12,  feature: 'RX_SERIAL',    visible: true, },
+        { name: 'DSM/1024',             id: 0,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'DSM/2048',             id: 1,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'DSM/SRXL',             id: 10,  feature: 'RX_SERIAL',    visible: true, },
+        { name: 'DSM/SRXL2',            id: 13,  feature: 'RX_SERIAL',    visible: true, },
+        { name: 'GHOST',                id: 14,  feature: 'RX_SERIAL',    visible: true, },
+        { name: 'SUMD',                 id: 3,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'SUMH',                 id: 4,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'IBUS',                 id: 7,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'XBUS',                 id: 5,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'XBUS/RJ01',            id: 6,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'EXBUS',                id: 8,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'PPM',                  id: 0,   feature: 'RX_PPM',       visible: true, },
+        { name: 'MSP',                  id: 0,   feature: 'RX_MSP',       visible: true, },
+        // Hidden options
+        { name: 'PWM',                  id: 0,   feature: 'RX_PARALLEL_PWM', visible: false, },
+        { name: 'CUSTOM',               id: 11,  feature: 'RX_SERIAL',    visible: false, },
+        // Unsupported SPI receivers
+        { name: 'SPI/CX10',             id: 4,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/CX10A',            id: 5,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/ELRS',             id: 19,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY D',          id: 8,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY X',          id: 9,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY X LBT',      id: 15,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY X V2',       id: 17,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY X LBT V2',   id: 18,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FLYSKY',           id: 10,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FLYSKY 2A',        id: 11,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/H8_3D',            id: 6,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/INAV',             id: 7,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/KN',               id: 12,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/REDPINE',          id: 16,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/SFHSS',            id: 13,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/SYMA X',           id: 2,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/SYMA X5C',         id: 3,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/SPEKTRUM',         id: 14,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/V202 250k',        id: 0,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/V202 1M',          id: 1,   feature: 'RX_SPI',   visible: false, },
+    ],
 };
 
 TABS.receiver.initialize = function (callback) {
@@ -30,6 +109,7 @@ TABS.receiver.initialize = function (callback) {
             .then(() => MSP.promise(MSPCodes.MSP_RC_DEADBAND))
             .then(() => MSP.promise(MSPCodes.MSP_RX_MAP))
             .then(() => MSP.promise(MSPCodes.MSP_RX_CONFIG))
+            .then(() => MSP.promise(MSPCodes.MSP_RX_CHANNELS))
             .then(() => MSP.promise(MSPCodes.MSP_RSSI_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_MIXER_CONFIG))
             .then(callback);
@@ -61,14 +141,10 @@ TABS.receiver.initialize = function (callback) {
         // Hide the buttons toolbar
         $('.tab-receiver').addClass('toolbar_hidden');
 
-        const featuresElement = $('.tab-receiver .features');
-        FC.FEATURE_CONFIG.features.generateElements(featuresElement);
-
         // translate to user-selected language
         i18n.localizePage();
 
         // UI Hooks
-
         self.isDirty = false;
         self.saveButtons = false;
         self.bindButton = false;
@@ -96,199 +172,78 @@ TABS.receiver.initialize = function (callback) {
             }
         }
 
-        $('.deadband input[name="deadband"]').val(FC.RC_DEADBAND_CONFIG.deadband);
-        $('.deadband input[name="yaw_deadband"]').val(FC.RC_DEADBAND_CONFIG.yaw_deadband);
+        $('input[name="cyclic_deadband"]')
+            .val(FC.RC_DEADBAND_CONFIG.deadband)
+            .change(function () {
+                self.deadband = parseInt($(this).val());
+            })
+            .change();
 
-        $('.deadband input[name="deadband"]').change(function () {
-            self.deadband = parseInt($(this).val());
-        }).change();
-        $('.deadband input[name="yaw_deadband"]').change(function () {
-            self.yawDeadband = parseInt($(this).val());
-        }).change();
+        $('input[name="yaw_deadband"]')
+            .val(FC.RC_DEADBAND_CONFIG.yaw_deadband)
+            .change(function () {
+                self.yawDeadband = parseInt($(this).val());
+            })
+            .change();
 
-        $('.sticks input[name="stick_min"]').val(FC.RX_CONFIG.stick_min);
-        $('.sticks input[name="stick_center"]').val(FC.RX_CONFIG.stick_center);
-        $('.sticks input[name="stick_max"]').val(FC.RX_CONFIG.stick_max);
+        $('input[name="stick_center"]')
+            .val(FC.RX_CONFIG.stick_center)
+            .change();
 
-        // generate bars
-        const bar_names = [
-            'controlAxisRoll',
-            'controlAxisPitch',
-            'controlAxisYaw',
-            'controlAxisCollective',
-            'controlAxisThrottle',
-        ];
+        $('input[name="stick_min"]')
+            .val(FC.RX_CONFIG.stick_min)
+            .change();
 
-        const numBars = (FC.RC.active_channels > 0) ? FC.RC.active_channels : 8;
-        const barContainer = $('.tab-receiver .bars');
+        $('input[name="stick_max"]')
+            .val(FC.RX_CONFIG.stick_max)
+            .change();
 
-        for (let i = 0, aux = 1; i < numBars; i++) {
-            let name;
-            if (i < bar_names.length) {
-                name = i18n.getMessage(bar_names[i]);
-            } else {
-                name = i18n.getMessage("controlAxisAux" + (aux++));
-            }
 
-            barContainer.append('\
-                <ul>\
-                    <li class="name">' + name + '</li>\
-                    <li class="meter">\
-                        <div class="bar">\
-                            <div class="label"></div>\
-                            <div class="fill' + (FC.RC.active_channels == 0 ? 'disabled' : '') + '">\
-                                <div class="label"></div>\
-                            </div>\
-                        </div>\
-                    </li>\
-                </ul>\
-            ');
-        }
 
-        barContainer.append('\
-            <ul><li></li></ul>\
-            <ul>\
-                <li class="name">RSSI</li>\
-                <li class="meter">\
-                    <div class="bar">\
-                        <div class="label"></div>\
-                        <div class="fill">\
-                            <div class="label"></div>\
-                        </div>\
-                    </div>\
-                </li>\
-            </ul>\
-        ');
+    //// RX Mode
 
-        const meterScaleMin = 750;
-        const meterScaleMax = 2250;
+        const rxProtoSelectElement = $('select[name="receiverProtocol"]');
+        let currentProto = -1;
 
-        const meterFillArray = [];
-        $('.meter .fill', barContainer).each(function () {
-            meterFillArray.push($(this));
-        });
-
-        const meterLabelArray = [];
-        $('.meter', barContainer).each(function () {
-            meterLabelArray.push($('.label', this));
-        });
-
-        // correct inner label margin on window resize (i don't know how we could do this in css)
-        self.resize = function () {
-            const containerWidth = $('.meter:first', barContainer).width(),
-                labelWidth = $('.meter .label:first', barContainer).width(),
-                margin = (containerWidth / 2) - (labelWidth / 2);
-
-            for (let i = 0; i < meterLabelArray.length; i++) {
-                meterLabelArray[i].css('margin-left', margin);
-            }
-        };
-
-        $(window).on('resize', self.resize).resize(); // trigger so labels get correctly aligned on creation
-
-        function updateRSSI() {
-            const rssi = ((FC.ANALOG.rssi / 1023) * 100).toFixed(0) + '%';
-            meterFillArray[numBars].css('width', rssi);
-            meterLabelArray[numBars].text(rssi);
-        }
-
-        function updateBars() {
-            for (let i = 0; i < FC.RC.active_channels; i++) {
-                meterFillArray[i].css('width', ((FC.RC.channels[i] - meterScaleMin) / (meterScaleMax - meterScaleMin) * 100).clamp(0, 100) + '%');
-                meterLabelArray[i].text(FC.RC.channels[i]);
-            }
-            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
-        }
-
-        // handle rcmap & rssi aux channel
-
-        let strBuffer = [];
-        for (let i = 0; i < FC.RC_MAP.length; i++) {
-            strBuffer[FC.RC_MAP[i]] = self.rcMapLetters[i];
-        }
-
-        // reconstruct
-        const str = strBuffer.join('');
-
-        // set current value
-        $('input[name="rcmap"]').val(str);
-
-        // validation / filter
-        const lastValid = str;
-
-        $('input[name="rcmap"]').on('input', function () {
-            let val = $(this).val();
-
-            // limit length to max 8
-            if (val.length > 8) {
-                val = val.substr(0, 8);
-                $(this).val(val);
-            }
-        });
-
-        $('input[name="rcmap"]').focusout(function () {
-            const val = $(this).val();
-            strBuffer = val.split('');
-            const duplicityBuffer = [];
-
-            if (val.length != 8) {
-                $(this).val(lastValid);
-                return false;
-            }
-
-            // check if characters inside are all valid, also check for duplicity
-            for (let i = 0; i < val.length; i++) {
-                if (self.rcMapLetters.indexOf(strBuffer[i]) < 0) {
-                    $(this).val(lastValid);
-                    return false;
-                }
-
-                if (duplicityBuffer.indexOf(strBuffer[i]) < 0) {
-                    duplicityBuffer.push(strBuffer[i]);
-                } else {
-                    $(this).val(lastValid);
-                    return false;
+        self.rxProtocols.forEach((item, index) => {
+            let visible = item.visible;
+            if (FC.FEATURE_CONFIG.features.isEnabled(item.feature)) {
+                if ((item.feature == 'RX_SERIAL' && item.id == FC.RX_CONFIG.serialrx_provider) ||
+                    (item.feature == 'RX_SPI' && item.id == FC.RX_CONFIG.rxSpiProtocol) ||
+                    (item.feature == 'RX_MSP') ||
+                    (item.feature == 'RX_PPM') ||
+                    (item.feature == 'RX_PARALLEL_PWM')) {
+                        visible = true;
+                        currentProto = index;
                 }
             }
-        });
-
-        // handle helper
-        $('select[name="rcmap_helper"]').val(0); // go out of bounds
-        $('select[name="rcmap_helper"]').change(function () {
-            $('input[name="rcmap"]').val($(this).val());
-        });
-
-        // rssi
-        const rssi_channel_e = $('select[name="rssi_channel"]');
-        rssi_channel_e.append(`<option value="0">${i18n.getMessage("receiverRssiChannelDisabledOption")}</option>`);
-        //1-5 reserved for Roll Pitch Yaw Collective Throttle, starting at 6
-        for (let i = 6; i < FC.RC.active_channels + 1; i++) {
-            rssi_channel_e.append(`<option value="${i}">${i18n.getMessage("controlAxisAux" + (i-5))}</option>`);
-        }
-
-        $('select[name="rssi_channel"]').val(FC.RSSI_CONFIG.channel);
-
-        const serialRxSelectElement = $('select.serialRX');
-        FC.getSerialRxTypes().forEach((serialRxType, index) => {
-            serialRxSelectElement.append(`<option value="${index}">${serialRxType}</option>`);
-        });
-
-        serialRxSelectElement.change(function () {
-            const serialRxValue = parseInt($(this).val());
-
-            let newValue;
-            if (serialRxValue !== FC.RX_CONFIG.serialrx_provider) {
-                newValue = $(this).find('option:selected').text();
-                updateButtons(true);
+            if (visible) {
+                rxProtoSelectElement.append(`<option value="${index}">${item.name}</option>`);
             }
-
-            FC.RX_CONFIG.serialrx_provider = serialRxValue;
         });
 
-        // select current serial RX type
-        serialRxSelectElement.val(FC.RX_CONFIG.serialrx_provider);
+        rxProtoSelectElement.val(currentProto);
 
-        const serialRxInvertedElement = $('input[name="serialRXInverted"]');
+        rxProtoSelectElement.change(function () {
+            const index = parseInt($(this).val());
+
+            const proto = self.rxProtocols[index];
+
+            FC.FEATURE_CONFIG.features.setGroup('RX_PROTO', false);
+            FC.FEATURE_CONFIG.features.setFeature(proto.feature, true);
+
+            if (proto.feature == 'RX_SERIAL') {
+                FC.RX_CONFIG.serialrx_provider = proto.id;
+            }
+            else if (proto.feature == 'RX_SPI') {
+                FC.RX_CONFIG.rxSpiProtocol = proto.id;
+            }
+        });
+
+
+    //// Serial options
+
+        const serialRxInvertedElement = $('input[name="serial_inverted"]');
         serialRxInvertedElement.change(function () {
             const inverted = $(this).is(':checked') ? 1 : 0;
             if (FC.RX_CONFIG.serialrx_inverted !== inverted) {
@@ -299,7 +254,7 @@ TABS.receiver.initialize = function (callback) {
 
         serialRxInvertedElement.prop('checked', FC.RX_CONFIG.serialrx_inverted !== 0);
 
-        const serialRxHalfDuplexElement = $('input[name="serialRXHalfDuplex"]');
+        const serialRxHalfDuplexElement = $('input[name="serial_half_duplex"]');
         serialRxHalfDuplexElement.change(function () {
             const halfduplex = $(this).is(':checked') ? 1 : 0;
             if (FC.RX_CONFIG.serialrx_halfduplex !== halfduplex) {
@@ -310,106 +265,176 @@ TABS.receiver.initialize = function (callback) {
 
         serialRxHalfDuplexElement.prop('checked', FC.RX_CONFIG.serialrx_halfduplex !== 0);
 
-        const spiRxTypes = [
-            'NRF24_V202_250K',
-            'NRF24_V202_1M',
-            'NRF24_SYMA_X',
-            'NRF24_SYMA_X5C',
-            'NRF24_CX10',
-            'CX10A',
-            'NRF24_H8_3D',
-            'NRF24_INAV',
-            'FRSKY_D',
-            'FRSKY_X',
-            'A7105_FLYSKY',
-            'A7105_FLYSKY_2A',
-            'NRF24_KN',
-            'SFHSS',
-            'SPEKTRUM',
-            'FRSKY_X_LBT',
-            'REDPINE',
-        ];
 
-        const spiRxElement = $('select.spiRx');
-        for (let i = 0; i < spiRxTypes.length; i++) {
-            spiRxElement.append(`<option value="${i}">${spiRxTypes[i]}</option>`);
-        }
+    //// Channels Bars
 
-        spiRxElement.change(function () {
-            const value = parseInt($(this).val());
-
-            let newValue = undefined;
-            if (value !== FC.RX_CONFIG.rxSpiProtocol) {
-                newValue = $(this).find('option:selected').text();
-                updateButtons(true);
-            }
-
-            FC.RX_CONFIG.rxSpiProtocol = value;
-        });
-
-        // select current serial RX type
-        spiRxElement.val(FC.RX_CONFIG.rxSpiProtocol);
-
-        $('input.feature', featuresElement).change(function () {
-            const element = $(this);
-
-            FC.FEATURE_CONFIG.features.updateData(element);
-            updateTabList(FC.FEATURE_CONFIG.features);
-
-            if (element.attr('name') === "RSSI_ADC") {
-                updateButtons(true);
-            }
-        });
-
-        function checkShowSerialRxBox() {
-            if (FC.FEATURE_CONFIG.features.isEnabled('RX_SERIAL')) {
-                $('div.serialRXBox').show();
+        function addChannelBar(parent, name, options) {
+            const elem = $('#tab-receiver-templates .receiverBarTemplate table tr').clone();
+            elem.find('.name').text(name);
+            const chSelect = elem.find('.channel_select');
+            if (options) {
+                options.forEach((item) => {
+                    const text = i18n.getMessage(item.text);
+                    chSelect.append(`<option value="${item.value}">${text}</option>`);
+                });
             } else {
-                $('div.serialRXBox').hide();
+                chSelect.hide();
+            }
+            parent.append(elem);
+            return elem;
+        }
+
+        function updateChannelBar(elem, width, label) {
+            elem.find('.fill').css('width', width);
+            elem.find('.label').text(label);
+        }
+
+        self.rcmapSize = FC.RC_MAP.length;
+        self.numChannels = (FC.RC.active_channels > 0) ? FC.RC.active_channels : self.rcmapSize;
+
+        const chContainer = $('.tab-receiver .channels');
+
+        const channelElems = [];
+        const channelSelect = [];
+
+        for (let ch = 0; ch < self.numChannels; ch++) {
+            if (ch < self.rcmapSize) {
+                const elem = addChannelBar(chContainer, `CH${ch + 1}`, self.axisNames.slice(0, self.rcmapSize));
+                channelElems.push(elem);
+
+                const chsel = elem.find('.channel_select');
+                channelSelect.push(chsel);
+
+                chsel.change(function () {
+                    const newAxis = parseInt(chsel.val());
+                    const oldAxis = self.rcmap[ch];
+                    const hc = self.rcmap.indexOf(newAxis);
+
+                    self.rcmap[hc] = oldAxis;
+                    self.rcmap[ch] = newAxis;
+
+                    console.log(self.rcmap);
+
+                    setRcMapGUI();
+                });
+            }
+            else {
+                const options = [ self.axisNames[ch] ];
+                const elem = addChannelBar(chContainer, `CH${ch + 1}`, options);
+                channelElems.push(elem);
+
+                const chsel = elem.find('.channel_select');
+                chsel.prop('disabled', true);
             }
         }
 
-        function checkShowSpiRxBox() {
-            if (FC.FEATURE_CONFIG.features.isEnabled('RX_SPI')) {
-                $('div.spiRxBox').show();
-            } else {
-                $('div.spiRxBox').hide();
-            }
+
+    //// RSSI
+
+        // RSSI bar
+        const rssiBar = addChannelBar(chContainer, 'RSSI', self.rssiOptions);
+        const rssiSelect = rssiBar.bind('.channel_select');
+
+        rssiSelect.change(function() {
+            const value = rssiSelect.val();
+            // FIXME
+            FC.RSSI_CONFIG.channel = value;
+        });
+
+        function updateRSSI() {
+            const rssi = ((FC.ANALOG.rssi / 1023) * 100).toFixed(0) + '%';
+            updateChannelBar(rssiBar, rssi, rssi);
         }
 
-        $(featuresElement).filter('select').change(function () {
-            const element = $(this);
-            FC.FEATURE_CONFIG.features.updateData(element);
-            updateTabList(FC.FEATURE_CONFIG.features);
-            if (element.attr('name') === 'rxMode') {
-                checkShowSerialRxBox();
-                checkShowSpiRxBox();
-                updateButtons(true);
+
+    //// RX Channels
+
+        function updateRcData() {
+            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
+        }
+
+        function updateBars() {
+            const meterScaleMin = 750;
+            const meterScaleMax = 2250;
+            for (let ch = 0; ch < FC.RC.active_channels; ch++) {
+                const value = FC.RX_CHANNELS[ch];
+                const width = (100 * (value - meterScaleMin) / (meterScaleMax - meterScaleMin)).clamp(0, 100) + '%';
+                updateChannelBar(channelElems[ch], width, value);
+            }
+            MSP.send_message(MSPCodes.MSP_RC, false, false, updateRcData);
+        }
+
+        // correct inner label margin on window resize (i don't know how we could do this in css)
+        self.resize = function () {
+            const containerWidth = $('.meter:first', chContainer).width(),
+                labelWidth = $('.meter .label:first', chContainer).width(),
+                margin = (containerWidth - labelWidth) / 2;
+            $('.channels .label').css('margin-left', margin);
+        };
+
+        $(window).on('resize', self.resize).resize(); // trigger so labels get correctly aligned on creation
+
+
+    //// RCMAP
+
+        const rcmapInput = $('input[name="rcmap"]');
+        const rcmapPreset = $('select[name="rcmap_preset"]');
+
+        rcmapPreset.val(0);
+
+        function setRcMapGUI() {
+            const rcbuf = [];
+            for (let ch = 0; ch < self.rcmapSize; ch++) {
+                const axis = self.rcmap[ch];
+                rcbuf[ch] = self.axisLetters[axis];
+                channelSelect[ch].val(axis);
+            }
+            rcmapInput.val(rcbuf.join(''));
+        }
+
+        rcmapInput.on('input', function () {
+            const val = rcmapInput.val();
+            if (val.length > self.rcmapSize) {
+                rcmapInput.val(val.substring(0, self.rcmapSize));
             }
         });
 
-        checkShowSerialRxBox();
-        checkShowSpiRxBox();
-        updateButtons();
+        rcmapInput.on('change', function () {
+            const val = rcmapInput.val();
 
-        function updateConfig() {
-
-            FC.RX_CONFIG.stick_max = parseInt($('.sticks input[name="stick_max"]').val());
-            FC.RX_CONFIG.stick_center = parseInt($('.sticks input[name="stick_center"]').val());
-            FC.RX_CONFIG.stick_min = parseInt($('.sticks input[name="stick_min"]').val());
-            FC.RC_DEADBAND_CONFIG.yaw_deadband = parseInt($('.deadband input[name="yaw_deadband"]').val());
-            FC.RC_DEADBAND_CONFIG.deadband = parseInt($('.deadband input[name="deadband"]').val());
-
-            // catch rc map
-            strBuffer = $('input[name="rcmap"]').val().split('');
-
-            for (let i = 0; i < FC.RC_MAP.length; i++) {
-                FC.RC_MAP[i] = strBuffer.indexOf(self.rcMapLetters[i]);
+            if (val.length != self.rcmapSize) {
+                setRcMapGUI();
+                return false;
             }
 
-            // catch rssi aux
-            FC.RSSI_CONFIG.channel = parseInt($('select[name="rssi_channel"]').val());
-        }
+            const rcvec = val.split('');
+            const rcmap = [];
+
+            for (let ch = 0; ch < self.rcmapSize; ch++) {
+                const letter = rcvec[ch];
+                const axis = self.axisLetters.indexOf(letter);
+                if (axis < 0 || rcvec.slice(0,ch).indexOf(letter) >= 0) {
+                    setRcMapGUI();
+                    return false;
+                }
+                rcmap[ch] = axis;
+            }
+
+            self.rcmap = rcmap;
+            setRcMapGUI();
+
+            return true;
+        });
+
+        rcmapPreset.on('change', function () {
+            rcmapInput.val(rcmapPreset.val()).change();
+            rcmapPreset.val(0);
+        });
+
+        self.rcmap = FC.RC_MAP;
+
+
+    //// Virtual Stick
 
         $("a.sticks").click(function() {
             const windowWidth = 370;
@@ -441,6 +466,12 @@ TABS.receiver.initialize = function (callback) {
             });
         });
 
+        // Only show the MSP control sticks if the MSP Rx feature is enabled
+        self.stickButton = FC.FEATURE_CONFIG.features.isEnabled('RX_MSP');
+
+
+    //// Bind button
+
         self.bindButton = bit_check(FC.CONFIG.targetCapabilities, FC.TARGET_CAPABILITIES_FLAGS.SUPPORTS_RX_BIND);
         updateButtons();
 
@@ -449,8 +480,27 @@ TABS.receiver.initialize = function (callback) {
             GUI.log(i18n.getMessage('receiverButtonBindMessage'));
         });
 
-        // Only show the MSP control sticks if the MSP Rx feature is enabled
-        self.stickButton = FC.FEATURE_CONFIG.features.isEnabled('RX_MSP');
+
+    //// Update data
+
+        function updateConfig() {
+
+            FC.RX_CONFIG.stick_center = parseInt($('.sticks input[name="stick_center"]').val());
+
+            FC.RX_CONFIG.stick_max = parseInt($('.sticks input[name="stick_max"]').val());
+            FC.RX_CONFIG.stick_min = parseInt($('.sticks input[name="stick_min"]').val());
+
+            FC.RC_DEADBAND_CONFIG.deadband = self.deadband;
+            FC.RC_DEADBAND_CONFIG.yaw_deadband = self.yawDeadband;
+
+            FC.RC_MAP = self.rcmap;
+        }
+
+
+    //// Main GUI
+
+        setRcMapGUI();
+        updateButtons();
 
         self.initModelPreview();
         self.renderModel();
@@ -482,7 +532,7 @@ TABS.receiver.initialize = function (callback) {
         });
 
         GUI.interval_add('receiver_pull', function () {
-            MSP.send_message(MSPCodes.MSP_RC, false, false, updateBars);
+            MSP.send_message(MSPCodes.MSP_RX_CHANNELS, false, false, updateBars);
         }, 25, false);
 
         GUI.interval_add('status_pull', function () {
