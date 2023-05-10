@@ -94,20 +94,22 @@
                     <div class="gui_box_titlebar">
                         <div class="spacer_box_title" i18n="receiverBars"></div>
                     </div>
-                    <div class="spacer_box hybrid_container">
-                        <div class="hybrid_element">
-                            <input type="text" name="rcmap" spellcheck="false" />
-                            <select class="hybrid_helper" name="rcmap_helper">
-                                <option i18n="receiverChannelDefaultOption" value="AETRC123"></option>
-                                <option value="AETRC123">FrSky</option>
-                                <option value="AETR1C23">Futaba / Hitec</option>
-                                <option value="TAER1C23">Spektrum / Graupner / JR</option>
-                                <option value="AECR1T23">ELRS</option>
-                            </select>
+                    <div class="spacer_box">
+                        <div class="hybrid_wrapper">
+                            <div class="hybrid_element">
+                                <input type="text" name="rcmap" spellcheck="false" />
+                                <select class="hybrid_select" name="rcmap_select">
+                                    <option i18n="receiverChannelDefaultOption" value="AETRC123"></option>
+                                    <option value="AETRC123">FrSky</option>
+                                    <option value="AETR1C23">Futaba / Hitec</option>
+                                    <option value="TAER1C23">Spektrum / Graupner / JR</option>
+                                    <option value="AECR1T23">ELRS</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="spacer_box">
-                        <div class="bars"></div>
+                        <table class="channels"></table>
                     </div>
                 </div>
 
@@ -140,17 +142,34 @@
 <div id="tab-receiver-templates">
 
     <div class="receiverBarTemplate">
-        <ul>
-            <li class="name"></li>
-            <li class="meter">
-                <div class="bar">
-                    <div class="label"></div>
-                    <div class="fill">
-                        <div class="label"></div>
+        <table>
+            <tr>
+                <td><span class="name" /></td>
+                <td>
+                    <select class="channel_select">
+                        <option value="0">*</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </td>
+                <td>
+                    <div class="meter">
+                        <div class="bar">
+                            <div class="label"></div>
+                            <div class="fill">
+                                <div class="label"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </li>
-        </ul>
+                </td>
+            </tr>
+        </table>
     </div>
 
 </div>

@@ -11,7 +11,7 @@ TABS.receiver = {
     stickButton: false,
     saveButtons: false,
     rcMapLetters: ['A', 'E', 'R', 'C', 'T', '1', '2', '3'],
-    barNames : [
+    chNames : [
         'controlAxisRoll',
         'controlAxisPitch',
         'controlAxisYaw',
@@ -139,7 +139,7 @@ TABS.receiver.initialize = function (callback) {
     //// Bars
 
         function addBar(parent, name) {
-            const bar = $('#tab-receiver-templates .receiverBarTemplate ul').clone();
+            const bar = $('#tab-receiver-templates .receiverBarTemplate table tr').clone();
             bar.find('.name').text(name);
             parent.append(bar);
             return bar;
@@ -147,17 +147,17 @@ TABS.receiver.initialize = function (callback) {
 
         const numBars = (FC.RC.active_channels > 0) ? FC.RC.active_channels : 8;
 
-        const barContainer = $('.tab-receiver .bars');
+        const chContainer = $('.tab-receiver .channels');
         const channelBars = [];
         const channelLabels = [];
 
         for (let i = 0; i < numBars; i++) {
-            const bar = addBar(barContainer, i18n.getMessage(self.barNames[i]));
+            const bar = addBar(chContainer, i18n.getMessage(self.chNames[i]));
             channelBars.push(bar.find('.fill'));
             channelLabels.push(bar.find('.label'));
         }
 
-        const rssiBar = addBar(barContainer, 'RSSI');
+        const rssiBar = addBar(chContainer, 'RSSI');
         const rssiBarFill = rssiBar.find('.fill');
         const rssiBarLabel = rssiBar.find('.label');
 
@@ -166,8 +166,8 @@ TABS.receiver.initialize = function (callback) {
 
         // correct inner label margin on window resize (i don't know how we could do this in css)
         self.resize = function () {
-            const containerWidth = $('.meter:first', barContainer).width(),
-                  labelWidth = $('.meter .label:first', barContainer).width(),
+            const containerWidth = $('.meter:first', chContainer).width(),
+                  labelWidth = $('.meter .label:first', chContainer).width(),
                   margin = (containerWidth / 2) - (labelWidth / 2);
             for (let i = 0; i < channelLabels.length; i++) {
                 channelLabels[i].css('margin-left', margin);
