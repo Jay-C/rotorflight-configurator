@@ -1383,18 +1383,6 @@
         "message": "When enabled, only the first arm after the battery is connected will be used as home point. If not enabled, every time the quad is armed, the home point will be updated.",
         "description": "Help text for the option to set the Home Point with the first arm only, not with each arm in the GPS Configuration"
     },
-    "configurationSerialRX": {
-        "message": "Serial Receiver Protocol"
-    },
-    "configurationSerialRXInverted": {
-        "message": "Inverted Serial Line"
-    },
-    "configurationSerialRXHalfDuplex": {
-        "message": "Half-Duplex Communication"
-    },
-    "configurationSpiRX": {
-        "message": "SPI Bus Receiver Provider"
-    },
     "configurationEepromSaved": {
         "message": "EEPROM <span class=\"message-positive\">saved</span>"
     },
@@ -1725,53 +1713,62 @@
     "profilesActivateProfile": {
         "message": "Loaded Profile: <strong class=\"message-positive\">$1</strong>"
     },
-    "receiverHelp": {
-        "message": "Please read receiver chapter of the documentation.  Configure serial port (if required), receiver mode (serial/ppm/pwm), provider (for serial receivers), bind receiver, set channel map, configure channel endpoints/range on TX so that all channels go from ~1000 to ~2000.  Set midpoint (default 1500), trim channels to 1500, configure stick deadband, verify behaviour when TX is off or out of range.<br /><span class=\"message-negative\">IMPORTANT:</span> Before flying read failsafe chapter of documentation and configure failsafe."
+    "receiverSelection": {
+        "message": "Receiver Type"
     },
-    "receiverStickMin": {
-        "message": "'Stick Low' Threshold"
+    "receiverSettings": {
+        "message": "Receiver Settings"
     },
-    "receiverHelpStickMin": {
-        "message": "The maximum value (in us) for a stick to be recognised as low / left for command input (MIN_CHECK)."
+    "receiverProtocol": {
+        "message": "Receiver Protocol"
+    },
+    "receiverHelpProtocol": {
+        "message": "Select the protocol that the receiver is using"
+    },
+    "receiverSerialHalfDuplex": {
+        "message": "One-wire Communication (Half-Duplex)"
+    },
+    "receiverSerialInverted": {
+        "message": "Inverted Serial Signaling"
     },
     "receiverStickCenter": {
         "message": "Stick Center"
     },
     "receiverHelpStickCenter": {
-        "message": "The value (in us) used to determine if a stick is centered (MID_RC)."
+        "message": "The value (in us) of stick center."
     },
-    "receiverStickMax": {
+    "receiverStickCommandMin": {
+        "message": "'Stick Low' Threshold"
+    },
+    "receiverHelpStickCommandMin": {
+        "message": "The maximum value (in us) for a stick to be recognised as low / left for command input (MIN_CHECK)."
+    },
+    "receiverStickCommandMax": {
         "message": "'Stick High' Threshold"
     },
-    "receiverHelpStickMax": {
+    "receiverHelpStickCommandMax": {
         "message": "The minimum value (in us) for a stick to be recognised as high / right for command input (MAX_CHECK)."
     },
-    "receiverDeadband": {
-        "message": "RC Deadband"
+    "receiverCyclicDeadband": {
+        "message": "Cyclic Deadband"
     },
-    "receiverHelpDeadband": {
-        "message": "These are values (in us) by how much RC input can be different before it's considered valid. For transmitters with jitter on outputs, this value can be increased if rc inputs twitch while idle."
+    "receiverHelpCyclicDeadband": {
+        "message": "These are values (in us) by how much RC input can be different before it's considered non-zero. For transmitters with jitter on outputs, this value can be increased if rc inputs twitch while idle."
     },
     "receiverYawDeadband": {
         "message": "Yaw Deadband"
     },
     "receiverHelpYawDeadband": {
-        "message": "These are values (in us) by how much RC input can be different before it's considered valid. For transmitters with jitter on outputs, this value can be increased if rc inputs twitch while idle. <strong>This setting is for Yaw only.</strong>"
+        "message": "These are values (in us) by how much RC input can be different before it's considered non-zero. For transmitters with jitter on outputs, this value can be increased if rc inputs twitch while idle. <strong>This setting is for Yaw only.</strong>"
     },
-    "receiverChannelMap": {
-        "message": "Channel Map"
+    "receiverChannelOrder": {
+        "message": "Channel Order Preset"
     },
     "receiverChannelDefaultOption": {
         "message": "Default"
     },
-    "receiverChannelMapTitle": {
-        "message": "You can define your own channel map by clicking inside the box"
-    },
-    "receiverRssiChannel": {
-        "message": "RSSI Channel"
-    },
-    "receiverRssiChannelDisabledOption": {
-        "message": "Disabled"
+    "receiverHelpChannelOrder": {
+        "message": "Select one of the presets from the dropdown menu, or enter your own channel order."
     },
     "receiverButtonBind": {
         "message": "Bind Receiver"
