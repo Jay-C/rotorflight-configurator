@@ -44,7 +44,7 @@ const MSPCodes = {
     MSP_SET_ARMING_CONFIG:          62,
     MSP_RX_MAP:                     64,
     MSP_SET_RX_MAP:                 65,
-    MSP_BF_CONFIG:                  66, // DEPRECATED
+    MSP_RX_CHANNELS:                66,
     MSP_SET_BF_CONFIG:              67, // DEPRECATED
     MSP_SET_REBOOT:                 68,
     MSP_BF_BUILD_INFO:              69, // Not used

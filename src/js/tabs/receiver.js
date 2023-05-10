@@ -11,6 +11,31 @@ TABS.receiver = {
     stickButton: false,
     saveButtons: false,
     rcMapLetters: ['A', 'E', 'R', 'C', 'T', '1', '2', '3'],
+    barNames : [
+        'controlAxisRoll',
+        'controlAxisPitch',
+        'controlAxisYaw',
+        'controlAxisCollective',
+        'controlAxisThrottle',
+        'controlAxisAux1',
+        'controlAxisAux2',
+        'controlAxisAux3',
+        'controlAxisAux4',
+        'controlAxisAux5',
+        'controlAxisAux6',
+        'controlAxisAux7',
+        'controlAxisAux8',
+        'controlAxisAux9',
+        'controlAxisAux10',
+        'controlAxisAux11',
+        'controlAxisAux12',
+        'controlAxisAux13',
+        'controlAxisAux14',
+        'controlAxisAux15',
+        'controlAxisAux16',
+        'controlAxisAux17',
+        'controlAxisAux18',
+    ],
 };
 
 TABS.receiver.initialize = function (callback) {
@@ -110,77 +135,42 @@ TABS.receiver.initialize = function (callback) {
         $('.sticks input[name="stick_center"]').val(FC.RX_CONFIG.stick_center);
         $('.sticks input[name="stick_max"]').val(FC.RX_CONFIG.stick_max);
 
-        // generate bars
-        const bar_names = [
-            'controlAxisRoll',
-            'controlAxisPitch',
-            'controlAxisYaw',
-            'controlAxisCollective',
-            'controlAxisThrottle',
-        ];
 
-        const numBars = (FC.RC.active_channels > 0) ? FC.RC.active_channels : 8;
-        const barContainer = $('.tab-receiver .bars');
+    //// Bars
 
-        for (let i = 0, aux = 1; i < numBars; i++) {
-            let name;
-            if (i < bar_names.length) {
-                name = i18n.getMessage(bar_names[i]);
-            } else {
-                name = i18n.getMessage("controlAxisAux" + (aux++));
-            }
-
-            barContainer.append('\
-                <ul>\
-                    <li class="name">' + name + '</li>\
-                    <li class="meter">\
-                        <div class="bar">\
-                            <div class="label"></div>\
-                            <div class="fill' + (FC.RC.active_channels == 0 ? 'disabled' : '') + '">\
-                                <div class="label"></div>\
-                            </div>\
-                        </div>\
-                    </li>\
-                </ul>\
-            ');
+        function addBar(parent, name) {
+            const bar = $('#tab-receiver-templates .receiverBarTemplate ul').clone();
+            bar.find('.name').text(name);
+            parent.append(bar);
+            return bar;
         }
 
-        barContainer.append('\
-            <ul><li></li></ul>\
-            <ul>\
-                <li class="name">RSSI</li>\
-                <li class="meter">\
-                    <div class="bar">\
-                        <div class="label"></div>\
-                        <div class="fill">\
-                            <div class="label"></div>\
-                        </div>\
-                    </div>\
-                </li>\
-            </ul>\
-        ');
+        const numBars = (FC.RC.active_channels > 0) ? FC.RC.active_channels : 8;
+
+        const barContainer = $('.tab-receiver .bars');
+        const channelBars = [];
+        const channelLabels = [];
+
+        for (let i = 0; i < numBars; i++) {
+            const bar = addBar(barContainer, i18n.getMessage(self.barNames[i]));
+            channelBars.push(bar.find('.fill'));
+            channelLabels.push(bar.find('.label'));
+        }
+
+        const rssiBar = addBar(barContainer, 'RSSI');
+        const rssiBarFill = rssiBar.find('.fill');
+        const rssiBarLabel = rssiBar.find('.label');
 
         const meterScaleMin = 750;
         const meterScaleMax = 2250;
 
-        const meterFillArray = [];
-        $('.meter .fill', barContainer).each(function () {
-            meterFillArray.push($(this));
-        });
-
-        const meterLabelArray = [];
-        $('.meter', barContainer).each(function () {
-            meterLabelArray.push($('.label', this));
-        });
-
         // correct inner label margin on window resize (i don't know how we could do this in css)
         self.resize = function () {
             const containerWidth = $('.meter:first', barContainer).width(),
-                labelWidth = $('.meter .label:first', barContainer).width(),
-                margin = (containerWidth / 2) - (labelWidth / 2);
-
-            for (let i = 0; i < meterLabelArray.length; i++) {
-                meterLabelArray[i].css('margin-left', margin);
+                  labelWidth = $('.meter .label:first', barContainer).width(),
+                  margin = (containerWidth / 2) - (labelWidth / 2);
+            for (let i = 0; i < channelLabels.length; i++) {
+                channelLabels[i].css('margin-left', margin);
             }
         };
 
@@ -188,14 +178,14 @@ TABS.receiver.initialize = function (callback) {
 
         function updateRSSI() {
             const rssi = ((FC.ANALOG.rssi / 1023) * 100).toFixed(0) + '%';
-            meterFillArray[numBars].css('width', rssi);
-            meterLabelArray[numBars].text(rssi);
+            rssiBarFill.css('width', rssi);
+            rssiBarLabel.text(rssi);
         }
 
         function updateBars() {
             for (let i = 0; i < FC.RC.active_channels; i++) {
-                meterFillArray[i].css('width', ((FC.RC.channels[i] - meterScaleMin) / (meterScaleMax - meterScaleMin) * 100).clamp(0, 100) + '%');
-                meterLabelArray[i].text(FC.RC.channels[i]);
+                channelBars[i].css('width', ((FC.RC.channels[i] - meterScaleMin) / (meterScaleMax - meterScaleMin) * 100).clamp(0, 100) + '%');
+                channelLabels[i].text(FC.RC.channels[i]);
             }
             MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
         }
