@@ -49,8 +49,23 @@
                         <div class="spacer_box">
                             <table class="settings_table">
                                 <tr>
-                                    <td><input type="number" name="channel_center" min="1401" max="1599" /></td>
-                                    <td><span i18n="receiverChannelCenter" /><div class="helpicon cf_tip" i18n_title="receiverHelpChannelCenter" /></td>
+                                    <td>
+                                        <div class="hybrid_element">
+                                            <input type="text" name="rcmap" spellcheck="false" />
+                                            <select class="hybrid_select" name="rcmap_preset">
+                                                <option i18n="receiverChannelDefaultOption" value="AETRC123"></option>
+                                                <option value="AECR1T23">ELRS</option>
+                                                <option value="AETRC123">FrSky</option>
+                                                <option value="AETR1C23">Futaba / Hitec</option>
+                                                <option value="TAER1C23">Spektrum / Graupner / JR</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td><span i18n="receiverChannelOrder" /><div class="helpicon cf_tip" i18n_title="receiverHelpChannelOrder" /></td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" name="stick_center" min="1401" max="1599" /></td>
+                                    <td><span i18n="receiverStickCenter" /><div class="helpicon cf_tip" i18n_title="receiverHelpStickCenter" /></td>
                                 </tr>
                                 <tr>
                                     <td><input type="number" name="cyclic_deadband" step="1" min="0" max="100"/></td>
@@ -74,7 +89,7 @@
                 </div>
 
                 <!-- MODEL PREVIEW -->
-                <div class="gui_box tunings grey">
+                <div class="gui_box gui_preview grey">
                     <div class="gui_box_titlebar">
                         <div class="spacer_box_title" i18n="receiverModelPreview"></div>
                     </div>
@@ -93,20 +108,6 @@
                 <div class="gui_box grey margin-bottom">
                     <div class="gui_box_titlebar">
                         <div class="spacer_box_title" i18n="receiverBars"></div>
-                    </div>
-                    <div class="spacer_box">
-                        <div class="hybrid_wrapper">
-                            <div class="hybrid_element">
-                                <input type="text" name="rcmap" spellcheck="false" />
-                                <select class="hybrid_select" name="rcmap_select">
-                                    <option i18n="receiverChannelDefaultOption" value="AETRC123"></option>
-                                    <option value="AETRC123">FrSky</option>
-                                    <option value="AETR1C23">Futaba / Hitec</option>
-                                    <option value="TAER1C23">Spektrum / Graupner / JR</option>
-                                    <option value="AECR1T23">ELRS</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                     <div class="spacer_box">
                         <table class="channels"></table>
@@ -146,17 +147,7 @@
             <tr>
                 <td><span class="name" /></td>
                 <td>
-                    <select class="channel_select">
-                        <option value="0">AUTO</option>
-                        <option value="1">CH1</option>
-                        <option value="2">CH2</option>
-                        <option value="3">CH3</option>
-                        <option value="4">CH4</option>
-                        <option value="5">CH5</option>
-                        <option value="6">CH6</option>
-                        <option value="7">CH7</option>
-                        <option value="8">CH8</option>
-                    </select>
+                    <select class="channel_select" />
                 </td>
                 <td>
                     <div class="meter">

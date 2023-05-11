@@ -261,6 +261,8 @@ const FC = {
             channels:                   Array.from({length: 32}),
         };
 
+        this.RX_CHANNELS = Array.from({length: 32});
+
         this.RC_TUNING = {
             RC_RATE:                    0,
             RC_EXPO:                    0,
