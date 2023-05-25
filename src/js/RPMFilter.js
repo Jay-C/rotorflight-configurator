@@ -29,26 +29,25 @@ const RPMFilter = {
 
     nullNotch: function ()
     {
-        return { rpm_source: 0, freq_ratio: 0, notch_q: 0, min_hz: 0, max_hz: 0, };
+        return { rpm_source: 0, rpm_ratio: 0, rpm_limit: 0, notch_q: 0 };
     },
 
-    newNotch: function (rpm_source, freq_ratio, notch_q, min_hz, max_hz)
+    newNotch: function (rpm_source, rpm_ratio, rpm_limit, notch_q)
     {
-        return { rpm_source: rpm_source, freq_ratio: freq_ratio, notch_q: notch_q, min_hz: min_hz, max_hz: max_hz, };
+        return { rpm_source: rpm_source, rpm_ratio: rpm_ratio, rpm_limit: rpm_limit, notch_q: notch_q };
     },
 
     cloneNotch: function (a)
     {
-        return { rpm_source: a.rpm_source, freq_ratio: a.freq_ratio, notch_q: a.notch_q, min_hz: a.min_hz, max_hz: a.max_hz, };
+        return { rpm_source: a.rpm_source, rpm_ratio: a.rpm_ratio, rpm_limit: a.rpm_limit, notch_q: a.notch_q };
     },
 
     compareNotch : function (a, b)
     {
         return( a.rpm_source  == b.rpm_source &&
-                a.freq_ratio  == b.freq_ratio &&
-                a.notch_q     == b.notch_q &&
-                a.min_hz      == b.min_hz &&
-                a.max_hz      == b.max_hz );
+                a.rpm_ratio   == b.rpm_ratio &&
+                a.rpm_limit   == b.rpm_limit &&
+                a.notch_q     == b.notch_q );
     },
 
     isNullNotch : function (a)
@@ -114,7 +113,7 @@ const RPMFilter = {
         const self = this;
 
         for (let i=0; i<bank.length; i++) {
-            if (bank[i].rpm_source == source && bank[i].freq_ratio == ratio)
+            if (bank[i].rpm_source == source && bank[i].rpm_ratio == ratio)
                 return i;
         }
 
@@ -126,7 +125,7 @@ const RPMFilter = {
         const self = this;
 
         for (let i=0; i<bank.length; i++) {
-            if (bank[i].rpm_source == source && bank[i].freq_ratio >= ratioLow && bank[i].freq_ratio <= ratioHigh)
+            if (bank[i].rpm_source == source && bank[i].rpm_ratio >= ratioLow && bank[i].rpm_ratio <= ratioHigh)
                 return i;
         }
 
@@ -162,13 +161,11 @@ const RPMFilter = {
 
         if (index1 != undefined && index2 != undefined && index1 != index2)
         {
-            if (bank[index1].notch_q == bank[index2].notch_q &&
-                bank[index1].min_hz  == bank[index2].min_hz &&
-                bank[index1].max_hz  == bank[index2].max_hz) {
-                const dist1 = (bank[index1].freq_ratio - ratio) /  ratio;
-                const dist2 = (bank[index2].freq_ratio - ratio) / -ratio;
+            if (bank[index1].rpm_limit == bank[index2].rpm_limit && bank[index1].notch_q == bank[index2].notch_q) {
+                const dist1 = (bank[index1].rpm_ratio - ratio) /  ratio;
+                const dist2 = (bank[index2].rpm_ratio - ratio) / -ratio;
 
-                const separ = self.doubleNotchSeparation / (bank[index1].notch_q / 100);
+                const separ = self.doubleNotchSeparation / (bank[index1].notch_q / 10);
 
                 if (self.aboutEQ(dist1, separ, 0.0005) && self.aboutEQ(dist2, separ, 0.0005))
                     return [index1, index2];
@@ -186,17 +183,15 @@ const RPMFilter = {
             source:    source,
             harmonic:  harm,
             count:     0,
+            rpm_limit: 0,
             notch_q:   2.50,
-            min_hz:    20,
-            max_hz:    4000,
         };
 
         let index = self.findDoubleNotch(bank, source, harm);
         if (index) {
-            harmonic.count   = 2;
-            harmonic.notch_q = bank[index[0]].notch_q / 100;
-            harmonic.min_hz  = bank[index[0]].min_hz;
-            harmonic.max_hz  = bank[index[0]].max_hz;
+            harmonic.count = 2;
+            harmonic.notch_q = bank[index[0]].notch_q / 10;
+            harmonic.rpm_limit = bank[index[0]].rpm_limit;
 
             self.eraseBankNotches(bank, index);
 
@@ -205,10 +200,9 @@ const RPMFilter = {
 
         index = self.findSingleNotch(bank, source, harm);
         if (index) {
-            harmonic.count   = 1;
-            harmonic.notch_q = bank[index[0]].notch_q / 100;
-            harmonic.min_hz  = bank[index[0]].min_hz;
-            harmonic.max_hz  = bank[index[0]].max_hz;
+            harmonic.count = 1;
+            harmonic.notch_q = bank[index[0]].notch_q / 10;
+            harmonic.rpm_limit = bank[index[0]].rpm_limit;
 
             self.eraseBankNotches(bank, index);
 
@@ -222,9 +216,9 @@ const RPMFilter = {
         const self = this;
 
         const ratio = Math.round(10000 / harm.harmonic);
-        const notchq = Math.round(harm.notch_q * 100);
+        const notchq = Math.round(harm.notch_q * 10);
 
-        bank.push( self.newNotch(harm.source, ratio, notchq, harm.min_hz, harm.max_hz) );
+        bank.push( self.newNotch(harm.source, ratio, harm.rpm_limit, notchq) );
     },
 
     generateDoubleNotch : function(bank, harm) {
@@ -233,10 +227,10 @@ const RPMFilter = {
         const ratio  = 10000 / harm.harmonic;
         const ratio1 = Math.round(ratio * (1.0 - self.doubleNotchSeparation / harm.notch_q));
         const ratio2 = Math.round(ratio * (1.0 + self.doubleNotchSeparation / harm.notch_q));
-        const notchq = Math.round(harm.notch_q * 100);
+        const notchq = Math.round(harm.notch_q * 10);
 
-        bank.push( self.newNotch(harm.source, ratio1, notchq, harm.min_hz, harm.max_hz),
-                   self.newNotch(harm.source, ratio2, notchq, harm.min_hz, harm.max_hz) );
+        bank.push( self.newNotch(harm.source, ratio1, harm.rpm_limit, notchq),
+                   self.newNotch(harm.source, ratio2, harm.rpm_limit, notchq) );
     },
 
     generateNotch : function(bank, harm) {

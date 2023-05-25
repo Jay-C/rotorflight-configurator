@@ -259,11 +259,11 @@ TABS.gyro.initialize = function (callback) {
 
         enableElem.prop('checked', self.rpmFilter.enable && !self.rpmFilter.custom).change();
 
-        let mainMinRPM = (self.rpmFilter.mainRotor[0].min_hz > 50) ?
-                         self.rpmFilter.mainRotor[0].min_hz : 500;
+        let mainMinRPM = (self.rpmFilter.mainRotor[0].rpm_limit > 50) ?
+                         self.rpmFilter.mainRotor[0].rpm_limit : 500;
 
-        let tailMinRPM = (self.rpmFilter.tailRotor[0].min_hz > 50) ?
-                         self.rpmFilter.tailRotor[0].min_hz : 1000;
+        let tailMinRPM = (self.rpmFilter.tailRotor[0].rpm_limit > 50) ?
+                         self.rpmFilter.tailRotor[0].rpm_limit : 1000;
 
         $('input[id="gyroRpmFilterMainRotorMinRPM"]').val(mainMinRPM);
         $('input[id="gyroRpmFilterTailRotorMinRPM"]').val(tailMinRPM);
@@ -292,7 +292,7 @@ TABS.gyro.initialize = function (callback) {
                 if (!checked) {
                     notschy.val(0);
                 } else {
-                    if (self.rpmFilter.mainRotor[harm-1].count)
+                    if (conf.count)
                         notschy.val(conf.count);
                     else
                         notschy.val(1);
@@ -317,6 +317,7 @@ TABS.gyro.initialize = function (callback) {
         process_single_notch('TailRotor', 4, self.rpmFilter.tailRotor[3]);
 
         process_single_notch('MainMotor', 1, self.rpmFilter.mainMotor[0]);
+        process_single_notch('TailMotor', 1, self.rpmFilter.tailMotor[0]);
     }
 
     function form_to_data() {
@@ -375,19 +376,15 @@ TABS.gyro.initialize = function (callback) {
 
             const mainRotorMinRPM = parseInt($('input[id="gyroRpmFilterMainRotorMinRPM"]').val());
             for (let i=0; i<RPMFilter.MAIN_ROTOR_HARMONICS; i++) {
-                self.rpmFilter.mainRotor[i].min_hz = mainRotorMinRPM;
-                self.rpmFilter.mainRotor[i].max_hz = 50000;
+                self.rpmFilter.mainRotor[i].rpm_limit = mainRotorMinRPM;
             }
-            self.rpmFilter.mainMotor[0].min_hz = mainRotorMinRPM;
-            self.rpmFilter.mainMotor[0].max_hz = 50000;
+            self.rpmFilter.mainMotor[0].rpm_limit = mainRotorMinRPM;
 
             const tailRotorMinRPM = parseInt($('input[id="gyroRpmFilterTailRotorMinRPM"]').val());
             for (let i=0; i<RPMFilter.TAIL_ROTOR_HARMONICS; i++) {
-                self.rpmFilter.tailRotor[i].min_hz = tailRotorMinRPM;
-                self.rpmFilter.tailRotor[i].max_hz = 50000;
+                self.rpmFilter.tailRotor[i].rpm_limit = tailRotorMinRPM;
             }
-            self.rpmFilter.tailMotor[0].min_hz = tailRotorMinRPM;
-            self.rpmFilter.tailMotor[0].max_hz = 50000;
+            self.rpmFilter.tailMotor[0].rpm_limit = tailRotorMinRPM;
 
             function access_double_notch(rotor, harm, conf) {
                 const switchy = $(`input[id="gyroRpmFilter${rotor}S${harm}"]`);
@@ -426,16 +423,7 @@ TABS.gyro.initialize = function (callback) {
             access_single_notch('TailRotor', 4, self.rpmFilter.tailRotor[3]);
 
             access_single_notch('MainMotor', 1, self.rpmFilter.mainMotor[0]);
-
-            if (self.rpmFilter.mainMotor[1]) {
-                self.rpmFilter.mainMotor[1].count = 0;
-            }
-            if (self.rpmFilter.tailMotor[0]) {
-                self.rpmFilter.tailMotor[0].count = 0;
-            }
-            if (self.rpmFilter.tailMotor[1]) {
-                self.rpmFilter.tailMotor[1].count = 0;
-            }
+            access_single_notch('TailMotor', 1, self.rpmFilter.tailMotor[0]);
         }
 
         if (!self.rpmFilter.custom) {
