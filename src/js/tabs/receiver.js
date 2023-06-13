@@ -57,6 +57,47 @@ TABS.receiver = {
         { value: 12, text:'AUX7' },
         { value: 13, text:'AUX8' },
     ],
+    rxModes: [
+        { name: 'CRSF',                 type: 0, id: 9,   feature: 3,    visible: true, },
+        { name: 'S.BUS',                type: 0, id: 2,   feature: 3,    visible: true, },
+        { name: 'F.PORT',               type: 0, id: 12,  feature: 3,    visible: true, },
+        { name: 'DSM/1024',             type: 0, id: 0,   feature: 3,    visible: true, },
+        { name: 'DSM/2048',             type: 0, id: 1,   feature: 3,    visible: true, },
+        { name: 'DSM/SRXL',             type: 0, id: 10,  feature: 3,    visible: true, },
+        { name: 'DSM/SRXL2',            type: 0, id: 13,  feature: 3,    visible: true, },
+        { name: 'SUMD',                 type: 0, id: 3,   feature: 3,    visible: true, },
+        { name: 'SUMH',                 type: 0, id: 4,   feature: 3,    visible: true, },
+        { name: 'IBUS',                 type: 0, id: 7,   feature: 3,    visible: true, },
+        { name: 'XBUS',                 type: 0, id: 5,   feature: 3,    visible: true, },
+        { name: 'XBUS/RJ01',            type: 0, id: 6,   feature: 3,    visible: true, },
+        { name: 'EXBUS',                type: 0, id: 8,   feature: 3,    visible: true, },
+        { name: 'PPM',                  type: 1, id: 0,   feature: 0,    visible: true, },
+        // Hidden options
+        { name: 'PWM',                  type: 2, id: 0,   feature: 13,   visible: false, },
+        { name: 'MSP',                  type: 3, id: 0,   feature: 14,   visible: false, },
+        { name: 'CUSTOM',               type: 0, id: 11,  feature: 3,    visible: false, },
+        // Unsupported SPI receivers
+        { name: 'SPI/CX10',             type: 4, id: 4,   feature: 25,   visible: false, },
+        { name: 'SPI/CX10A',            type: 4, id: 5,   feature: 25,   visible: false, },
+        { name: 'SPI/ELRS',             type: 4, id: 19,  feature: 25,   visible: false, },
+        { name: 'SPI/FRSKY D',          type: 4, id: 8,   feature: 25,   visible: false, },
+        { name: 'SPI/FRSKY X',          type: 4, id: 9,   feature: 25,   visible: false, },
+        { name: 'SPI/FRSKY X LBT',      type: 4, id: 15,  feature: 25,   visible: false, },
+        { name: 'SPI/FRSKY X V2',       type: 4, id: 17,  feature: 25,   visible: false, },
+        { name: 'SPI/FRSKY X LBT V2',   type: 4, id: 18,  feature: 25,   visible: false, },
+        { name: 'SPI/FLYSKY',           type: 4, id: 10,  feature: 25,   visible: false, },
+        { name: 'SPI/FLYSKY 2A',        type: 4, id: 11,  feature: 25,   visible: false, },
+        { name: 'SPI/H8_3D',            type: 4, id: 6,   feature: 25,   visible: false, },
+        { name: 'SPI/INAV',             type: 4, id: 7,   feature: 25,   visible: false, },
+        { name: 'SPI/KN',               type: 4, id: 12,  feature: 25,   visible: false, },
+        { name: 'SPI/REDPINE',          type: 4, id: 16,  feature: 25,   visible: false, },
+        { name: 'SPI/SFHSS',            type: 4, id: 13,  feature: 25,   visible: false, },
+        { name: 'SPI/SYMA X',           type: 4, id: 2,   feature: 25,   visible: false, },
+        { name: 'SPI/SYMA X5C',         type: 4, id: 3,   feature: 25,   visible: false, },
+        { name: 'SPI/SPEKTRUM',         type: 4, id: 14,  feature: 25,   visible: false, },
+        { name: 'SPI/V202 250k',        type: 4, id: 0,   feature: 25,   visible: false, },
+        { name: 'SPI/V202 1M',          type: 4, id: 1,   feature: 25,   visible: false, },
+    ],
 };
 
 TABS.receiver.initialize = function (callback) {
@@ -139,20 +180,31 @@ TABS.receiver.initialize = function (callback) {
             }
         }
 
-        $('input[name="cyclic_deadband"]').val(FC.RC_DEADBAND_CONFIG.deadband);
-        $('input[name="yaw_deadband"]').val(FC.RC_DEADBAND_CONFIG.yaw_deadband);
+        $('input[name="cyclic_deadband"]')
+            .val(FC.RC_DEADBAND_CONFIG.deadband)
+            .change(function () {
+                self.deadband = parseInt($(this).val());
+            })
+            .change();
 
-        $('input[name="cyclic_deadband"]').change(function () {
-            self.deadband = parseInt($(this).val());
-        }).change();
-        $('input[name="yaw_deadband"]').change(function () {
-            self.yawDeadband = parseInt($(this).val());
-        }).change();
+        $('input[name="yaw_deadband"]')
+            .val(FC.RC_DEADBAND_CONFIG.yaw_deadband)
+            .change(function () {
+                self.yawDeadband = parseInt($(this).val());
+            })
+            .change();
 
-        $('input[name="stick_center"]').val(FC.RX_CONFIG.stick_center);
+        $('input[name="stick_center"]')
+            .val(FC.RX_CONFIG.stick_center)
+            .change();
 
-        $('input[name="stick_min"]').val(FC.RX_CONFIG.stick_min);
-        $('input[name="stick_max"]').val(FC.RX_CONFIG.stick_max);
+        $('input[name="stick_min"]')
+            .val(FC.RX_CONFIG.stick_min)
+            .change();
+
+        $('input[name="stick_max"]')
+            .val(FC.RX_CONFIG.stick_max)
+            .change();
 
 
     //// Bars
@@ -217,7 +269,7 @@ TABS.receiver.initialize = function (callback) {
 
     //// rcmap
 
-        const rcmapElem = $('input[name="rcmap"]');
+        const rcmapInput = $('input[name="rcmap"]');
 
         function setRcMapGUI() {
             const rcbuf = [];
@@ -226,22 +278,22 @@ TABS.receiver.initialize = function (callback) {
                 rcbuf[ch] = self.axisLetters[axis];
                 channelSelect[axis].val(ch);
             }
-            rcmapElem.val(rcbuf.join(''));
+            rcmapInput.val(rcbuf.join(''));
         }
 
         self.rcmap = FC.RC_MAP;
 
         setRcMapGUI();
 
-        rcmapElem.on('input', function () {
-            const val = rcmapElem.val();
+        rcmapInput.on('input', function () {
+            const val = rcmapInput.val();
             if (val.length > 8) {
-                rcmapElem.val(val.substr(0, 8));
+                rcmapInput.val(val.substr(0, 8));
             }
         });
 
-        rcmapElem.on('change', function () {
-            const val = rcmapElem.val();
+        rcmapInput.on('change', function () {
+            const val = rcmapInput.val();
 
             if (val.length != 8) {
                 setRcMapGUI();
@@ -268,11 +320,13 @@ TABS.receiver.initialize = function (callback) {
 
         $('select[name="rcmap_preset"]').val(0);
         $('select[name="rcmap_preset"]').change(function () {
-            rcmapElem.val($(this).val()).change();
+            rcmapInput.val($(this).val()).change();
         });
 
 
-        // rssi
+    //// RSSI
+
+        // rssi FIXME
         const rssi_channel_e = $('select[name="rssi_channel"]');
         rssi_channel_e.append(`<option value="0">${i18n.getMessage("receiverRssiChannelDisabledOption")}</option>`);
         //1-5 reserved for Roll Pitch Yaw Collective Throttle, starting at 6
@@ -282,25 +336,22 @@ TABS.receiver.initialize = function (callback) {
 
         $('select[name="rssi_channel"]').val(FC.RSSI_CONFIG.channel);
 
-        const serialRxSelectElement = $('select.serialRX');
-        FC.getSerialRxTypes().forEach((serialRxType, index) => {
-            serialRxSelectElement.append(`<option value="${index}">${serialRxType}</option>`);
-        });
 
-        serialRxSelectElement.change(function () {
-            const serialRxValue = parseInt($(this).val());
+    //// RX Mode
 
-            let newValue;
-            if (serialRxValue !== FC.RX_CONFIG.serialrx_provider) {
-                newValue = $(this).find('option:selected').text();
-                updateButtons(true);
+        const rxModeSelectElement = $('select[name="rxMode"]');
+        self.rxModes.forEach((item, index) => {
+            if (item.visible) {
+                rxModeSelectElement.append(`<option value="${index}">${item.name}</option>`);
             }
-
-            FC.RX_CONFIG.serialrx_provider = serialRxValue;
         });
 
-        // select current serial RX type
-        serialRxSelectElement.val(FC.RX_CONFIG.serialrx_provider);
+        rxModeSelectElement.change(function () {
+            const index = parseInt($(this).val());
+
+            //FC.RX_CONFIG.serialrx_provider = serialRxValue;
+        });
+
 
         const serialRxInvertedElement = $('input[name="serialRXInverted"]');
         serialRxInvertedElement.change(function () {
