@@ -65,6 +65,7 @@ TABS.receiver = {
         { name: 'DSM/2048',             type: 0, id: 1,   feature: 3,    visible: true, },
         { name: 'DSM/SRXL',             type: 0, id: 10,  feature: 3,    visible: true, },
         { name: 'DSM/SRXL2',            type: 0, id: 13,  feature: 3,    visible: true, },
+        { name: 'GHOST',                type: 0, id: 14,  feature: 3,    visible: true, },
         { name: 'SUMD',                 type: 0, id: 3,   feature: 3,    visible: true, },
         { name: 'SUMH',                 type: 0, id: 4,   feature: 3,    visible: true, },
         { name: 'IBUS',                 type: 0, id: 7,   feature: 3,    visible: true, },
