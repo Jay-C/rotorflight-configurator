@@ -207,135 +207,6 @@ TABS.receiver.initialize = function (callback) {
             .change();
 
 
-    //// Bars
-
-        function addChannel(parent, name, channels) {
-            const elem = $('#tab-receiver-templates .receiverBarTemplate table tr').clone();
-            elem.find('.name').text(name);
-            const chSelect = elem.find('.channel_select');
-            channels.forEach((ch) => {
-                chSelect.append(`<option value="${ch.value}">${ch.text}</option>`);
-            });
-            parent.append(elem);
-            return elem;
-        }
-
-        function updateChannelBar(elem, width, label) {
-            elem.find('.fill').css('width', width);
-            elem.find('.label').text(label);
-        }
-
-        const numChannels = (FC.RC.active_channels > 0) ? FC.RC.active_channels : 8;
-
-        const chContainer = $('.tab-receiver .channels');
-        const channelElems = [];
-        const channelSelect = [];
-
-        for (let i = 0; i < numChannels; i++) {
-            const elem = addChannel(chContainer, i18n.getMessage(self.axisNames[i]), self.chNames);
-            channelElems.push(elem);
-            channelSelect.push(elem.find('.channel_select'));
-        }
-
-        const rssiBar = addChannel(chContainer, 'RSSI', self.rssiNames);
-
-        function updateRSSI() {
-            const rssi = ((FC.ANALOG.rssi / 1023) * 100).toFixed(0) + '%';
-            updateChannelBar(rssiBar, rssi, rssi);
-        }
-
-        function updateBars() {
-            const meterScaleMin = 750;
-            const meterScaleMax = 2250;
-            for (let i = 0; i < FC.RC.active_channels; i++) {
-                const ch = (i < 8) ? self.rcmap[i] : i;
-                const value = FC.RC.channels[i]; // FC.RX_CHANNELS[ch];
-                const width = (100 * (value - meterScaleMin) / (meterScaleMax - meterScaleMin)).clamp(0, 100) + '%';
-                updateChannelBar(channelElems[i], width, value);
-            }
-            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
-        }
-
-        // correct inner label margin on window resize (i don't know how we could do this in css)
-        self.resize = function () {
-            const containerWidth = $('.meter:first', chContainer).width(),
-                  labelWidth = $('.meter .label:first', chContainer).width(),
-                  margin = (containerWidth - labelWidth) / 2;
-            $('.channels .label').css('margin-left', margin);
-        };
-
-        $(window).on('resize', self.resize).resize(); // trigger so labels get correctly aligned on creation
-
-
-    //// rcmap
-
-        const rcmapInput = $('input[name="rcmap"]');
-
-        function setRcMapGUI() {
-            const rcbuf = [];
-            for (let axis = 0; axis < self.rcmap.length; axis++) {
-                const ch = self.rcmap[axis];
-                rcbuf[ch] = self.axisLetters[axis];
-                channelSelect[axis].val(ch);
-            }
-            rcmapInput.val(rcbuf.join(''));
-        }
-
-        self.rcmap = FC.RC_MAP;
-
-        setRcMapGUI();
-
-        rcmapInput.on('input', function () {
-            const val = rcmapInput.val();
-            if (val.length > 8) {
-                rcmapInput.val(val.substr(0, 8));
-            }
-        });
-
-        rcmapInput.on('change', function () {
-            const val = rcmapInput.val();
-
-            if (val.length != 8) {
-                setRcMapGUI();
-                return false;
-            }
-
-            const rcvec = val.split('');
-            const rcmap = [];
-
-            for (let ch = 0; ch < 8; ch++) {
-                const axis = self.axisLetters.indexOf(rcvec[ch]);
-                if (axis < 0 || rcvec.slice(0,ch).indexOf(rcvec[ch]) >= 0) {
-                    setRcMapGUI();
-                    return false;
-                }
-                rcmap[axis] = ch;
-            }
-
-            self.rcmap = rcmap;
-            setRcMapGUI();
-
-            return true;
-        });
-
-        $('select[name="rcmap_preset"]').val(0);
-        $('select[name="rcmap_preset"]').change(function () {
-            rcmapInput.val($(this).val()).change();
-        });
-
-
-    //// RSSI
-
-        // rssi FIXME
-        const rssi_channel_e = $('select[name="rssi_channel"]');
-        rssi_channel_e.append(`<option value="0">${i18n.getMessage("receiverRssiChannelDisabledOption")}</option>`);
-        //1-5 reserved for Roll Pitch Yaw Collective Throttle, starting at 6
-        for (let i = 6; i < FC.RC.active_channels + 1; i++) {
-            rssi_channel_e.append(`<option value="${i}">${i18n.getMessage("controlAxisAux" + (i-5))}</option>`);
-        }
-
-        $('select[name="rssi_channel"]').val(FC.RSSI_CONFIG.channel);
-
 
     //// RX Mode
 
@@ -374,6 +245,158 @@ TABS.receiver.initialize = function (callback) {
         });
 
         serialRxHalfDuplexElement.prop('checked', FC.RX_CONFIG.serialrx_halfduplex !== 0);
+
+
+    //// RSSI
+
+        // rssi FIXME
+        const rssi_channel_e = $('select[name="rssi_channel"]');
+        rssi_channel_e.append(`<option value="0">${i18n.getMessage("receiverRssiChannelDisabledOption")}</option>`);
+
+        // 1-5 reserved for Roll Pitch Yaw Collective Throttle, starting at 6
+        for (let i = 6; i < FC.RC.active_channels + 1; i++) {
+            rssi_channel_e.append(`<option value="${i}">${i18n.getMessage("controlAxisAux" + (i-5))}</option>`);
+        }
+
+        $('select[name="rssi_channel"]').val(FC.RSSI_CONFIG.channel);
+
+
+
+    //// Bars
+
+        function addChannel(parent, name, channels) {
+            const elem = $('#tab-receiver-templates .receiverBarTemplate table tr').clone();
+            elem.find('.name').text(name);
+            const chSelect = elem.find('.channel_select');
+            channels.forEach((ch) => {
+                chSelect.append(`<option value="${ch.value}">${ch.text}</option>`);
+            });
+            parent.append(elem);
+            return elem;
+        }
+
+        function updateChannelBar(elem, width, label) {
+            elem.find('.fill').css('width', width);
+            elem.find('.label').text(label);
+        }
+
+        const numChannels = (FC.RC.active_channels > 0) ? FC.RC.active_channels : 8;
+
+        const chContainer = $('.tab-receiver .channels');
+
+        const channelElems = [];
+        const channelSelect = [];
+
+        for (let axis = 0; axis < numChannels; axis++) {
+            const elem = addChannel(chContainer, i18n.getMessage(self.axisNames[axis]), self.chNames);
+            channelElems.push(elem);
+
+            const chsel = elem.find('.channel_select');
+            channelSelect.push(chsel);
+
+            chsel.change(function () {
+                const newCh = parseInt(chsel.val());
+                const oldCh = self.rcmap[axis];
+                const prev = self.rcmap.indexOf(newCh);
+
+                self.rcmap[prev] = oldCh;
+                self.rcmap[axis] = newCh;
+
+                console.log(self.rcmap);
+
+                setRcMapGUI();
+            });
+        }
+
+        const rssiBar = addChannel(chContainer, 'RSSI', self.rssiNames);
+
+        function updateRSSI() {
+            const rssi = ((FC.ANALOG.rssi / 1023) * 100).toFixed(0) + '%';
+            updateChannelBar(rssiBar, rssi, rssi);
+        }
+
+        function updateBars() {
+            const meterScaleMin = 750;
+            const meterScaleMax = 2250;
+            for (let i = 0; i < FC.RC.active_channels; i++) {
+                const ch = (i < 8) ? self.rcmap[i] : i;
+                const value = FC.RC.channels[i]; // FC.RX_CHANNELS[ch];
+                const width = (100 * (value - meterScaleMin) / (meterScaleMax - meterScaleMin)).clamp(0, 100) + '%';
+                updateChannelBar(channelElems[i], width, value);
+            }
+            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
+        }
+
+        // correct inner label margin on window resize (i don't know how we could do this in css)
+        self.resize = function () {
+            const containerWidth = $('.meter:first', chContainer).width(),
+                labelWidth = $('.meter .label:first', chContainer).width(),
+                margin = (containerWidth - labelWidth) / 2;
+            $('.channels .label').css('margin-left', margin);
+        };
+
+        $(window).on('resize', self.resize).resize(); // trigger so labels get correctly aligned on creation
+
+
+    //// rcmap
+
+        const rcmapInput = $('input[name="rcmap"]');
+
+        function setRcMapGUI() {
+            const rcbuf = [];
+            for (let axis = 0; axis < 8; axis++) {
+                const ch = self.rcmap[axis];
+                rcbuf[ch] = self.axisLetters[axis];
+                channelSelect[axis].val(ch);
+            }
+            rcmapInput.val(rcbuf.join(''));
+        }
+
+        rcmapInput.on('input', function () {
+            const val = rcmapInput.val();
+            if (val.length > 8) {
+                rcmapInput.val(val.substr(0, 8));
+            }
+        });
+
+        rcmapInput.on('change', function () {
+            const val = rcmapInput.val();
+
+            if (val.length != 8) {
+                setRcMapGUI();
+                return false;
+            }
+
+            const rcvec = val.split('');
+            const rcmap = [];
+
+            for (let ch = 0; ch < 8; ch++) {
+                const letter = rcvec[ch];
+                const axis = self.axisLetters.indexOf(letter);
+                if (axis < 0 || rcvec.slice(0,ch).indexOf(letter) >= 0) {
+                    setRcMapGUI();
+                    return false;
+                }
+                rcmap[axis] = ch;
+            }
+
+            self.rcmap = rcmap;
+            setRcMapGUI();
+
+            return true;
+        });
+
+        $('select[name="rcmap_preset"]')
+            .val(0)
+            .change(function () {
+                rcmapInput.val($(this).val()).change();
+                $(this).val(0);
+            });
+
+        self.rcmap = FC.RC_MAP;
+
+        setRcMapGUI();
+
 
 
         updateButtons();
