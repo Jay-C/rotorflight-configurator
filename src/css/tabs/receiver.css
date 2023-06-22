@@ -69,12 +69,12 @@
 .tab-receiver .settings_table,
 .tab-receiver .settings_table th,
 .tab-receiver .settings_table td {
-    padding: 0;
+    padding-bottom: 2px;
     text-align: left;
 }
 
 .tab-receiver .settings_table td:nth-child(1) {
-    width: 120px;
+    width: 80px;
 }
 
 .tab-receiver .settings_table td:nth-child(2) {
@@ -83,8 +83,8 @@
 
 .tab-receiver .receiver select {
     border: 1px solid var(--subtleAccent);
-    width: 230px;
-    height: 20px;
+    width: 140px;
+    height: 22px;
     float: left;
     margin-right: 15px;
     border-radius: 3px;
@@ -93,17 +93,77 @@
 
 /* RX CHANNELS */
 
+.tab-receiver .channels_config_box {
+    padding-bottom: 0;
+}
+
+.tab-receiver .channels_config {
+    margin-bottom: 0;
+    width: 100%;
+    float: left;
+}
+
+.tab-receiver .channels_config,
+.tab-receiver .channels_config th,
+.tab-receiver .channels_config td {
+    padding: 0;
+    text-align: left;
+}
+
+.tab-receiver .channels_config td {
+    padding-bottom: 10px;
+    border-bottom: 1px dotted var(--superSubtleAccent);
+}
+
+.tab-receiver .channels_config td:nth-child(1) {
+    width: 150px;
+    padding-left: 18px;
+}
+
+.tab-receiver .channels_config td:nth-child(2) {
+    width: calc(100% - 170px);
+}
+
+.tab-receiver .hybrid_element {
+    width: 140px;
+    height: 30px;
+    margin: 0;
+    position: relative;
+}
+
+.tab-receiver .hybrid_element input {
+    position: absolute;
+    padding-left: 5px;
+    width: calc(100% - 36px);
+    height: 20px;
+    z-index: 2;
+    margin: 4px;
+    border: 1px solid var(--subtleAccent);
+    border-right: none;
+    border-radius: 3px 0 0 3px;
+}
+
+.tab-receiver .hybrid_element select {
+    position: absolute;
+    width: calc(100% - 10px);
+    height: 22px;
+    z-index: 1;
+    margin: 4px;
+    border: 1px solid var(--subtleAccent);
+    border-radius: 3px;
+}
+
 .tab-receiver .channels {
     width: 100%;
     float: left;
 }
 
 .tab-receiver .channels td {
-    padding: 2px 5px 2px 5px;
+    padding: 1px 5px 4px 5px;
 }
 
 .tab-receiver .channels td:nth-child(1) {
-    width: 80px;
+    width: 50px;
     text-align: right;
     padding-right: 10px;
 }
@@ -114,13 +174,13 @@
 }
 
 .tab-receiver .channels td:nth-child(2) {
-    width: 60px;
+    width: 80px;
 }
 
 .tab-receiver .channels td:nth-child(2) select {
     width: 100%;
     height: 18px;
-    font-size: 10px;
+    font-size: 11px;
     padding-left: 2px;
     border: 1px solid var(--subtleAccent);
     border-radius: 3px;
@@ -128,6 +188,10 @@
 
 .tab-receiver .channels td:nth-child(3) {
     width: calc(100% - 150px);
+}
+
+.tab-receiver .channels tr:last-child td {
+    padding-top: 15px;
 }
 
 .tab-receiver .channels .bar {
@@ -236,49 +300,6 @@
 
 .tab-receiver .channels tr:nth-child(19) .fill {
     background-color: #34d8eb;
-}
-
-
-.tab-receiver .input-helpicon-flex {
-    display: flex;
-    flex-flow: row nowrap;
-}
-
-.tab-receiver .helpicon {
-    min-width: 14px;
-    margin-top: 7px;
-    margin-left: 4px;
-    margin-right: 7px;
-}
-
-
-.tab-receiver .hybrid_element {
-    width: 120px;
-    height: 30px;
-    margin: 0;
-    position: relative;
-}
-
-.tab-receiver .hybrid_element input {
-    position: absolute;
-    padding-left: 5px;
-    width: calc(100% - 36px);
-    height: 20px;
-    z-index: 2;
-    margin: 4px;
-    border: 1px solid var(--subtleAccent);
-    border-right: none;
-    border-radius: 3px 0 0 3px;
-}
-
-.tab-receiver .hybrid_element select {
-    position: absolute;
-    width: calc(100% - 10px);
-    height: 22px;
-    z-index: 1;
-    margin: 4px;
-    border: 1px solid var(--subtleAccent);
-    border-radius: 3px;
 }
 
 
