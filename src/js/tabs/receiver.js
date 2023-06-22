@@ -2,14 +2,14 @@
 
 TABS.receiver = {
     isDirty: false,
-    rcmap: [ 0, 1, 2, 3, 4, 5, 6, 7 ],
-    deadband: 0,
-    yawDeadband: 0,
     needReboot: false,
     bindButton: false,
     stickButton: false,
     saveButtons: false,
-    rcmapSize: 0,
+    rcmap: [ 0, 1, 2, 3, 4, 5, 6, 7 ],
+    rcmapSize: 8,
+    deadband: 0,
+    yawDeadband: 0,
     axisLetters: ['A', 'E', 'R', 'C', 'T', '1', '2', '3'],
     axisNames: [
         { value: 0, text: 'controlAxisRoll' },
@@ -49,46 +49,46 @@ TABS.receiver = {
         { value: 13, text:'AUX8' },
     ],
     rxProtocols: [
-        { name: 'CRSF',                 type: 0, id: 9,   feature: 3,    visible: true, },
-        { name: 'S.BUS',                type: 0, id: 2,   feature: 3,    visible: true, },
-        { name: 'F.PORT',               type: 0, id: 12,  feature: 3,    visible: true, },
-        { name: 'DSM/1024',             type: 0, id: 0,   feature: 3,    visible: true, },
-        { name: 'DSM/2048',             type: 0, id: 1,   feature: 3,    visible: true, },
-        { name: 'DSM/SRXL',             type: 0, id: 10,  feature: 3,    visible: true, },
-        { name: 'DSM/SRXL2',            type: 0, id: 13,  feature: 3,    visible: true, },
-        { name: 'GHOST',                type: 0, id: 14,  feature: 3,    visible: true, },
-        { name: 'SUMD',                 type: 0, id: 3,   feature: 3,    visible: true, },
-        { name: 'SUMH',                 type: 0, id: 4,   feature: 3,    visible: true, },
-        { name: 'IBUS',                 type: 0, id: 7,   feature: 3,    visible: true, },
-        { name: 'XBUS',                 type: 0, id: 5,   feature: 3,    visible: true, },
-        { name: 'XBUS/RJ01',            type: 0, id: 6,   feature: 3,    visible: true, },
-        { name: 'EXBUS',                type: 0, id: 8,   feature: 3,    visible: true, },
-        { name: 'PPM',                  type: 1, id: 0,   feature: 0,    visible: true, },
+        { name: 'CRSF',                 id: 9,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'S.BUS',                id: 2,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'F.PORT',               id: 12,  feature: 'RX_SERIAL',    visible: true, },
+        { name: 'DSM/1024',             id: 0,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'DSM/2048',             id: 1,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'DSM/SRXL',             id: 10,  feature: 'RX_SERIAL',    visible: true, },
+        { name: 'DSM/SRXL2',            id: 13,  feature: 'RX_SERIAL',    visible: true, },
+        { name: 'GHOST',                id: 14,  feature: 'RX_SERIAL',    visible: true, },
+        { name: 'SUMD',                 id: 3,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'SUMH',                 id: 4,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'IBUS',                 id: 7,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'XBUS',                 id: 5,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'XBUS/RJ01',            id: 6,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'EXBUS',                id: 8,   feature: 'RX_SERIAL',    visible: true, },
+        { name: 'PPM',                  id: 0,   feature: 'RX_PPM',       visible: true, },
+        { name: 'MSP',                  id: 0,   feature: 'RX_MSP',       visible: true, },
         // Hidden options
-        { name: 'PWM',                  type: 2, id: 0,   feature: 13,   visible: false, },
-        { name: 'MSP',                  type: 3, id: 0,   feature: 14,   visible: false, },
-        { name: 'CUSTOM',               type: 0, id: 11,  feature: 3,    visible: false, },
+        { name: 'PWM',                  id: 0,   feature: 'RX_PARALLEL_PWM', visible: false, },
+        { name: 'CUSTOM',               id: 11,  feature: 'RX_SERIAL',    visible: false, },
         // Unsupported SPI receivers
-        { name: 'SPI/CX10',             type: 4, id: 4,   feature: 25,   visible: false, },
-        { name: 'SPI/CX10A',            type: 4, id: 5,   feature: 25,   visible: false, },
-        { name: 'SPI/ELRS',             type: 4, id: 19,  feature: 25,   visible: false, },
-        { name: 'SPI/FRSKY D',          type: 4, id: 8,   feature: 25,   visible: false, },
-        { name: 'SPI/FRSKY X',          type: 4, id: 9,   feature: 25,   visible: false, },
-        { name: 'SPI/FRSKY X LBT',      type: 4, id: 15,  feature: 25,   visible: false, },
-        { name: 'SPI/FRSKY X V2',       type: 4, id: 17,  feature: 25,   visible: false, },
-        { name: 'SPI/FRSKY X LBT V2',   type: 4, id: 18,  feature: 25,   visible: false, },
-        { name: 'SPI/FLYSKY',           type: 4, id: 10,  feature: 25,   visible: false, },
-        { name: 'SPI/FLYSKY 2A',        type: 4, id: 11,  feature: 25,   visible: false, },
-        { name: 'SPI/H8_3D',            type: 4, id: 6,   feature: 25,   visible: false, },
-        { name: 'SPI/INAV',             type: 4, id: 7,   feature: 25,   visible: false, },
-        { name: 'SPI/KN',               type: 4, id: 12,  feature: 25,   visible: false, },
-        { name: 'SPI/REDPINE',          type: 4, id: 16,  feature: 25,   visible: false, },
-        { name: 'SPI/SFHSS',            type: 4, id: 13,  feature: 25,   visible: false, },
-        { name: 'SPI/SYMA X',           type: 4, id: 2,   feature: 25,   visible: false, },
-        { name: 'SPI/SYMA X5C',         type: 4, id: 3,   feature: 25,   visible: false, },
-        { name: 'SPI/SPEKTRUM',         type: 4, id: 14,  feature: 25,   visible: false, },
-        { name: 'SPI/V202 250k',        type: 4, id: 0,   feature: 25,   visible: false, },
-        { name: 'SPI/V202 1M',          type: 4, id: 1,   feature: 25,   visible: false, },
+        { name: 'SPI/CX10',             id: 4,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/CX10A',            id: 5,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/ELRS',             id: 19,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY D',          id: 8,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY X',          id: 9,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY X LBT',      id: 15,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY X V2',       id: 17,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FRSKY X LBT V2',   id: 18,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FLYSKY',           id: 10,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/FLYSKY 2A',        id: 11,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/H8_3D',            id: 6,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/INAV',             id: 7,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/KN',               id: 12,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/REDPINE',          id: 16,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/SFHSS',            id: 13,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/SYMA X',           id: 2,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/SYMA X5C',         id: 3,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/SPEKTRUM',         id: 14,  feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/V202 250k',        id: 0,   feature: 'RX_SPI',   visible: false, },
+        { name: 'SPI/V202 1M',          id: 1,   feature: 'RX_SPI',   visible: false, },
     ],
 };
 
@@ -203,16 +203,41 @@ TABS.receiver.initialize = function (callback) {
     //// RX Mode
 
         const rxProtoSelectElement = $('select[name="receiverProtocol"]');
+        let currentProto = -1;
+
         self.rxProtocols.forEach((item, index) => {
-            if (item.visible) {
+            let visible = item.visible;
+            if (FC.FEATURE_CONFIG.features.isEnabled(item.feature)) {
+                if ((item.feature == 'RX_SERIAL' && item.id == FC.RX_CONFIG.serialrx_provider) ||
+                    (item.feature == 'RX_SPI' && item.id == FC.RX_CONFIG.rxSpiProtocol) ||
+                    (item.feature == 'RX_MSP') ||
+                    (item.feature == 'RX_PPM') ||
+                    (item.feature == 'RX_PARALLEL_PWM')) {
+                        visible = true;
+                        currentProto = index;
+                }
+            }
+            if (visible) {
                 rxProtoSelectElement.append(`<option value="${index}">${item.name}</option>`);
             }
         });
 
+        rxProtoSelectElement.val(currentProto);
+
         rxProtoSelectElement.change(function () {
             const index = parseInt($(this).val());
 
-            //FC.RX_CONFIG.serialrx_provider = serialRxValue;
+            const proto = self.rxProtocols[index];
+
+            FC.FEATURE_CONFIG.features.setGroup('RX_PROTO', false);
+            FC.FEATURE_CONFIG.features.setFeature(proto.feature, true);
+
+            if (proto.feature == 'RX_SERIAL') {
+                FC.RX_CONFIG.serialrx_provider = proto.id;
+            }
+            else if (proto.feature == 'RX_SPI') {
+                FC.RX_CONFIG.rxSpiProtocol = proto.id;
+            }
         });
 
 
@@ -324,6 +349,10 @@ TABS.receiver.initialize = function (callback) {
 
     //// RX Channels
 
+        function updateRcData() {
+            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
+        }
+
         function updateBars() {
             const meterScaleMin = 750;
             const meterScaleMax = 2250;
@@ -332,7 +361,7 @@ TABS.receiver.initialize = function (callback) {
                 const width = (100 * (value - meterScaleMin) / (meterScaleMax - meterScaleMin)).clamp(0, 100) + '%';
                 updateChannelBar(channelElems[ch], width, value);
             }
-            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
+            MSP.send_message(MSPCodes.MSP_RC, false, false, updateRcData);
         }
 
         // correct inner label margin on window resize (i don't know how we could do this in css)
@@ -461,8 +490,8 @@ TABS.receiver.initialize = function (callback) {
             FC.RX_CONFIG.stick_max = parseInt($('.sticks input[name="stick_max"]').val());
             FC.RX_CONFIG.stick_min = parseInt($('.sticks input[name="stick_min"]').val());
 
-            FC.RC_DEADBAND_CONFIG.yaw_deadband = parseInt($('.deadband input[name="yaw_deadband"]').val());
-            FC.RC_DEADBAND_CONFIG.deadband = parseInt($('.deadband input[name="deadband"]').val());
+            FC.RC_DEADBAND_CONFIG.deadband = self.deadband;
+            FC.RC_DEADBAND_CONFIG.yaw_deadband = self.yawDeadband;
 
             FC.RC_MAP = self.rcmap;
         }
@@ -503,7 +532,7 @@ TABS.receiver.initialize = function (callback) {
         });
 
         GUI.interval_add('receiver_pull', function () {
-            MSP.send_message(MSPCodes.MSP_RC, false, false, updateBars);
+            MSP.send_message(MSPCodes.MSP_RX_CHANNELS, false, false, updateBars);
         }, 25, false);
 
         GUI.interval_add('status_pull', function () {

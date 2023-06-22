@@ -1768,7 +1768,7 @@
         "message": "Default"
     },
     "receiverHelpChannelOrder": {
-        "message": "Select one of the presets, or enter your own channel order."
+        "message": "Select one of the presets from the dropdown menu, or enter your own channel order."
     },
     "receiverButtonBind": {
         "message": "Bind Receiver"
