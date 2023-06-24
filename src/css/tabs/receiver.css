@@ -43,6 +43,10 @@
     width: calc(100% - 20px);
 }
 
+.tab-receiver .bottom_border {
+    padding-bottom: 8px;
+    border-bottom: 1px dotted var(--superSubtleAccent);
+}
 
 /* SETTINGS */
 
@@ -93,10 +97,6 @@
 
 /* RX CHANNELS */
 
-.tab-receiver .channels_config_box {
-    padding-bottom: 0;
-}
-
 .tab-receiver .channels_config {
     margin-bottom: 0;
     width: 100%;
@@ -110,7 +110,7 @@
     text-align: left;
 }
 
-.tab-receiver .channels_config td {
+.xxtab-receiver .channels_config td {
     padding-bottom: 10px;
     border-bottom: 1px dotted var(--superSubtleAccent);
 }

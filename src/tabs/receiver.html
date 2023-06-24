@@ -17,7 +17,7 @@
                         <div class="gui_box_titlebar">
                             <div class="spacer_box_title" i18n="receiverSelection"></div>
                         </div>
-                        <div class="spacer_box">
+                        <div class="spacer_box bottom_border">
                             <table class="settings_table">
                                 <tr class="receiverProtocol">
                                     <td><select name="receiverProtocol"></select></td>
@@ -49,7 +49,7 @@
                         <div class="spacer_box">
                             <table class="settings_table">
                                 <tr>
-                                    <td><input type="number" name="stick_center" min="1401" max="1599" /></td>
+                                    <td><input type="number" name="stick_center" min="1400" max="1600" /></td>
                                     <td>
                                         <span i18n="receiverStickCenter"></span>
                                         <div class="helpicon cf_tip" i18n_title="receiverHelpStickCenter"></div>
@@ -88,18 +88,6 @@
                     </div>
                 </div>
 
-                <!-- MODEL PREVIEW -->
-                <div class="gui_box gui_preview grey">
-                    <div class="gui_box_titlebar">
-                        <div class="spacer_box_title" i18n="receiverModelPreview"></div>
-                    </div>
-                    <div class="model_preview background_paper">
-                        <div id="canvas_wrapper">
-                            <canvas id="canvas"></canvas>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
             <div class="grid-col col6">
@@ -109,7 +97,7 @@
                     <div class="gui_box_titlebar">
                         <div class="spacer_box_title" i18n="receiverBars"></div>
                     </div>
-                    <div class="spacer_box channels_config_box">
+                    <div class="spacer_box bottom_border">
                         <table class="channels_config">
                             <tr>
                                 <td>
@@ -133,6 +121,18 @@
                     </div>
                     <div class="spacer_box">
                         <table class="channels"></table>
+                    </div>
+                </div>
+
+                <!-- MODEL PREVIEW -->
+                <div class="gui_box gui_preview grey">
+                    <div class="gui_box_titlebar">
+                        <div class="spacer_box_title" i18n="receiverModelPreview"></div>
+                    </div>
+                    <div class="model_preview background_paper">
+                        <div id="canvas_wrapper">
+                            <canvas id="canvas"></canvas>
+                        </div>
                     </div>
                 </div>
 

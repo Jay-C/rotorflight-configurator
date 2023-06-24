@@ -10,6 +10,8 @@ TABS.receiver = {
     rcmapSize: 8,
     deadband: 0,
     yawDeadband: 0,
+    rcCenter: 1500,
+    rcData: [ 0, 0, 0, 0, 0, 0, 0, 0, ],
     axisLetters: ['A', 'E', 'R', 'C', 'T', '1', '2', '3'],
     axisNames: [
         { value: 0, text: 'controlAxisRoll' },
@@ -47,6 +49,16 @@ TABS.receiver = {
         { value: 11, text:'AUX6' },
         { value: 12, text:'AUX7' },
         { value: 13, text:'AUX8' },
+        { value: 14, text:'AUX9' },
+        { value: 15, text:'AUX10' },
+        { value: 16, text:'AUX11' },
+        { value: 17, text:'AUX12' },
+        { value: 18, text:'AUX13' },
+        { value: 19, text:'AUX14' },
+        { value: 20, text:'AUX15' },
+        { value: 21, text:'AUX16' },
+        { value: 22, text:'AUX17' },
+        { value: 23, text:'AUX18' },
     ],
     rxProtocols: [
         { name: 'CRSF',                 id: 9,   feature: 'RX_SERIAL',    visible: true, },
@@ -188,6 +200,9 @@ TABS.receiver.initialize = function (callback) {
 
         $('input[name="stick_center"]')
             .val(FC.RX_CONFIG.stick_center)
+            .change(function () {
+                self.rcCenter = parseInt($(this).val());
+            })
             .change();
 
         $('input[name="stick_min"]')
@@ -333,13 +348,23 @@ TABS.receiver.initialize = function (callback) {
 
         // RSSI bar
         const rssiBar = addChannelBar(chContainer, 'RSSI', self.rssiOptions);
-        const rssiSelect = rssiBar.bind('.channel_select');
+        const rssiSelect = rssiBar.find('.channel_select');
 
         rssiSelect.change(function() {
-            const value = rssiSelect.val();
-            // FIXME
-            FC.RSSI_CONFIG.channel = value;
+            const value = parseInt(rssiSelect.val());
+            FC.FEATURE_CONFIG.features.setFeature('RSSI_ADC', value == 1);
+            FC.RSSI_CONFIG.channel = (value > 5) ? value : 0;
         });
+
+        if (FC.FEATURE_CONFIG.features.isEnabled('RSSI_ADC')) {
+            rssiSelect.val(1);
+        }
+        else if (FC.RSSI_CONFIG.channel > 5) {
+            rssiSelect.val(FC.RSSI_CONFIG.channel);
+        }
+        else {
+            rssiSelect.val(0);
+        }
 
         function updateRSSI() {
             const rssi = ((FC.ANALOG.rssi / 1023) * 100).toFixed(0) + '%';
@@ -349,19 +374,18 @@ TABS.receiver.initialize = function (callback) {
 
     //// RX Channels
 
-        function updateRcData() {
-            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
-        }
-
         function updateBars() {
             const meterScaleMin = 750;
             const meterScaleMax = 2250;
             for (let ch = 0; ch < FC.RC.active_channels; ch++) {
+                const axis = self.rcmap[ch];
                 const value = FC.RX_CHANNELS[ch];
                 const width = (100 * (value - meterScaleMin) / (meterScaleMax - meterScaleMin)).clamp(0, 100) + '%';
                 updateChannelBar(channelElems[ch], width, value);
+                self.rcData[axis] = value - (self.rcCenter - 1500);
+                console.log(`Channel=${ch} axis=${axis} value=${value}`);
             }
-            MSP.send_message(MSPCodes.MSP_RC, false, false, updateRcData);
+            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
         }
 
         // correct inner label margin on window resize (i don't know how we could do this in css)
@@ -485,10 +509,10 @@ TABS.receiver.initialize = function (callback) {
 
         function updateConfig() {
 
-            FC.RX_CONFIG.stick_center = parseInt($('.sticks input[name="stick_center"]').val());
+            FC.RX_CONFIG.stick_max = parseInt($('input[name="stick_max"]').val());
+            FC.RX_CONFIG.stick_min = parseInt($('input[name="stick_min"]').val());
 
-            FC.RX_CONFIG.stick_max = parseInt($('.sticks input[name="stick_max"]').val());
-            FC.RX_CONFIG.stick_min = parseInt($('.sticks input[name="stick_min"]').val());
+            FC.RX_CONFIG.stick_center = self.rcCenter;
 
             FC.RC_DEADBAND_CONFIG.deadband = self.deadband;
             FC.RC_DEADBAND_CONFIG.yaw_deadband = self.yawDeadband;
@@ -614,11 +638,11 @@ TABS.receiver.renderModel = function () {
         requestAnimationFrame(self.renderModel.bind(this));
     }
 
-    if (FC.RC.channels[0] && FC.RC.channels[1] && FC.RC.channels[2]) {
+    if (self.rcData[0] && self.rcData[1] && self.rcData[2]) {
         const delta = self.clock.getDelta();
 
         const roll = delta * self.rateCurve.rcCommandRawToDegreesPerSecond(
-            FC.RC.channels[0],
+            self.rcData[0],
             self.currentRatesType,
             self.currentRates.roll_rate,
             self.currentRates.rc_rate,
@@ -628,7 +652,7 @@ TABS.receiver.renderModel = function () {
             self.currentRates.roll_rate_limit
         );
         const pitch = delta * self.rateCurve.rcCommandRawToDegreesPerSecond(
-            FC.RC.channels[1],
+            self.rcData[1],
             self.currentRatesType,
             self.currentRates.pitch_rate,
             self.currentRates.rc_rate_pitch,
@@ -638,7 +662,7 @@ TABS.receiver.renderModel = function () {
             self.currentRates.pitch_rate_limit
         );
         const yaw = delta * self.rateCurve.rcCommandRawToDegreesPerSecond(
-            FC.RC.channels[2],
+            self.rcData[2],
             self.currentRatesType,
             self.currentRates.yaw_rate,
             self.currentRates.rc_rate_yaw,
