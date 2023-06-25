@@ -12,6 +12,7 @@ TABS.receiver = {
     yawDeadband: 0,
     rcCenter: 1500,
     rcData: [ 0, 0, 0, 0, 0, 0, 0, 0, ],
+    telemetryMap: 0,
     axisLetters: ['A', 'E', 'R', 'C', 'T', '1', '2', '3'],
     axisNames: [
         { value: 0, text: 'controlAxisRoll' },
@@ -101,6 +102,31 @@ TABS.receiver = {
         { name: 'SPI/SPEKTRUM',         id: 14,  feature: 'RX_SPI',   visible: false, },
         { name: 'SPI/V202 250k',        id: 0,   feature: 'RX_SPI',   visible: false, },
         { name: 'SPI/V202 1M',          id: 1,   feature: 'RX_SPI',   visible: false, },
+    ],
+    telemetryOptions: [
+        { name: 'Voltage',              bit:  0, },
+        { name: 'Current',              bit:  1, },
+        { name: 'Fuel',                 bit:  2, },
+        { name: 'Mode',                 bit:  3, },
+        { name: 'AccX',                 bit:  4, },
+        { name: 'AccY',                 bit:  5, },
+        { name: 'AccZ',                 bit:  6, },
+        { name: 'Pitch',                bit:  7, },
+        { name: 'Roll',                 bit:  8, },
+        { name: 'Heading',              bit:  9, },
+        { name: 'Altitude',             bit: 10, },
+        { name: 'Vario',                bit: 11, },
+        { name: 'Vario',                bit: 11, },
+        { name: 'GPS Position',         bit: 12, },
+        { name: 'GPS Speed',            bit: 13, },
+        { name: 'GPS Distance',         bit: 14, },
+        { name: 'ESC Current',          bit: 15, },
+        { name: 'ESC Voltage',          bit: 16, },
+        { name: 'ESC RPM',              bit: 17, },
+        { name: 'ESC Temperature',      bit: 18, },
+        { name: 'Temperature',          bit: 19, },
+        { name: 'Capacity',             bit: 20, },
+        { name: 'Adjustment',           bit: 21, },
     ],
 };
 
@@ -214,7 +240,6 @@ TABS.receiver.initialize = function (callback) {
             .change();
 
 
-
     //// RX Mode
 
         const rxProtoSelectElement = $('select[name="receiverProtocol"]');
@@ -237,8 +262,6 @@ TABS.receiver.initialize = function (callback) {
             }
         });
 
-        rxProtoSelectElement.val(currentProto);
-
         rxProtoSelectElement.change(function () {
             const index = parseInt($(this).val());
 
@@ -247,6 +270,8 @@ TABS.receiver.initialize = function (callback) {
             FC.FEATURE_CONFIG.features.setGroup('RX_PROTO', false);
             FC.FEATURE_CONFIG.features.setFeature(proto.feature, true);
 
+            $('.featureSerialRx').toggle(proto.feature == 'RX_SERIAL');
+
             if (proto.feature == 'RX_SERIAL') {
                 FC.RX_CONFIG.serialrx_provider = proto.id;
             }
@@ -254,6 +279,8 @@ TABS.receiver.initialize = function (callback) {
                 FC.RX_CONFIG.rxSpiProtocol = proto.id;
             }
         });
+
+        rxProtoSelectElement.val(currentProto).change();
 
 
     //// Serial options
@@ -279,6 +306,14 @@ TABS.receiver.initialize = function (callback) {
         });
 
         serialRxHalfDuplexElement.prop('checked', FC.RX_CONFIG.serialrx_halfduplex !== 0);
+
+
+    //// Telemetry
+
+        const telemetryTableElement = $('.telemetry_table');
+
+
+
 
 
     //// Channels Bars

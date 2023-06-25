@@ -38,15 +38,19 @@
 }
 
 .tab-receiver .spacer_box {
-    padding-bottom: 10px;
+    padding-bottom: 8px;
     float: left;
     width: calc(100% - 20px);
 }
 
+.tab-receiver .top_border {
+    border-top: 1px dotted var(--superSubtleAccent);
+}
+
 .tab-receiver .bottom_border {
-    padding-bottom: 8px;
     border-bottom: 1px dotted var(--superSubtleAccent);
 }
+
 
 /* SETTINGS */
 
@@ -73,7 +77,7 @@
 .tab-receiver .settings_table,
 .tab-receiver .settings_table th,
 .tab-receiver .settings_table td {
-    padding-bottom: 2px;
+    padding-bottom: 4px;
     text-align: left;
 }
 
