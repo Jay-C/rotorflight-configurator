@@ -114,7 +114,6 @@ const FC = {
     DATAFLASH: null,
     DEFAULT: null,
     FAILSAFE_CONFIG: null,
-    FC_CONFIG: null,
     FEATURE_CONFIG: null,
     FILTER_CONFIG: null,
     RPM_FILTER_CONFIG: null,
@@ -150,6 +149,7 @@ const FC = {
     RSSI_CONFIG: null,
     RXFAIL_CONFIG: null,
     RX_CONFIG: null,
+    TELEMETRY_CONFIG: null,
     SDCARD: null,
     SENSOR_ALIGNMENT: null,
     SENSOR_CONFIG: null,
@@ -376,10 +376,6 @@ const FC = {
         this.ARMING_CONFIG = {
             auto_disarm_delay:          0,
             disarm_kill_switch:         0,
-        };
-
-        this.FC_CONFIG = {
-            loopTime:                   0,
         };
 
         this.MOTOR_CONFIG = {
@@ -641,6 +637,12 @@ const FC = {
             failsafe_switch_mode:           0,
             failsafe_throttle_low_delay:    0,
             failsafe_procedure:             0,
+        };
+
+        this.TELEMETRY_CONFIG = {
+            telemetry_inverted:             0,
+            telemetry_halfduplex:           0,
+            telemetry_sensors:              0,
         };
 
         this.GPS_RESCUE = {

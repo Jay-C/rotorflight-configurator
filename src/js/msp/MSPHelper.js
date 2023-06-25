@@ -366,10 +366,6 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 FC.ARMING_CONFIG.auto_disarm_delay = data.readU8();
                 break;
 
-            case MSPCodes.MSP_LOOP_TIME:
-                FC.FC_CONFIG.loopTime = data.readU16();
-                break;
-
             case MSPCodes.MSP_MOTOR_CONFIG:
                 FC.MOTOR_CONFIG.minthrottle = data.readU16();
                 FC.MOTOR_CONFIG.maxthrottle = data.readU16();
@@ -869,6 +865,12 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 }
                 break;
 
+            case MSPCodes.MSP_TELEMETRY_CONFIG:
+                FC.TELEMETRY_CONFIG.telemetry_inverted = data.readU8();
+                FC.TELEMETRY_CONFIG.telemetry_halfduplex = data.readU8();
+                FC.TELEMETRY_CONFIG.telemetry_sensors = data.readU32();
+                break;
+
             case MSPCodes.MSP_ADVANCED_CONFIG:
                 FC.ADVANCED_CONFIG.gyro_sync_denom = data.readU8();
                 FC.ADVANCED_CONFIG.pid_process_denom = data.readU8();
@@ -1354,9 +1356,6 @@ MspHelper.prototype.process_data = function(dataHandler) {
             case MSPCodes.MSP_SET_DEBUG_CONFIG:
                 console.log('Debug flags changed');
                 break;
-            case MSPCodes.MSP_SET_LOOP_TIME:
-                console.log('Looptime saved');
-                break;
             case MSPCodes.MSP_SET_ARMING_CONFIG:
                 console.log('Arming config saved');
                 break;
@@ -1389,6 +1388,9 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 break;
             case MSPCodes.MSP_SET_FAILSAFE_CONFIG:
                 console.log('Failsafe config saved');
+                break;
+            case MSPCodes.MSP_SET_TELEMETRY_CONFIG:
+                console.log('Telemetry config saved');
                 break;
             case MSPCodes.MSP_OSD_CONFIG:
                 break;
@@ -1596,10 +1598,6 @@ MspHelper.prototype.crunch = function(code) {
             buffer.push8(FC.ARMING_CONFIG.auto_disarm_delay);
             break;
 
-        case MSPCodes.MSP_SET_LOOP_TIME:
-            buffer.push16(FC.FC_CONFIG.loopTime);
-            break;
-
         case MSPCodes.MSP_SET_MOTOR_CONFIG:
             buffer.push16(FC.MOTOR_CONFIG.minthrottle)
                 .push16(FC.MOTOR_CONFIG.maxthrottle)
@@ -1689,6 +1687,12 @@ MspHelper.prototype.crunch = function(code) {
                 .push8(FC.FAILSAFE_CONFIG.failsafe_switch_mode)
                 .push16(FC.FAILSAFE_CONFIG.failsafe_throttle_low_delay)
                 .push8(FC.FAILSAFE_CONFIG.failsafe_procedure);
+            break;
+
+        case MSPCodes.MSP_SET_TELEMETRY_CONFIG:
+            buffer.push8(FC.TELEMETRY_CONFIG.telemetry_halfduplex)
+                .push8(FC.TELEMETRY_CONFIG.telemetry_halfduplex)
+                .push32(FC.TELEMETRY_CONFIG.telemetry_sensors);
             break;
 
         case MSPCodes.MSP_SET_TRANSPONDER_CONFIG:

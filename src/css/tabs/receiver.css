@@ -51,6 +51,10 @@
     border-bottom: 1px dotted var(--superSubtleAccent);
 }
 
+.tab-receiver .no_padding {
+    padding-bottom: 0;
+}
+
 
 /* SETTINGS */
 

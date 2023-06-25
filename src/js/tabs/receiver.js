@@ -117,13 +117,13 @@ TABS.receiver = {
         { name: 'Altitude',             bit: 10, },
         { name: 'Vario',                bit: 11, },
         { name: 'Vario',                bit: 11, },
-        { name: 'GPS Position',         bit: 12, },
-        { name: 'GPS Speed',            bit: 13, },
-        { name: 'GPS Distance',         bit: 14, },
-        { name: 'ESC Current',          bit: 15, },
-        { name: 'ESC Voltage',          bit: 16, },
-        { name: 'ESC RPM',              bit: 17, },
-        { name: 'ESC Temperature',      bit: 18, },
+        { name: 'GPSPosition',          bit: 12, },
+        { name: 'GPSSpeed',             bit: 13, },
+        { name: 'GPSDistance',          bit: 14, },
+        { name: 'ESCCurrent',           bit: 15, },
+        { name: 'ESCVoltage',           bit: 16, },
+        { name: 'ESCRPM',               bit: 17, },
+        { name: 'ESCTemperature',       bit: 18, },
         { name: 'Temperature',          bit: 19, },
         { name: 'Capacity',             bit: 20, },
         { name: 'Adjustment',           bit: 21, },
@@ -312,14 +312,27 @@ TABS.receiver.initialize = function (callback) {
 
         const telemetryTableElement = $('.telemetry_table');
 
-
-
+        self.telemetryOptions.forEach((item) => {
+            const elem = $('#telemetryOptionTemplate tr').clone();
+            const name = i18n.getMessage('receiverTelemetry' + item.name);
+            elem.find('span').text(name);
+            elem.find('input')
+                .prop('checked', FC.TELEMETRY_CONFIG.telemetry_sensors & (1 << item.bit))
+                .change(function () {
+                    const checked = $(this).is(':checked');
+                    if (checked)
+                        FC.TELEMETRY_CONFIG.telemetry_sensors |= (1 << item.bit);
+                    else
+                        FC.TELEMETRY_CONFIG.telemetry_sensors &= ~(1 << item.bit);
+                });
+            telemetryTableElement.append(elem);
+        });
 
 
     //// Channels Bars
 
         function addChannelBar(parent, name, options) {
-            const elem = $('#tab-receiver-templates .receiverBarTemplate table tr').clone();
+            const elem = $('#receiverBarTemplate tr').clone();
             elem.find('.name').text(name);
             const chSelect = elem.find('.channel_select');
             if (options) {

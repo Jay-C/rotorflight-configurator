@@ -17,7 +17,7 @@
                         <div class="gui_box_titlebar">
                             <div class="spacer_box_title" i18n="receiverSelection"></div>
                         </div>
-                        <div class="spacer_box">
+                        <div class="spacer_box no_padding">
                             <table class="settings_table">
                                 <tr class="receiverProtocol">
                                     <td><select name="receiverProtocol"></select></td>
@@ -89,21 +89,17 @@
                 </div>
 
                 <!-- TELEMETRY -->
-                <div class="telemetry">
+                <!-- div class="telemetry">
                     <div class="gui_box grey">
                         <div class="gui_box_titlebar">
                             <div class="spacer_box_title" i18n="receiverTelemetry"></div>
                         </div>
                         <div class="spacer_box">
                             <table class="settings_table telemetry_table">
-                                <tr>
-                                    <td><input type="checkbox" class="toggle" name="receiverTelemetryFoo"/></td>
-                                    <td><span i18n="receiverTelemetryFoo"></span></td>
-                                </tr>
                             </table>
                         </div>
                     </div>
-                </div>
+                </div -->
 
             </div>
 
@@ -181,8 +177,7 @@
 
 <div id="tab-receiver-templates">
 
-    <div class="receiverBarTemplate">
-        <table>
+        <table id="receiverBarTemplate">
             <tr>
                 <td><span class="name" /></td>
                 <td>
@@ -200,6 +195,13 @@
                 </td>
             </tr>
         </table>
-    </div>
+
+        <table id="telemetryOptionTemplate">
+            <tr>
+                <td><input type="checkbox" class="toggle" name="telemetryOption"/></td>
+                <td><span></span></td>
+            </tr>
+        </table>
+
 
 </div>
