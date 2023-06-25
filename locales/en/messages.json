@@ -1613,31 +1613,31 @@
         "message": "Stick Center"
     },
     "receiverHelpStickCenter": {
-        "message": "The value (in us) of stick center."
+        "message": "The value of stick center in µs. Usually 1500µs or 1520µs."
     },
     "receiverStickCommandMin": {
         "message": "'Stick Low' Threshold"
     },
     "receiverHelpStickCommandMin": {
-        "message": "The maximum value (in us) for a stick to be recognised as low / left for command input (MIN_CHECK)."
+        "message": "The maximum value (in µs) for a stick to be recognised as low / left for command input (MIN_CHECK)."
     },
     "receiverStickCommandMax": {
         "message": "'Stick High' Threshold"
     },
     "receiverHelpStickCommandMax": {
-        "message": "The minimum value (in us) for a stick to be recognised as high / right for command input (MAX_CHECK)."
+        "message": "The minimum value (in µs) for a stick to be recognised as high / right for command input (MAX_CHECK)."
     },
     "receiverCyclicDeadband": {
         "message": "Cyclic Deadband"
     },
     "receiverHelpCyclicDeadband": {
-        "message": "These are values (in us) by how much RC input can be different before it's considered non-zero. For transmitters with jitter on outputs, this value can be increased if rc inputs twitch while idle."
+        "message": "These are values (in µs) by how much RC input can be different before it's considered non-zero. For transmitters with jitter on outputs, this value can be increased if rc inputs twitch while idle."
     },
     "receiverYawDeadband": {
         "message": "Yaw Deadband"
     },
     "receiverHelpYawDeadband": {
-        "message": "These are values (in us) by how much RC input can be different before it's considered non-zero. For transmitters with jitter on outputs, this value can be increased if rc inputs twitch while idle. <strong>This setting is for Yaw only.</strong>"
+        "message": "These are values (in µs) by how much RC input can be different before it's considered non-zero. For transmitters with jitter on outputs, this value can be increased if rc inputs twitch while idle. <strong>This setting is for Yaw only.</strong>"
     },
     "receiverTelemetry": {
         "message": "Telemetry Settings"
