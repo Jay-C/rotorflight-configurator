@@ -31,8 +31,8 @@ const channelValues = [
 ];
 
 const gimbalChannels = [
-    [ 2, 3 ],
-    [ 1, 0 ],
+    [ 3, 2 ],
+    [ 0, 1 ],
 ];
 
 var gimbalElems;
@@ -132,10 +132,10 @@ function localizeAxisNames()
 {
     for (const gimbalIndex in gimbalChannels) {
         const gimbal = gimbalElems.get(gimbalIndex);
-        const vChannel = gimbalChannels[gimbalIndex][0];
-        const hChannel = gimbalChannels[gimbalIndex][1];
-        $(".gimbal-label-vert", gimbal).text(i18n.getMessage("controlAxis" + channelNames[vChannel]));
+        const hChannel = gimbalChannels[gimbalIndex][0];
+        const vChannel = gimbalChannels[gimbalIndex][1];
         $(".gimbal-label-horz", gimbal).text(i18n.getMessage("controlAxis" + channelNames[hChannel]));
+        $(".gimbal-label-vert", gimbal).text(i18n.getMessage("controlAxis" + channelNames[vChannel]));
     }
 
     $(".slider-label", sliderElems.get(0)).text(i18n.getMessage("controlAxisThrottle"));
