@@ -1613,7 +1613,7 @@
         "message": "Stick Center"
     },
     "receiverHelpStickCenter": {
-        "message": "The value of stick center in µs. Usually 1500µs or 1520µs."
+        "message": "The value of stick (channel) center in µs. Usually 1500µs or 1520µs."
     },
     "receiverStickCommandMin": {
         "message": "'Stick Low' Threshold"
@@ -1638,6 +1638,18 @@
     },
     "receiverHelpYawDeadband": {
         "message": "These are values (in µs) by how much RC input can be different before it's considered non-zero. For transmitters with jitter on outputs, this value can be increased if rc inputs twitch while idle. <strong>This setting is for Yaw only.</strong>"
+    },
+    "receiverRxMinUsec": {
+        "message": "Minimum channel value"
+    },
+    "receiverHelpRxMinUsec": {
+        "message": "The minimum RX channel value (in µs) that is considered valid."
+    },
+    "receiverRxMaxUsec": {
+        "message": "Maximum channel value"
+    },
+    "receiverHelpRxMaxUsec": {
+        "message": "The maximum RX channel value (in µs) that is considered valid."
     },
     "receiverTelemetry": {
         "message": "Telemetry Settings"

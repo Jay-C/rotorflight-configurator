@@ -239,6 +239,16 @@ TABS.receiver.initialize = function (callback) {
             .val(FC.RX_CONFIG.stick_max)
             .change();
 
+        $('input[name="rx_min_usec"]')
+            .val(FC.RX_CONFIG.rx_min_usec)
+            .change();
+
+        $('input[name="rx_max_usec"]')
+            .val(FC.RX_CONFIG.rx_max_usec)
+            .change();
+
+        $('.receiverStickComamnds').hide();
+
 
     //// RX Mode
 
@@ -559,6 +569,9 @@ TABS.receiver.initialize = function (callback) {
 
             FC.RX_CONFIG.stick_max = parseInt($('input[name="stick_max"]').val());
             FC.RX_CONFIG.stick_min = parseInt($('input[name="stick_min"]').val());
+
+            FC.RX_CONFIG.rx_min_usec = parseInt($('input[name="rx_min_usec"]').val());
+            FC.RX_CONFIG.rx_max_usec = parseInt($('input[name="rx_max_usec"]').val());
 
             FC.RX_CONFIG.stick_center = self.rcCenter;
 
