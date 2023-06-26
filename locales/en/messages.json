@@ -3591,11 +3591,11 @@
     "controlAxisYaw": {
         "message": "Yaw [R]"
     },
-    "controlAxisThrottle": {
-        "message": "Throttle [T]"
-    },
     "controlAxisCollective": {
         "message": "Coll [C]"
+    },
+    "controlAxisThrottle": {
+        "message": "Throttle [T]"
     },
     "controlAxisAux1": {
         "message": "AUX 1"

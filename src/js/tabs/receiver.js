@@ -274,19 +274,20 @@ TABS.receiver.initialize = function (callback) {
 
         rxProtoSelectElement.change(function () {
             const index = parseInt($(this).val());
-
             const proto = self.rxProtocols[index];
 
-            FC.FEATURE_CONFIG.features.setGroup('RX_PROTO', false);
-            FC.FEATURE_CONFIG.features.setFeature(proto.feature, true);
+            if (proto) {
+                FC.FEATURE_CONFIG.features.setGroup('RX_PROTO', false);
+                FC.FEATURE_CONFIG.features.setFeature(proto.feature, true);
 
-            $('.featureSerialRx').toggle(proto.feature == 'RX_SERIAL');
+                $('.featureSerialRx').toggle(proto.feature == 'RX_SERIAL');
 
-            if (proto.feature == 'RX_SERIAL') {
-                FC.RX_CONFIG.serialrx_provider = proto.id;
-            }
-            else if (proto.feature == 'RX_SPI') {
-                FC.RX_CONFIG.rxSpiProtocol = proto.id;
+                if (proto.feature == 'RX_SERIAL') {
+                    FC.RX_CONFIG.serialrx_provider = proto.id;
+                }
+                else if (proto.feature == 'RX_SPI') {
+                    FC.RX_CONFIG.rxSpiProtocol = proto.id;
+                }
             }
         });
 
@@ -441,7 +442,6 @@ TABS.receiver.initialize = function (callback) {
                 const width = (100 * (value - meterScaleMin) / (meterScaleMax - meterScaleMin)).clamp(0, 100) + '%';
                 updateChannelBar(channelElems[ch], width, value);
                 self.rcData[axis] = value - (self.rcCenter - 1500);
-                console.log(`Channel=${ch} axis=${axis} value=${value}`);
             }
             MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
         }
@@ -534,6 +534,7 @@ TABS.receiver.initialize = function (callback) {
                 // Give the window a callback it can use to send the channels (otherwise it can't see those objects)
                 createdWindow.contentWindow.setRawRx = function(channels) {
                     if (CONFIGURATOR.connectionValid && GUI.active_tab != 'cli') {
+                        console.log(channels);
                         mspHelper.setRawRx(channels);
                         return true;
                     } else {
