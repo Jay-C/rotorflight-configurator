@@ -157,7 +157,7 @@ function applyNormalTheme()
 
 $(document).ready(function() {
     $(".button-enable .btn").click(function() {
-        const shrinkHeight = $(".warning").height();
+        const shrinkHeight = $(".warning").height() + 20;
 
         $(".warning").slideUp("short", function() {
             chrome.app.window.current().innerBounds.minHeight -= shrinkHeight;

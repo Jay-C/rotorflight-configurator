@@ -3595,7 +3595,7 @@
         "message": "Coll [C]"
     },
     "controlAxisThrottle": {
-        "message": "Throttle [T]"
+        "message": "THR"
     },
     "controlAxisAux1": {
         "message": "AUX 1"
