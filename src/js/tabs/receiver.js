@@ -37,6 +37,15 @@ TABS.receiver = {
         { value: 20, text: 'controlAxisAux16' },
         { value: 21, text: 'controlAxisAux17' },
         { value: 22, text: 'controlAxisAux18' },
+        { value: 23, text: 'controlAxisAux19' },
+        { value: 24, text: 'controlAxisAux20' },
+        { value: 25, text: 'controlAxisAux21' },
+        { value: 26, text: 'controlAxisAux22' },
+        { value: 27, text: 'controlAxisAux23' },
+        { value: 28, text: 'controlAxisAux24' },
+        { value: 29, text: 'controlAxisAux25' },
+        { value: 30, text: 'controlAxisAux26' },
+        { value: 31, text: 'controlAxisAux27' },
     ],
     rssiOptions: [
         { value: 0,  text:'rssiOptionAUTO' },
@@ -59,6 +68,15 @@ TABS.receiver = {
         { value: 21, text:'controlAxisAux16' },
         { value: 22, text:'controlAxisAux17' },
         { value: 23, text:'controlAxisAux18' },
+        { value: 24, text:'controlAxisAux19' },
+        { value: 25, text:'controlAxisAux20' },
+        { value: 26, text:'controlAxisAux21' },
+        { value: 27, text:'controlAxisAux22' },
+        { value: 28, text:'controlAxisAux23' },
+        { value: 29, text:'controlAxisAux24' },
+        { value: 30, text:'controlAxisAux25' },
+        { value: 31, text:'controlAxisAux26' },
+        { value: 32, text:'controlAxisAux27' },
     ],
     rxProtocols: [
         { name: 'None',                 id: 0,   feature: null,           visible: true, },
@@ -308,6 +326,7 @@ TABS.receiver.initialize = function (callback) {
             } else {
                 chSelect.hide();
             }
+            elem.find('.fill').css('width', '0%');
             parent.append(elem);
             return elem;
         }
@@ -318,14 +337,15 @@ TABS.receiver.initialize = function (callback) {
         }
 
         self.rcmapSize = FC.RC_MAP.length;
-        self.numChannels = (FC.RC.active_channels > 0) ? FC.RC.active_channels : self.rcmapSize;
+        self.numChannels = FC.RC.active_channels;
+        self.guiChannels = Math.min(Math.max(self.numChannels, self.rcmapSize), 18);
 
         const chContainer = $('.tab-receiver .channels');
 
         const channelElems = [];
         const channelSelect = [];
 
-        for (let ch = 0; ch < self.numChannels; ch++) {
+        for (let ch = 0; ch < self.guiChannels; ch++) {
             if (ch < self.rcmapSize) {
                 const elem = addChannelBar(chContainer, `CH${ch + 1}`, self.axisNames.slice(0, self.rcmapSize));
                 channelElems.push(elem);
@@ -357,7 +377,7 @@ TABS.receiver.initialize = function (callback) {
     //// RSSI
 
         // RSSI bar
-        const rssiBar = addChannelBar(chContainer, 'RSSI', self.rssiOptions);
+        const rssiBar = addChannelBar(chContainer, 'RSSI', self.rssiOptions.slice(0, self.numChannels - 3));
         const rssiSelect = rssiBar.find('.channel_select');
 
         rssiSelect.change(function() {
@@ -387,7 +407,7 @@ TABS.receiver.initialize = function (callback) {
         function updateBars() {
             const meterScaleMin = 750;
             const meterScaleMax = 2250;
-            for (let ch = 0; ch < FC.RC.active_channels; ch++) {
+            for (let ch = 0; ch < self.guiChannels; ch++) {
                 const value = FC.RX_CHANNELS[ch];
                 const width = (100 * (value - meterScaleMin) / (meterScaleMax - meterScaleMin)).clamp(0, 100) + '%';
                 updateChannelBar(channelElems[ch], width, value);
