@@ -145,6 +145,7 @@ const FC = {
     RC: null,
     RC_DEADBAND_CONFIG: null,
     RC_MAP: null,
+    RC_RANGE: null,
     RC_TUNING: null,
     RSSI_CONFIG: null,
     RXFAIL_CONFIG: null,
@@ -254,6 +255,14 @@ const FC = {
         }
 
         this.RC_MAP = [];
+
+        this.RC_RANGE = [
+            { min: 0, max: 0 },
+            { min: 0, max: 0 },
+            { min: 0, max: 0 },
+            { min: 0, max: 0 },
+            { min: 0, max: 0 },
+        ];
 
         // defaults
         // roll, pitch, yaw, throttle, aux 1, ... aux n
