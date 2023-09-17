@@ -38,9 +38,9 @@
 }
 
 .tab-receiver .spacer_box {
-    padding-bottom: 8px;
     float: left;
     width: calc(100% - 20px);
+    padding-bottom: 8px;
 }
 
 .tab-receiver .top_border {
@@ -58,8 +58,8 @@
 
 /* SETTINGS */
 
-.tab-receiver .settings input,
-.tab-receiver .settings select {
+.tab-receiver input,
+.tab-receiver select {
     width: 55px;
     height: 20px;
     line-height: 20px;
@@ -85,12 +85,24 @@
     text-align: left;
 }
 
-.tab-receiver .settings_table td:nth-child(1) {
+.tab-receiver .receiver .settings_table td:nth-child(1) {
+    width: 160px;
+}
+
+.tab-receiver .receiver .settings_table td:nth-child(2) {
+    width: calc(100% - 160px);
+}
+
+.tab-receiver .settings .settings_table td:nth-child(1) {
     width: 80px;
 }
 
-.tab-receiver .settings_table td:nth-child(2) {
-    width: calc(100% - 120px);
+.tab-receiver .settings .settings_table td:nth-child(2) {
+    width: 80px;
+}
+
+.tab-receiver .settings .settings_table td:nth-child(3) {
+    width: calc(100% - 160px);
 }
 
 .tab-receiver .receiver select {

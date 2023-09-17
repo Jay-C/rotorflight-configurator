@@ -136,11 +136,11 @@ TABS.receiver.initialize = function (callback) {
         MSP.promise(MSPCodes.MSP_STATUS)
             .then(() => MSP.promise(MSPCodes.MSP_FEATURE_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_RC))
+            .then(() => MSP.promise(MSPCodes.MSP_RX_MAP))
+            .then(() => MSP.promise(MSPCodes.MSP_RX_RANGE))
+            .then(() => MSP.promise(MSPCodes.MSP_RX_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_RC_TUNING))
             .then(() => MSP.promise(MSPCodes.MSP_RC_DEADBAND))
-            .then(() => MSP.promise(MSPCodes.MSP_RX_MAP))
-            .then(() => MSP.promise(MSPCodes.MSP_RX_CONFIG))
-            .then(() => MSP.promise(MSPCodes.MSP_RX_CHANNELS))
             .then(() => MSP.promise(MSPCodes.MSP_RSSI_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_MIXER_CONFIG))
             .then(callback);
@@ -149,6 +149,7 @@ TABS.receiver.initialize = function (callback) {
     function save_data(callback) {
         Promise.resolve(true)
             .then(() => MSP.promise(MSPCodes.MSP_SET_RX_MAP, mspHelper.crunch(MSPCodes.MSP_SET_RX_MAP)))
+            .then(() => MSP.promise(MSPCodes.MSP_SET_RX_RANGE, mspHelper.crunch(MSPCodes.MSP_SET_RX_RANGE)))
             .then(() => MSP.promise(MSPCodes.MSP_SET_RX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RX_CONFIG)))
             .then(() => MSP.promise(MSPCodes.MSP_SET_RC_DEADBAND, mspHelper.crunch(MSPCodes.MSP_SET_RC_DEADBAND)))
             .then(() => MSP.promise(MSPCodes.MSP_SET_RSSI_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RSSI_CONFIG)))
@@ -239,6 +240,13 @@ TABS.receiver.initialize = function (callback) {
         $('input[name="rx_max_usec"]')
             .val(FC.RX_CONFIG.rx_max_usec)
             .change();
+
+        for (let axis = 0; axis < 5; axis++) {
+            $(`.axis${axis} input[name="channel_min"]`)
+                .val(FC.RC_RANGE[axis].min).change();
+            $(`.axis${axis} input[name="channel_max"]`)
+                .val(FC.RC_RANGE[axis].max).change();
+        }
 
         $('.receiverPulseLimit').hide();
         $('.receiverStickComamnds').hide();
@@ -549,6 +557,11 @@ TABS.receiver.initialize = function (callback) {
 
             FC.RX_CONFIG.rx_min_usec = parseInt($('input[name="rx_min_usec"]').val());
             FC.RX_CONFIG.rx_max_usec = parseInt($('input[name="rx_max_usec"]').val());
+
+            for (let axis = 0; axis < 5; axis++) {
+                FC.RC_RANGE[axis].min = parseInt($(`.axis${axis} input[name="channel_min"]`).val());
+                FC.RC_RANGE[axis].max = parseInt($(`.axis${axis} input[name="channel_max"]`).val());
+            }
 
             FC.RX_CONFIG.stick_center = self.rcCenter;
 
