@@ -137,7 +137,7 @@ TABS.receiver.initialize = function (callback) {
             .then(() => MSP.promise(MSPCodes.MSP_FEATURE_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_RC))
             .then(() => MSP.promise(MSPCodes.MSP_RC_TUNING))
-            .then(() => MSP.promise(MSPCodes.MSP_RC_DEADBAND))
+            .then(() => MSP.promise(MSPCodes.MSP_RC_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_RX_MAP))
             .then(() => MSP.promise(MSPCodes.MSP_RX_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_RX_CHANNELS))
@@ -150,7 +150,7 @@ TABS.receiver.initialize = function (callback) {
         Promise.resolve(true)
             .then(() => MSP.promise(MSPCodes.MSP_SET_RX_MAP, mspHelper.crunch(MSPCodes.MSP_SET_RX_MAP)))
             .then(() => MSP.promise(MSPCodes.MSP_SET_RX_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RX_CONFIG)))
-            .then(() => MSP.promise(MSPCodes.MSP_SET_RC_DEADBAND, mspHelper.crunch(MSPCodes.MSP_SET_RC_DEADBAND)))
+            .then(() => MSP.promise(MSPCodes.MSP_SET_RC_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RC_CONFIG)))
             .then(() => MSP.promise(MSPCodes.MSP_SET_RSSI_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_RSSI_CONFIG)))
             .then(() => MSP.promise(MSPCodes.MSP_SET_FEATURE_CONFIG, mspHelper.crunch(MSPCodes.MSP_SET_FEATURE_CONFIG)))
             .then(() => MSP.promise(MSPCodes.MSP_EEPROM_WRITE))
@@ -204,40 +204,24 @@ TABS.receiver.initialize = function (callback) {
         }
 
         $('input[name="cyclic_deadband"]')
-            .val(FC.RC_DEADBAND_CONFIG.deadband)
+            .val(FC.RC_CONFIG.rc_deadband)
             .change(function () {
                 self.deadband = parseInt($(this).val());
             })
             .change();
 
         $('input[name="yaw_deadband"]')
-            .val(FC.RC_DEADBAND_CONFIG.yaw_deadband)
+            .val(FC.RC_CONFIG.rc_yaw_deadband)
             .change(function () {
                 self.yawDeadband = parseInt($(this).val());
             })
             .change();
 
         $('input[name="stick_center"]')
-            .val(FC.RX_CONFIG.stick_center)
+            .val(FC.RC_CONFIG.rc_center)
             .change(function () {
                 self.rcCenter = parseInt($(this).val());
             })
-            .change();
-
-        $('input[name="stick_min"]')
-            .val(FC.RX_CONFIG.stick_min)
-            .change();
-
-        $('input[name="stick_max"]')
-            .val(FC.RX_CONFIG.stick_max)
-            .change();
-
-        $('input[name="rx_min_usec"]')
-            .val(FC.RX_CONFIG.rx_min_usec)
-            .change();
-
-        $('input[name="rx_max_usec"]')
-            .val(FC.RX_CONFIG.rx_max_usec)
             .change();
 
         $('.receiverPulseLimit').hide();
@@ -544,16 +528,13 @@ TABS.receiver.initialize = function (callback) {
 
         function updateConfig() {
 
-            FC.RX_CONFIG.stick_max = parseInt($('input[name="stick_max"]').val());
-            FC.RX_CONFIG.stick_min = parseInt($('input[name="stick_min"]').val());
+            //FC.RX_CONFIG.stick_max = parseInt($('input[name="stick_max"]').val());
+            //FC.RX_CONFIG.stick_min = parseInt($('input[name="stick_min"]').val());
 
-            FC.RX_CONFIG.rx_min_usec = parseInt($('input[name="rx_min_usec"]').val());
-            FC.RX_CONFIG.rx_max_usec = parseInt($('input[name="rx_max_usec"]').val());
+            FC.RC_CONFIG.rc_center = self.rcCenter;
 
-            FC.RX_CONFIG.stick_center = self.rcCenter;
-
-            FC.RC_DEADBAND_CONFIG.deadband = self.deadband;
-            FC.RC_DEADBAND_CONFIG.yaw_deadband = self.yawDeadband;
+            FC.RC_CONFIG.rc_deadband = self.deadband;
+            FC.RC_CONFIG.rc_yaw_deadband = self.yawDeadband;
 
             FC.RC_MAP = self.rcmap;
         }
@@ -628,8 +609,8 @@ TABS.receiver.initModelPreview = function () {
         roll_rate_limit:   FC.RC_TUNING.roll_rate_limit,
         pitch_rate_limit:  FC.RC_TUNING.pitch_rate_limit,
         yaw_rate_limit:    FC.RC_TUNING.yaw_rate_limit,
-        deadband:          FC.RC_DEADBAND_CONFIG.deadband,
-        yawDeadband:       FC.RC_DEADBAND_CONFIG.yaw_deadband,
+        deadband:          FC.RC_CONFIG.rc_deadband,
+        yawDeadband:       FC.RC_CONFIG.rc_yaw_deadband,
         superexpo:         true
     };
 
