@@ -6,12 +6,15 @@ TABS.receiver = {
     bindButton: false,
     stickButton: false,
     saveButtons: false,
+    rcData: [ 0, 0, 0, 0, 0, 0, 0, 0, ],
     rcmap: [ 0, 1, 2, 3, 4, 5, 6, 7 ],
     rcmapSize: 8,
     deadband: 0,
     yawDeadband: 0,
     rcCenter: 1500,
-    rcData: [ 0, 0, 0, 0, 0, 0, 0, 0, ],
+    rcDeflection: 500,
+    rcZeroThrottle: 1100,
+    rcFullThrottle: 1900,
     axisLetters: ['A', 'E', 'R', 'C', 'T', '1', '2', '3'],
     axisNames: [
         { value: 0, text: 'controlAxisRoll' },
@@ -138,9 +141,8 @@ TABS.receiver.initialize = function (callback) {
             .then(() => MSP.promise(MSPCodes.MSP_RC))
             .then(() => MSP.promise(MSPCodes.MSP_RC_TUNING))
             .then(() => MSP.promise(MSPCodes.MSP_RC_CONFIG))
-            .then(() => MSP.promise(MSPCodes.MSP_RX_MAP))
             .then(() => MSP.promise(MSPCodes.MSP_RX_CONFIG))
-            .then(() => MSP.promise(MSPCodes.MSP_RX_CHANNELS))
+            .then(() => MSP.promise(MSPCodes.MSP_RX_MAP))
             .then(() => MSP.promise(MSPCodes.MSP_RSSI_CONFIG))
             .then(() => MSP.promise(MSPCodes.MSP_MIXER_CONFIG))
             .then(callback);
@@ -224,8 +226,26 @@ TABS.receiver.initialize = function (callback) {
             })
             .change();
 
-        $('.receiverPulseLimit').hide();
-        $('.receiverStickComamnds').hide();
+        $('input[name="stick_deflection"]')
+            .val(FC.RC_CONFIG.rc_deflection)
+            .change(function () {
+                self.rcDeflection = parseInt($(this).val());
+            })
+            .change();
+
+        $('input[name="zero_throttle"]')
+            .val(FC.RC_CONFIG.rc_min_throttle)
+            .change(function () {
+                self.rcZeroThrottle = parseInt($(this).val());
+            })
+            .change();
+
+        $('input[name="full_throttle"]')
+            .val(FC.RC_CONFIG.rc_max_throttle)
+            .change(function () {
+                self.rcFullThrottle = parseInt($(this).val());
+            })
+            .change();
 
 
     //// RX Mode
@@ -316,9 +336,10 @@ TABS.receiver.initialize = function (callback) {
             return elem;
         }
 
-        function updateChannelBar(elem, width, label) {
+        function updateChannelBar(elem, width, label1, label2) {
             elem.find('.fill').css('width', width);
-            elem.find('.label').text(label);
+            elem.find('.label1').text(label1);
+            elem.find('.label2').text(label2);
         }
 
         self.mapChannels = FC.RC_MAP.length;
@@ -382,36 +403,60 @@ TABS.receiver.initialize = function (callback) {
             rssiSelect.val(0);
         }
 
-        function updateRSSI() {
-            const rssi = ((FC.ANALOG.rssi / 1023) * 100).toFixed(0) + '%';
-            updateChannelBar(rssiBar, rssi, rssi);
-        }
-
 
     //// RX Channels
+
+        function calcStickPercentage(axis, pulse) {
+            let value = pulse - self.rcCenter;
+            let deadband = 0;
+            let result = 0;
+            if (axis == 0 || axis == 1)
+                deadband = self.deadband;
+            else if (axis == 2)
+                deadband = self.yawDeadband;
+            const range = self.rcDeflection - deadband;
+            if (value > deadband)
+                result = (value - deadband) / range;
+            else if (value < deadband)
+                result = (value + deadband) / range;
+            return result * 100;
+        }
+
+        function calcThrottlePercentage(pulse) {
+            let range = self.rcFullThrottle - self.rcZeroThrottle;
+            let result = (pulse - self.rcZeroThrottle) / range;
+            return result * 100;
+        }
 
         function updateBars() {
             const meterScaleMin = 750;
             const meterScaleMax = 2250;
             for (let ch = 0; ch < self.barChannels; ch++) {
-                const value = FC.RX_CHANNELS[ch];
-                const width = (100 * (value - meterScaleMin) / (meterScaleMax - meterScaleMin)).clamp(0, 100) + '%';
-                updateChannelBar(channelElems[ch], width, value);
                 const axis = (ch < self.mapChannels) ? self.rcmap.indexOf(ch) : ch;
-                self.rcData[axis] = value - (self.rcCenter - 1500);
+                const pulse = FC.RX_CHANNELS[ch];
+                const width = (100 * (pulse - meterScaleMin) / (meterScaleMax - meterScaleMin)).clamp(0, 100) + '%';
+                let command = '';
+                if (axis < 4)
+                    command = calcStickPercentage(axis, pulse).toFixed(1) + '%';
+                else if (axis == 4)
+                    command = calcThrottlePercentage(pulse).toFixed(1) + '%';
+                updateChannelBar(channelElems[ch], width, pulse, command);
+                self.rcData[axis] = pulse - (self.rcCenter - 1500);
             }
-            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, updateRSSI);
+
+            const rssi = ((FC.ANALOG.rssi / 1023) * 100).toFixed(0) + '%';
+            updateChannelBar(rssiBar, rssi, '', rssi);
         }
 
-        // correct inner label margin on window resize (i don't know how we could do this in css)
         self.resize = function () {
-            const containerWidth = $('.meter:first', chContainer).width(),
-                labelWidth = $('.meter .label:first', chContainer).width(),
-                margin = (containerWidth - labelWidth) / 2;
-            $('.channels .label').css('margin-left', margin);
+            const barWidth = $('.meter:last', chContainer).width();
+            const labelWidth = $('.meter:last .label2', chContainer).width();
+            const margin = Math.max(barWidth - labelWidth - 15, 50);
+            $('.channels .label1').css('margin-left', '15px');
+            $('.channels .label2').css('margin-left', margin + 'px');
         };
 
-        $(window).on('resize', self.resize).resize(); // trigger so labels get correctly aligned on creation
+        $(window).on('resize', self.resize).resize();
 
 
     //// RCMAP
@@ -528,10 +573,11 @@ TABS.receiver.initialize = function (callback) {
 
         function updateConfig() {
 
-            //FC.RX_CONFIG.stick_max = parseInt($('input[name="stick_max"]').val());
-            //FC.RX_CONFIG.stick_min = parseInt($('input[name="stick_min"]').val());
-
             FC.RC_CONFIG.rc_center = self.rcCenter;
+            FC.RC_CONFIG.rc_deflection = self.rcDeflection;
+
+            FC.RC_CONFIG.rc_min_throttle = self.rcZeroThrottle;
+            FC.RC_CONFIG.rc_max_throttle = self.rcFullThrottle;
 
             FC.RC_CONFIG.rc_deadband = self.deadband;
             FC.RC_CONFIG.rc_yaw_deadband = self.yawDeadband;
@@ -575,7 +621,11 @@ TABS.receiver.initialize = function (callback) {
         });
 
         GUI.interval_add('receiver_pull', function () {
-            MSP.send_message(MSPCodes.MSP_RX_CHANNELS, false, false, updateBars);
+            MSP.send_message(MSPCodes.MSP_ANALOG, false, false, function () {
+                MSP.send_message(MSPCodes.MSP_RX_CHANNELS, false, false, function () {
+                    MSP.send_message(MSPCodes.MSP_RC_COMMAND, false, false, updateBars);
+                });
+            });
         }, 25, false);
 
         GUI.interval_add('status_pull', function () {

@@ -606,6 +606,12 @@ MspHelper.prototype.process_data = function(dataHandler) {
                 }
                 break;
 
+            case MSPCodes.MSP_RC_COMMAND:
+                for (let i = 0; i < data.byteLength / 2; i++) {
+                    FC.RC_COMMAND[i] = data.readU16();
+                }
+                break;
+
             case MSPCodes.MSP_MIXER_CONFIG:
                 FC.MIXER_CONFIG.main_rotor_dir = data.readU8();
                 FC.MIXER_CONFIG.tail_rotor_mode = data.readU8();
