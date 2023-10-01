@@ -445,13 +445,13 @@ TABS.receiver.initialize = function (callback) {
             }
 
             const rssi = ((FC.ANALOG.rssi / 1023) * 100).toFixed(0) + '%';
-            updateChannelBar(rssiBar, rssi, '', rssi);
+            updateChannelBar(rssiBar, rssi, FC.ANALOG.rssi, rssi);
         }
 
         self.resize = function () {
             const barWidth = $('.meter:last', chContainer).width();
             const labelWidth = $('.meter:last .label2', chContainer).width();
-            const margin = Math.max(barWidth - labelWidth - 15, 50);
+            const margin = Math.max(barWidth - labelWidth - 15, 40);
             $('.channels .label1').css('margin-left', '15px');
             $('.channels .label2').css('margin-left', margin + 'px');
         };
