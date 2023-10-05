@@ -435,7 +435,8 @@ function processName() {
 function setRtc() {
     MSP.send_message(MSPCodes.MSP_SET_RTC, mspHelper.crunch(MSPCodes.MSP_SET_RTC), false, function () {
         //GUI.log(i18n.getMessage('realTimeClockSet'));
-        setArming();
+        //setArming();
+        finishOpen();
     });
 }
 
