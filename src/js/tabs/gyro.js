@@ -97,12 +97,12 @@ TABS.gyro.initialize = function (callback) {
         $('input[name="gyroNotch2Frequency"]').val(FC.FILTER_CONFIG.gyro_notch2_hz);
         $('input[name="gyroNotch2Cutoff"]').val(FC.FILTER_CONFIG.gyro_notch2_cutoff);
 
-        $('input[name="dynamicNotchWidthPercent"]').val(FC.FILTER_CONFIG.dyn_notch_width_percent);
-        $('input[name="dynamicNotchQ"]').val(FC.FILTER_CONFIG.dyn_notch_q);
+        $('input[name="dynamicNotchCount"]').val(FC.FILTER_CONFIG.dyn_notch_count);
+        $('input[name="dynamicNotchQ"]').val(FC.FILTER_CONFIG.dyn_notch_q / 10).change();
         $('input[name="dynamicNotchMinHz"]').val(FC.FILTER_CONFIG.dyn_notch_min_hz);
         $('input[name="dynamicNotchMaxHz"]').val(FC.FILTER_CONFIG.dyn_notch_max_hz);
 
-        $('.dynamicNotch').toggle( FC.FEATURE_CONFIG.features.isEnabled('DYNAMIC_FILTER') );
+        $('.dynamicNotch').toggle( FC.FEATURE_CONFIG.features.isEnabled('DYN_NOTCH') );
 
         $('input[id="gyroLowpassEnabled"]').change(function() {
             const checked = $(this).is(':checked');
@@ -384,8 +384,8 @@ TABS.gyro.initialize = function (callback) {
             FC.FILTER_CONFIG.gyro_notch2_cutoff = 0;
         }
 
-        FC.FILTER_CONFIG.dyn_notch_width_percent = parseInt($('input[name="dynamicNotchWidthPercent"]').val());
-        FC.FILTER_CONFIG.dyn_notch_q = parseInt($('input[name="dynamicNotchQ"]').val());
+        FC.FILTER_CONFIG.dyn_notch_count = parseInt($('input[name="dynamicNotchCount"]').val());
+        FC.FILTER_CONFIG.dyn_notch_q = parseFloat($('input[name="dynamicNotchQ"]').val()) * 10;
         FC.FILTER_CONFIG.dyn_notch_min_hz = parseInt($('input[name="dynamicNotchMinHz"]').val());
         FC.FILTER_CONFIG.dyn_notch_max_hz = parseInt($('input[name="dynamicNotchMaxHz"]').val());
 
