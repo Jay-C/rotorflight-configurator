@@ -238,7 +238,7 @@ TABS.status.initialize = function (callback) {
                 if (i < 4)
                     rabel = (FC.RC_COMMAND[i] / 5).toFixed(1) + '%';
                 else if (i == 4)
-                    rabel = (FC.RC_COMMAND[i] / 10).toFixed(1) + '%';
+                    rabel = (FC.RC_COMMAND[i] / 10 + 50).toFixed(1) + '%';
                 updateChannelBar(barElems[i], width, label, rabel);
             }
         }
