@@ -238,37 +238,51 @@ TABS.gyro.initialize = function (callback) {
 
         populateSelectorClass('rpmFilterTypes', self.RPM_FILTER_TYPES);
 
-        $('.gyro_rpm_filter_config').toggle( FC.FEATURE_CONFIG.features.isEnabled('RPM_FILTER') );
-
-        $('.gyroRpmFilterCustomNoteRow').toggle(self.rpmFilter.custom);
-        $('select[id="gyroRpmFilterSetupType"]').val(2);
-
         const enableElem = $('input[id="gyroRpmFilterEnable"]');
+        const typeElem = $('select[id="gyroRpmFilterSetupType"]');
 
-        let resetCustom = self.rpmFilter.custom;
+        $('select[id="gyroRpmFilterSetupType"] option[value="3"]').attr('hidden', self.rpmFilter.type != RPMFilter.CUSTOM);
 
-        enableElem.change(function () {
+        function rpmFilterVisibility() {
+            const typeval = self.rpmFilter.type;
             const enabled = enableElem.is(':checked');
-
-            $('.rpm_filter_notches').toggle(enabled);
-            $('.rpm_filter_settings').toggle(enabled);
+            const advanced = enabled && (typeval == RPMFilter.ADVANCED);
+            $('.rpm_filter_settings').toggle(advanced);
+            $('.rpm_filter_notches').toggle(advanced);
             $('select[id="gyroRpmFilterSetupType"]').attr('disabled', !enabled);
-
-            if (enabled && resetCustom)
-                $('.dialogGyroReset')[0].showModal();
-        });
+            $('.gyroRpmFilterCustomNoteRow').toggle(typeval == RPMFilter.CUSTOM);
+        }
 
         $('.dialogGyroReset-acceptbtn').click(function() {
             $('.dialogGyroReset')[0].close();
-            $('.gyroRpmFilterCustomNoteRow').hide();
-            resetCustom = false;
+            self.rpmFilter.type = typeElem.val();
+            rpmFilterVisibility();
         });
         $('.dialogGyroReset-revertbtn').click(function() {
             $('.dialogGyroReset')[0].close();
-            enableElem.prop('checked', false).change();
+            typeElem.val(self.rpmFilter.type);
+            rpmFilterVisibility();
         });
 
-        enableElem.prop('checked', self.rpmFilter.enable && !self.rpmFilter.custom).change();
+        enableElem.change(function () {
+            const enabled = enableElem.is(':checked');
+            if (enabled && self.rpmFilter.type == RPMFilter.DISABLED)
+                typeElem.val(RPMFilter.ADVANCED).change();
+            rpmFilterVisibility();
+        });
+
+        enableElem.prop('checked', FC.FEATURE_CONFIG.features.isEnabled('RPM_FILTER')).change();
+
+        typeElem.change(function () {
+            const typeval = typeElem.val();
+            if (self.rpmFilter.type == RPMFilter.CUSTOM && typeval != RPMFilter.CUSTOM)
+                $('.dialogGyroReset')[0].showModal();
+            else
+                self.rpmFilter.type = typeval;
+            rpmFilterVisibility();
+        });
+
+        typeElem.val(self.rpmFilter.type);
 
         let mainMinRPM = (self.rpmFilter.mainRotor[0].rpm_limit > 50) ?
                          self.rpmFilter.mainRotor[0].rpm_limit : 500;
@@ -409,10 +423,11 @@ TABS.gyro.initialize = function (callback) {
 
     //// RPM Filter Config
 
-        self.rpmFilter.enable = $('input[id="gyroRpmFilterEnable"]').is(':checked');
-        self.rpmFilter.custom &= !self.rpmFilter.enable;
+        const rpmFilterEnabled = $('input[id="gyroRpmFilterEnable"]').is(':checked');
 
-        if (self.rpmFilter.enable && !self.rpmFilter.custom) {
+        FC.FEATURE_CONFIG.features.setFeature('RPM_FILTER', rpmFilterEnabled);
+
+        if (rpmFilterEnabled && self.rpmFilter.type == RPMFilter.ADVANCED) {
 
             const mainMotorGroupActive =
                 (FC.MOTOR_CONFIG.main_rotor_gear_ratio[0] != 1 || FC.MOTOR_CONFIG.main_rotor_gear_ratio[1] != 1);
@@ -469,9 +484,7 @@ TABS.gyro.initialize = function (callback) {
 
             access_single_notch('MainMotor', 1, self.rpmFilter.mainMotor[0]);
             access_single_notch('TailMotor', 1, self.rpmFilter.tailMotor[0]);
-        }
 
-        if (!self.rpmFilter.custom) {
             FC.RPM_FILTER_CONFIG = RPMFilter.generateConfig(self.rpmFilter);
             self.rpmFilterDirty = true;
         }
