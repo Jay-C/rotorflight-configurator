@@ -7,6 +7,10 @@ TABS.adjustments = {
 
     FUNCTIONS: [
         'None',
+        'RateProfile',
+        'PIDProfile',
+        'LEDProfile',
+        'OSDProfile',
         'PitchRate',
         'RollRate',
         'YawRate',
@@ -28,18 +32,27 @@ TABS.adjustments = {
         'YawI',
         'YawD',
         'YawF',
-        'YawCenter',
         'YawCWStopGain',
         'YawCCWStopGain',
         'YawCyclicFF',
         'YawCollectiveFF',
-        'YawImpulseFF',
+        'YawCollectiveDyn',
+        'YawCollectiveDecay',
         'PitchCollectiveFF',
-        'PitchCollectiveUNUSED',
-        'RescueCollective',
-        'RescueCollectiveBoost',
-        'AngleLevelStrength',
-        'HorizonLevelStrength',
+        'PitchGyroCutoff',
+        'RollGyroCutoff',
+        'YawGyroCutoff',
+        'PitchDtermCutoff',
+        'RollDtermCutoff',
+        'YawDtermCutoff',
+        'RescueClimbCollective',
+        'RescueHoverCollective',
+        'RescueHoverAltitude',
+        'RescueAltP',
+        'RescueAltI',
+        'RescueAltD',
+        'AngleLevelGain',
+        'HorizonLevelGain',
         'AcroTrainerGain',
         'GovernorGain',
         'GovernorP',
@@ -49,25 +62,14 @@ TABS.adjustments = {
         'GovernorTTA',
         'GovernorCyclicFF',
         'GovernorCollectiveFF',
-        'TailMotorIdle',
-        'SwashPhase',
-        'RateProfile',
-        'PIDProfile',
-        'OSDProfile',
-        'LEDProfile',
-        'WayP',
-        'WayI',
-        'WayD',
-        'WayF',
-        'PitchErrorCutoff',
-        'PitchDtermCutoff',
-        'PitchFtermCutoff',
-        'RollErrorCutoff',
-        'RollDtermCutoff',
-        'RollFtermCutoff',
-        'YawErrorCutoff',
-        'YawDtermCutoff',
-        'YawFtermCutoff',
+        'PitchB',
+        'RollB',
+        'YawB',
+        'PitchO',
+        'RollO',
+        'CrossCoupling',
+        'CrossCouplingRatio',
+        'CrossCouplingCutoff',
     ],
 };
 
@@ -108,134 +110,133 @@ TABS.adjustments.initialize = function (callback) {
         }
     }
 
-    function addAdjustment(adjustmentIndex, adjustmentRange, auxChannelCount) {
+    function newAdjustment(adjustmentIndex) {
 
-        const newAdjustment = $('#tab-adjustments-templates .adjustments .adjustment').clone();
+        const adjElem = $('#tab-adjustments-templates .adjustment').clone();
+        const adjRange = FC.ADJUSTMENT_RANGES[adjustmentIndex];
 
-        $(newAdjustment).attr('id', 'adjustment-' + adjustmentIndex);
-        $(newAdjustment).data('index', adjustmentIndex);
+        adjElem.attr('id', 'adjustment-' + adjustmentIndex);
+        adjElem.data('index', adjustmentIndex);
 
-        //
-        // populate enable channel select box
-        //
-        const channelList = $(newAdjustment).find('.channelInfo .channel');
-        const channelOptionTemplate = $(channelList).find('option');
-        channelOptionTemplate.remove();
+        const enaChannelList = adjElem.find('select.enaChannel');
+        enaChannelList.val(adjRange.enaChannel);
 
-        let autoOption = channelOptionTemplate.clone();
-        autoOption.text(i18n.getMessage('auxiliaryAutoChannelSelect'));
-        autoOption.val(-1);
-        channelList.append(autoOption);
+        const adjChannelList = adjElem.find('.functionChannel select');
+        adjChannelList.val(adjRange.adjChannel);
 
-        for (let index = 0; index < auxChannelCount; index++) {
-            const channelOption = channelOptionTemplate.clone();
-            channelOption.text('AUX ' + (index + 1));
-            channelOption.val(index);
-            channelList.append(channelOption);
-        }
-        channelList.val(adjustmentRange.enaChannel);
+        const adjFuncList = adjElem.find('.functionSelection select');
+        adjFuncList.val(adjRange.adjFunction);
 
-        //
-        // update selected function
-        //
-        const functionList = $(newAdjustment).find('.functionSelection select');
-        // update list of selected functions
+        const stepSizeElem = adjElem.find('.functionStepSize input');
+        stepSizeElem.val(adjRange.adjStep);
 
-        functionList.val(adjustmentRange.adjFunction);
+        const minValueElem = adjElem.find('.functionMinValue input');
+        minValueElem.val(adjRange.adjMin);
 
-        //
-        // populate source channel select box
-        //
-        const srcChannelList = $(newAdjustment).find('.functionChannel select');
-        const srcChannelOptionTemplate = $(srcChannelList).find('option');
-        srcChannelOptionTemplate.remove();
+        const maxValueElem = adjElem.find('.functionMaxValue input');
+        maxValueElem.val(adjRange.adjMax);
 
-        let srcAutoOption = channelOptionTemplate.clone();
-        srcAutoOption.text(i18n.getMessage('auxiliaryAutoChannelSelect'));
-        srcAutoOption.val(-1);
-        srcChannelList.append(srcAutoOption);
-
-        for (let index = 0; index < auxChannelCount; index++) {
-            let srcChannelOption = srcChannelOptionTemplate.clone();
-            srcChannelOption.text('AUX ' + (index + 1));
-            srcChannelOption.val(index);
-            srcChannelList.append(srcChannelOption);
-        }
-        srcChannelList.val(adjustmentRange.adjChannel);
-
-        //
-        // populate step,min,max
-        //
-        $(newAdjustment).find('.functionStepSize input').val(adjustmentRange.adjStep);
-        $(newAdjustment).find('.functionMinValue input').val(adjustmentRange.adjMin);
-        $(newAdjustment).find('.functionMaxValue input').val(adjustmentRange.adjMax);
-
-        //
-        // configure range
-        //
-        const channel_range = {
+        // configure ranges
+        const channelRange = {
                 'min': [  900 ],
                 'max': [ 2100 ]
             };
 
-        let rangeValues = [1300, 1700];
-        if (adjustmentRange.enaRange != undefined) {
-            rangeValues = [adjustmentRange.enaRange.start, adjustmentRange.enaRange.end];
+        let enaValues = [ 1300, 1700 ];
+        if (adjRange.enaRange != undefined) {
+            enaValues = [adjRange.enaRange.start, adjRange.enaRange.end];
         }
 
-        let rangeElement = $(newAdjustment).find('.range');
+        let incValues = [ 1800, 1900 ];
+        if (adjRange.adjRange2 != undefined) {
+            incValues = [adjRange.adjRange2.start, adjRange.adjRange2.end];
+        }
 
-        $(rangeElement).find('.channel-slider').noUiSlider({
-            start: rangeValues,
+        let decValues = [ 1100, 1200 ];
+        if (adjRange.adjRange1 != undefined) {
+            decValues = [adjRange.adjRange1.start, adjRange.adjRange1.end];
+        }
+
+        const enaSlider = adjElem.find('.ena-slider');
+        const incSlider = adjElem.find('.inc-slider');
+        const decSlider = adjElem.find('.dec-slider');
+
+        enaSlider.noUiSlider({
+            start: enaValues,
             behaviour: 'snap-drag',
-            margin: 25,
+            margin: 20,
             step: 5,
             connect: true,
-            range: channel_range,
+            range: channelRange,
             format: wNumb({
                 decimals: 0
             })
         });
 
-        $(newAdjustment).find('.channel-slider').Link('lower').to($(newAdjustment).find('.lowerLimitValue'));
-        $(newAdjustment).find('.channel-slider').Link('upper').to($(newAdjustment).find('.upperLimitValue'));
+        incSlider.noUiSlider({
+            start: incValues,
+            behaviour: 'snap-drag',
+            margin: 10,
+            step: 5,
+            connect: true,
+            range: channelRange,
+            format: wNumb({
+                decimals: 0
+            })
+        });
 
-        $(rangeElement).find(".pips-channel-range").noUiSlider_pips({
+        decSlider.noUiSlider({
+            start: decValues,
+            behaviour: 'snap-drag',
+            margin: 10,
+            step: 5,
+            connect: true,
+            range: channelRange,
+            format: wNumb({
+                decimals: 0
+            })
+        });
+
+        enaSlider.Link('lower').to(adjElem.find('.lowerLimitValue'));
+        enaSlider.Link('upper').to(adjElem.find('.upperLimitValue'));
+        incSlider.Link('lower').to(adjElem.find('.lowerIncValue'));
+        incSlider.Link('upper').to(adjElem.find('.upperIncValue'));
+        decSlider.Link('lower').to(adjElem.find('.lowerDecValue'));
+        decSlider.Link('upper').to(adjElem.find('.upperDecValue'));
+
+        adjElem.find(".pips-channel-range").noUiSlider_pips({
             mode: 'values',
-            values: [900, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2100],
+            values: [ 900, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2100 ],
             density: 4,
             stepped: true
         });
 
-        //
-        // add the enable/disable behavior
-        //
-        const enableElement = $(newAdjustment).find('.enable');
-        $(enableElement).data('adjustmentElement', newAdjustment);
-        $(enableElement).change(function() {
-            const adjustmentElement = $(this).data('adjustmentElement');
-            if ($(this).prop("checked")) {
-                $(adjustmentElement).find(':input').prop("disabled", false);
-                $(adjustmentElement).find('.channel-slider').removeAttr("disabled");
-                rangeElement = $(adjustmentElement).find('.range .channel-slider');
-                const range = $(rangeElement).val();
-                if (range[0] == range[1]) {
-                    const defaultRangeValues = [1300, 1700];
-                    $(rangeElement).val(defaultRangeValues);
-                }
+        // Element visibility
+        const enableElement = adjElem.find('input.enable');
+
+        function updateVisibility() {
+            const isEnabled = enableElement.is(':checked');
+            adjElem.find('.adjActive').prop("disabled", !isEnabled);
+            if (isEnabled) {
+                adjElem.find('.channel-slider').removeAttr("disabled");
             } else {
-                $(adjustmentElement).find(':input').prop("disabled", true);
-                $(adjustmentElement).find('.channel-slider').attr("disabled", "disabled");
+                adjElem.find('.channel-slider').attr("disabled", "disabled");
             }
+            const stepSize = parseInt(stepSizeElem.val());
+            adjElem.find('.IncLimit').toggle(stepSize > 0);
+            adjElem.find('.DecLimit').toggle(stepSize > 0);
+            adjElem.find('.inc-slider').toggle(stepSize > 0);
+            adjElem.find('.ScaleLimit').toggle(stepSize == 0);
+        }
 
-            // keep this element enabled
-            $(this).prop("disabled", false);
-        });
+        enableElement.change(updateVisibility);
 
-        const isEnabled = (adjustmentRange?.enaRange?.start !== adjustmentRange?.enaRange?.end);
-        $(enableElement).prop("checked", isEnabled).change();
+        const isEnabled = (adjRange?.enaRange?.start < adjRange?.enaRange?.end);
+        enableElement.prop("checked", isEnabled).change();
 
-        return newAdjustment;
+        stepSizeElem.change(updateVisibility);
+
+        return adjElem;
     }
 
     function formToData() {
@@ -250,6 +251,14 @@ TABS.adjustments.initialize = function (callback) {
                 start: 1500,
                 end: 1500,
             },
+            adjRange1: {
+                start: 1500,
+                end: 1500,
+            },
+            adjRange2: {
+                start: 1500,
+                end: 1500,
+            },
             adjFunction: 0,
             adjChannel: 0,
             adjStep: 0,
@@ -260,13 +269,23 @@ TABS.adjustments.initialize = function (callback) {
         $('.tab-adjustments .adjustments .adjustment').each(function () {
             const adjustmentElement = $(this);
 
-            if ($(adjustmentElement).find('.enable').prop("checked")) {
-                const rangeValues = $(this).find('.range .channel-slider').val();
-                const adjustmentRange = {
-                    enaChannel: parseInt($(this).find('.channelInfo .channel').val()),
+            if (adjustmentElement.find('.enable').prop("checked")) {
+                const enaValues = $(this).find('.range .ena-slider').val();
+                const incValues = $(this).find('.range .inc-slider').val();
+                const decValues = $(this).find('.range .dec-slider').val();
+                const adjRange = {
+                    enaChannel: parseInt($(this).find('select.enaChannel').val()),
                     enaRange: {
-                        start: rangeValues[0],
-                        end: rangeValues[1],
+                        start: enaValues[0],
+                        end: enaValues[1],
+                    },
+                    adjRange1: {
+                        start: decValues[0],
+                        end: decValues[1],
+                    },
+                    adjRange2: {
+                        start: incValues[0],
+                        end: incValues[1],
                     },
                     adjFunction: parseInt($(this).find('.functionSelection select').val()),
                     adjChannel: parseInt($(this).find('.functionChannel select').val()),
@@ -274,7 +293,7 @@ TABS.adjustments.initialize = function (callback) {
                     adjMin: parseInt($(this).find('.functionMinValue input').val()),
                     adjMax: parseInt($(this).find('.functionMaxValue input').val()),
                 };
-                FC.ADJUSTMENT_RANGES.push(adjustmentRange);
+                FC.ADJUSTMENT_RANGES.push(adjRange);
             } else {
                 FC.ADJUSTMENT_RANGES.push(defaultAdjustmentRange);
             }
@@ -286,18 +305,24 @@ TABS.adjustments.initialize = function (callback) {
     }
 
     function dataToForm() {
-        const functions = self.FUNCTIONS;
-
-        const selectFunction = $('#functionSelectionSelect');
-        functions.forEach(function(value, key) {
+        const selectFunction = $('#tab-adjustments-templates .adjustment select.function');
+        self.FUNCTIONS.forEach(function(value, key) {
             selectFunction.append(new Option(i18n.getMessage('adjustmentsFunction' + value), key));
         });
 
+        const channelList = $('#tab-adjustments-templates .adjustment select.channel');
+        let autoOption = new Option(i18n.getMessage('auxiliaryAutoChannelSelect'), -1);
+        channelList.append(autoOption);
+
         const auxChannelCount = FC.RC.active_channels - self.PRIMARY_CHANNEL_COUNT;
-        const modeTableBodyElement = $('.tab-adjustments .adjustments tbody');
+        for (let index = 0; index < auxChannelCount; index++) {
+            const option = new Option(`AUX${index + 1}`, index);
+            channelList.append(option);
+        }
+
+        const adjTableBody = $('.tab-adjustments .adjustments tbody');
         for (let index = 0; index < FC.ADJUSTMENT_RANGES.length; index++) {
-            const newAdjustment = addAdjustment(index, FC.ADJUSTMENT_RANGES[index], auxChannelCount);
-            modeTableBodyElement.append(newAdjustment);
+            adjTableBody.append(newAdjustment(index));
         }
     }
 
@@ -314,34 +339,18 @@ TABS.adjustments.initialize = function (callback) {
 
         self.isDirty = false;
 
-        function update_marker(auxChannelIndex, channelPosition) {
-            if (channelPosition < 900) {
-                channelPosition = 900;
-            } else if (channelPosition > 2100) {
-                channelPosition = 2100;
-            }
-            const percentage = (channelPosition - 900) / (2100-900) * 100;
-
+        function update_markers() {
             $('.adjustments .adjustment').each( function () {
-                const enaChannelIndex = $(this).find('.enaChannel').val();
-                if (enaChannelIndex == auxChannelIndex) {
-                    $(this).find('.range .enaMarker').css('left', percentage + '%');
-                }
-                const adjChannelIndex = $(this).find('.adjChannel').val();
-                if (adjChannelIndex == auxChannelIndex) {
-                    $(this).find('.range .adjMarker').css('left', percentage + '%');
-                }
+                const enaChannelIndex = $(this).find('.enaChannel').val() + self.PRIMARY_CHANNEL_COUNT;
+                const enaChannelPos = FC.RC.channels[enaChannelIndex].clamp(900, 2100);
+                const enaPercentage = (enaChannelPos - 900) / (2100-900) * 100;
+                $(this).find('.enaMarker').css('left', enaPercentage + '%');
+
+                const adjChannelIndex = $(this).find('.adjChannel').val() + self.PRIMARY_CHANNEL_COUNT;
+                const adjChannelPos = FC.RC.channels[adjChannelIndex].clamp(900, 2100);
+                const adjPercentage = (adjChannelPos - 900) / (2100-900) * 100;
+                $(this).find('.adjMarker').css('left', adjPercentage + '%');
             });
-        }
-
-        function update_ui() {
-
-            auto_select_channel();
-
-            let auxChannelCount = FC.RC.active_channels - self.PRIMARY_CHANNEL_COUNT;
-            for (let index = 0; index < auxChannelCount; index++) {
-                update_marker(index, FC.RC.channels[index + self.PRIMARY_CHANNEL_COUNT]);
-            }
         }
 
         function auto_select_channel() {
@@ -372,6 +381,11 @@ TABS.adjustments.initialize = function (callback) {
             }
         }
 
+        function update_ui() {
+            auto_select_channel();
+            update_markers();
+        }
+
         self.save = function (callback) {
             formToData();
             save_data(callback);
@@ -392,9 +406,6 @@ TABS.adjustments.initialize = function (callback) {
         $('.content_wrapper').change(function () {
             setDirty();
         });
-
-        // update ui instantly on first load
-        update_ui();
 
         // enable data pulling
         GUI.interval_add('rc_pull', function () {
