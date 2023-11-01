@@ -1809,6 +1809,15 @@
     "adjustmentsColumnThenApplyFunction": {
         "message": "then apply value from channel,<br>limited between minimum and maximum, with step size"
     },
+    "adjustmentsTypeOff": {
+        "message": "Off"
+    },
+    "adjustmentsTypeMapped": {
+        "message": "Mapped"
+    },
+    "adjustmentsTypeStepped": {
+        "message": "Stepped"
+    },
     "adjustmentsMin": {
         "message": "Min"
     },
@@ -2010,7 +2019,7 @@
     "adjustmentsFunctionRollO": {
         "message": "Roll O-gain"
     },
-    "adjustmentsFunctionCrossCoupling": {
+    "adjustmentsFunctionCrossCouplingGain": {
         "message": "Cross Coupling Gain"
     },
     "adjustmentsFunctionCrossCouplingRatio": {

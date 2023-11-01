@@ -20,7 +20,8 @@
                 <tr>
                     <td class="column-enable" i18n="adjustmentsColumnEnable"></td>
                     <td i18n="adjustmentsColumnWhenChannel"></td>
-                    <td i18n="adjustmentsColumnIsInRange" class="range"></td>
+                    <td i18n="adjustmentsColumnIsInRange"></td>
+                    <td i18n="adjustmentsColumnWhenChannel"></td>
                     <td i18n="adjustmentsColumnThenApplyFunction"></td>
                 </tr>
                 </thead>
@@ -43,32 +44,28 @@
     <table>
         <tbody>
             <tr class="adjustment">
-                <td class="info">
-                    <div class="enabling">
-                        <input type="checkbox" class="enable toggle" />
+                <td class="adjSelect">
+                    <div class="adjTypeOption">
+                        <input type="radio" id="adjOff" class="adjType" /><span i18n="adjustmentsTypeOff">Off</span>
+                    </div>
+                    <div class="adjTypeOption">
+                        <input type="radio" id="adjMapped" class="adjType" /><span i18n="adjustmentsTypeMapped">Mapped</span>
+                    </div>
+                    <div class="adjTypeOption">
+                        <input type="radio" id="adjStepped" class="adjType" /><span i18n="adjustmentsTypeStepped">Stepped</span>
                     </div>
                 </td>
-                <td class="channelInfo">
-                    <div class="limits">
-                        <p class="RangeLimit">
-                            <label i18n="adjustmentsRange"></label>: <span class="lowerLimitValue"></span> : <span class="upperLimitValue"></span>
-                        </p>
-                        <p class="IncLimit">
-                            <label i18n="adjustmentsRangeInc"></label>: <span class="lowerIncValue"></span> : <span class="upperIncValue"></span>
-                        </p>
-                        <p class="DecLimit">
-                            <label i18n="adjustmentsRangeDec"></label>: <span class="lowerDecValue"></span> : <span class="upperDecValue"></span>
-                        </p>
-                        <p class="ScaleLimit">
-                            <label i18n="adjustmentsRangeScale"></label>: <span class="lowerDecValue"></span> : <span class="upperDecValue"></span>
-                        </p>
-                    </div>
+                <td class="channelSelect">
                     <div>
                         <select class="channel enaChannel adjActive">
                         </select>
                     </div>
+                    <div>
+                        <select class="channel adjChannel adjActive">
+                        </select>
+                    </div>
                 </td>
-                <td class="range">
+                <td class="rangeSliders">
                     <div class="channel-slider ena-slider">
                         <div class="marker enaMarker"></div>
                     </div>
@@ -77,6 +74,22 @@
                     </div>
                     <div class="channel-slider dec-slider pips-channel-range">
                         <div class="marker adjMarker"></div>
+                    </div>
+                </td>
+                <td class="channelInfo">
+                    <div class="limits">
+                        <p class="RangeLimit">
+                            <span class="lowerLimitValue"></span> : <span class="upperLimitValue"></span>
+                        </p>
+                        <p class="IncLimit">
+                            <span class="lowerIncValue"></span> : <span class="upperIncValue"></span>
+                        </p>
+                        <p class="DecLimit">
+                            <span class="lowerDecValue"></span> : <span class="upperDecValue"></span>
+                        </p>
+                        <p class="ScaleLimit">
+                            <span class="lowerDecValue"></span> : <span class="upperDecValue"></span>
+                        </p>
                     </div>
                 </td>
                 <td class="function">
@@ -88,8 +101,6 @@
                                 </select>
                             </td>
                             <td class="functionChannel">
-                                <select class="channel adjChannel adjActive">
-                                </select>
                             </td>
                         </tr>
                         <tr>
