@@ -67,7 +67,7 @@ TABS.adjustments = {
         'YawB',
         'PitchO',
         'RollO',
-        'CrossCoupling',
+        'CrossCouplingGain',
         'CrossCouplingRatio',
         'CrossCouplingCutoff',
     ],
@@ -117,6 +117,8 @@ TABS.adjustments.initialize = function (callback) {
 
         adjElem.attr('id', 'adjustment-' + adjustmentIndex);
         adjElem.data('index', adjustmentIndex);
+
+        adjElem.find('.adjType').attr('name', `adjType${adjustmentIndex}`);
 
         const enaChannelList = adjElem.find('select.enaChannel');
         enaChannelList.val(adjRange.enaChannel);

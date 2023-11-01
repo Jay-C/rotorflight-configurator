@@ -56,29 +56,22 @@
     padding: 1px 0;
 }
 
-.tab-adjustments .adjustment input {
+.tab-adjustments .adjustment .function input {
     width: calc(100% - 10px);
     border: 1px solid var(--subtleAccent);
     border-radius: 3px;
     text-align: right;
 }
 
-.tab-adjustments .adjustment td {
-    text-align: center;
-}
-
-.tab-adjustments .adjustment .info {
-    width: 5%;
+.tab-adjustments .adjustment .adjSelect {
+    width: 80px;
     height: 80px;
-}
-
-.tab-adjustments .adjustment .info .enabling {
-    white-space: nowrap;
 }
 
 .tab-adjustments .adjustment .channelInfo {
     width: 10%;
     padding: 0px 0px 0px 0px;
+    text-align: center;
 }
 
 .tab-adjustments .adjustment .channelInfo .limits {
@@ -86,23 +79,22 @@
     margin-bottom: 10px;
 }
 
-.tab-adjustments .adjustment .range {
-    width: 65%;
-    padding: 10px 20px;
+.tab-adjustments .adjustment .rangeSliders {
+    width: 60%;
 }
 
-.tab-adjustments .adjustment .range .channel-slider {
+.tab-adjustments .adjustment .rangeSliders .channel-slider {
     margin-top: 5px;
     margin-bottom: 10px;
     height: 13px;
     marker-start: 10px;
 }
 
-.tab-adjustments .adjustment .range .pips-channel-range {
+.tab-adjustments .adjustment .rangeSliders .pips-channel-range {
     margin-bottom: 35px;
 }
 
-.tab-adjustments .adjustment .range .marker {
+.tab-adjustments .adjustment .rangeSliders .marker {
     position: absolute;
     left: 50%;
     top: 0px;
@@ -113,7 +105,7 @@
     z-index: 1000;
 }
 
-.tab-adjustments .adjustment .range .noUi-horizontal .noUi-handle {
+.tab-adjustments .adjustment .rangeSliders .noUi-horizontal .noUi-handle {
     background: var(--sideBackground);
     border-color: var(--subtleAccent);
     border-radius: 15px;
@@ -124,8 +116,8 @@
     top: -5px;
 }
 
-.tab-adjustments .adjustment .range .noUi-handle:before,
-.tab-adjustments .adjustment .range .noUi-handle:after {
+.tab-adjustments .adjustment .rangeSliders .noUi-handle:before,
+.tab-adjustments .adjustment .rangeSliders .noUi-handle:after {
     border-color: var(--subtleAccent);
     background-color: var(--subtleAccent);
     height: 8px;
@@ -136,11 +128,11 @@
     border-radius: 2px;
 }
 
-.tab-adjustments .adjustment .range .enaMarker {
+.tab-adjustments .adjustment .rangeSliders .enaMarker {
     background: rgba(255, 0, 0, 0.6);
 }
 
-.tab-adjustments .adjustment .range .adjMarker {
+.tab-adjustments .adjustment .rangeSliders .adjMarker {
     background: rgba(0, 255, 0, 0.6);
 }
 
@@ -171,7 +163,7 @@
         overflow: auto;
     }
 
-    .tab-adjustments .range {
+    .tab-adjustments .rangeSliders {
         min-width: 300px;
     }
 }
