@@ -17,16 +17,13 @@
         <div class="overflow">
             <table class="adjustments">
                 <thead>
-                <tr>
-                    <td class="column-enable" i18n="adjustmentsColumnEnable"></td>
-                    <td i18n="adjustmentsColumnWhenChannel"></td>
-                    <td i18n="adjustmentsColumnIsInRange"></td>
-                    <td i18n="adjustmentsColumnWhenChannel"></td>
-                    <td i18n="adjustmentsColumnThenApplyFunction"></td>
-                </tr>
+                    <tr>
+                        <td i18n="adjustmentsColumnEnable"></td>
+                        <td i18n="adjustmentsColumnWhenChannel"></td>
+                        <td i18n="adjustmentsColumnIsInRange"></td>
+                        <td i18n="adjustmentsColumnWhenChannel"></td>
+                    </tr>
                 </thead>
-                <tbody>
-                </tbody>
             </table>
         </div>
     </div>
@@ -42,9 +39,9 @@
 
 <div id="tab-adjustments-templates">
     <table>
-        <tbody>
-            <tr class="adjustment">
-                <td class="adjSelect">
+        <tbody class="adjustmentBody">
+            <tr>
+                <td rowspan="2" class="adjType">
                     <div class="adjTypeOption">
                         <input type="radio" id="adjOff" class="adjType" /><span i18n="adjustmentsTypeOff">Off</span>
                     </div>
@@ -55,20 +52,34 @@
                         <input type="radio" id="adjStepped" class="adjType" /><span i18n="adjustmentsTypeStepped">Stepped</span>
                     </div>
                 </td>
-                <td class="channelSelect">
+                <td class="adjChannels">
                     <div>
-                        <select class="channel enaChannel adjActive">
-                        </select>
-                    </div>
-                    <div>
-                        <select class="channel adjChannel adjActive">
+                        <select class="enaChannel channel input-element">
                         </select>
                     </div>
                 </td>
-                <td class="rangeSliders">
+                <td class="adjSliders">
                     <div class="channel-slider ena-slider">
                         <div class="marker enaMarker"></div>
                     </div>
+                </td>
+                <td class="adjRanges">
+                    <div>
+                        <span class="rangeLabel" i18n="adjustmentRangeEnable">Ena:</span>
+                        <input type="number" class="lowerLimitValue range-input input-element"/>
+                        <span class="dash">-</span>
+                        <input type="number" class="upperLimitValue range-input input-element"/>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="adjChannels">
+                    <div>
+                        <select class="channel adjChannel input-element">
+                        </select>
+                    </div>
+                </td>
+                <td class="adjSliders">
                     <div class="channel-slider inc-slider">
                         <div class="marker adjMarker"></div>
                     </div>
@@ -76,45 +87,42 @@
                         <div class="marker adjMarker"></div>
                     </div>
                 </td>
-                <td class="channelInfo">
-                    <div class="limits">
-                        <p class="RangeLimit">
-                            <span class="lowerLimitValue"></span> : <span class="upperLimitValue"></span>
-                        </p>
-                        <p class="IncLimit">
-                            <span class="lowerIncValue"></span> : <span class="upperIncValue"></span>
-                        </p>
-                        <p class="DecLimit">
-                            <span class="lowerDecValue"></span> : <span class="upperDecValue"></span>
-                        </p>
-                        <p class="ScaleLimit">
-                            <span class="lowerDecValue"></span> : <span class="upperDecValue"></span>
-                        </p>
+                <td class="adjRanges">
+                    <div>
+                        <span class="rangeLabel" i18n="adjustmentRangeInc">Inc:</span>
+                        <input type="number" class="lowerIncValue range-input input-element"/>
+                        <span class="dash">-</span>
+                        <input type="number" class="upperIncValue range-input input-element"/>
+                    </div>
+                    <div>
+                        <span class="rangeLabel" i18n="adjustmentRangeDec">Dec:</span>
+                        <input type="number" class="lowerDecValue range-input input-element"/>
+                        <span class="dash">-</span>
+                        <input type="number" class="upperDecValue range-input input-element"/>
                     </div>
                 </td>
-                <td class="function">
-                    <table>
-                        <tr>
-                            <td class="functionSelection" colspan="2">
-                                <select id="functionSelectionSelect" class="function adjActive">
-                                    <!--  Generated values go here -->
-                                </select>
-                            </td>
-                            <td class="functionChannel">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="functionMinValue">
-                                <input type="number" name="functionMinValue" class="adjActive"/>
-                            </td>
-                            <td class="functionMaxValue">
-                                <input type="number" name="functionMaxValue" class="adjActive"/>
-                            </td>
-                            <td class="functionStepSize">
-                                <input type="number" name="functionStepSize" class="adjActive" min="0" />
-                            </td>
-                        </tr>
-                    </table>
+            </tr>
+            <tr>
+                <td colspan="2" class="adjFunction">
+                    <select class="function input-element">
+                        <!--  Generated values go here -->
+                    </select>
+                </td>
+                <td class="adjSliders">
+                    <div class="value-slider pips-channel-range">
+                        <div class="marker valMarker"></div>
+                    </div>
+                </td>
+                <td class="adjRanges">
+                    <div>
+                        <span class="rangeLabel" i18n="adjustmentRangeResult">Val:</span>
+                        <input type="number" class="functionMinValue range-input input-element"/>
+                        <span class="dash">-</span>
+                        <input type="number" class="functionMaxValue range-input input-element"/>
+                    </div>
+                    <div>
+                        <input type="number" class="functionStepSize range-input input-element" min="0" />
+                    </div>
                 </td>
             </tr>
         </tbody>

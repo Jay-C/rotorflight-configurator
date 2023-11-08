@@ -112,30 +112,30 @@ TABS.adjustments.initialize = function (callback) {
 
     function newAdjustment(adjustmentIndex) {
 
-        const adjElem = $('#tab-adjustments-templates .adjustment').clone();
+        const adjBody = $('#tab-adjustments-templates .adjustmentBody').clone();
         const adjRange = FC.ADJUSTMENT_RANGES[adjustmentIndex];
 
-        adjElem.attr('id', 'adjustment-' + adjustmentIndex);
-        adjElem.data('index', adjustmentIndex);
+        adjBody.attr('id', 'adjustment-' + adjustmentIndex);
+        adjBody.data('index', adjustmentIndex);
 
-        adjElem.find('.adjType').attr('name', `adjType${adjustmentIndex}`);
+        adjBody.find('.adjType').attr('name', `adjType${adjustmentIndex}`);
 
-        const enaChannelList = adjElem.find('select.enaChannel');
+        const enaChannelList = adjBody.find('select.enaChannel');
         enaChannelList.val(adjRange.enaChannel);
 
-        const adjChannelList = adjElem.find('.functionChannel select');
+        const adjChannelList = adjBody.find('select.adjChannel');
         adjChannelList.val(adjRange.adjChannel);
 
-        const adjFuncList = adjElem.find('.functionSelection select');
+        const adjFuncList = adjBody.find('select.function');
         adjFuncList.val(adjRange.adjFunction);
 
-        const stepSizeElem = adjElem.find('.functionStepSize input');
+        const stepSizeElem = adjBody.find('input.functionStepSize');
         stepSizeElem.val(adjRange.adjStep);
 
-        const minValueElem = adjElem.find('.functionMinValue input');
+        const minValueElem = adjBody.find('input.functionMinValue');
         minValueElem.val(adjRange.adjMin);
 
-        const maxValueElem = adjElem.find('.functionMaxValue input');
+        const maxValueElem = adjBody.find('input.functionMaxValue');
         maxValueElem.val(adjRange.adjMax);
 
         // configure ranges
@@ -159,9 +159,10 @@ TABS.adjustments.initialize = function (callback) {
             decValues = [adjRange.adjRange1.start, adjRange.adjRange1.end];
         }
 
-        const enaSlider = adjElem.find('.ena-slider');
-        const incSlider = adjElem.find('.inc-slider');
-        const decSlider = adjElem.find('.dec-slider');
+        if (false) {
+        const enaSlider = adjBody.find('.ena-slider');
+        const incSlider = adjBody.find('.inc-slider');
+        const decSlider = adjBody.find('.dec-slider');
 
         enaSlider.noUiSlider({
             start: enaValues,
@@ -199,36 +200,37 @@ TABS.adjustments.initialize = function (callback) {
             })
         });
 
-        enaSlider.Link('lower').to(adjElem.find('.lowerLimitValue'));
-        enaSlider.Link('upper').to(adjElem.find('.upperLimitValue'));
-        incSlider.Link('lower').to(adjElem.find('.lowerIncValue'));
-        incSlider.Link('upper').to(adjElem.find('.upperIncValue'));
-        decSlider.Link('lower').to(adjElem.find('.lowerDecValue'));
-        decSlider.Link('upper').to(adjElem.find('.upperDecValue'));
+        enaSlider.Link('lower').to(adjBody.find('.lowerLimitValue'));
+        enaSlider.Link('upper').to(adjBody.find('.upperLimitValue'));
+        incSlider.Link('lower').to(adjBody.find('.lowerIncValue'));
+        incSlider.Link('upper').to(adjBody.find('.upperIncValue'));
+        decSlider.Link('lower').to(adjBody.find('.lowerDecValue'));
+        decSlider.Link('upper').to(adjBody.find('.upperDecValue'));
 
-        adjElem.find(".pips-channel-range").noUiSlider_pips({
+        adjBody.find(".pips-channel-range").noUiSlider_pips({
             mode: 'values',
             values: [ 900, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2100 ],
             density: 4,
             stepped: true
         });
+        }
 
         // Element visibility
-        const enableElement = adjElem.find('input.enable');
+        const enableElement = adjBody.find('input.enable');
 
         function updateVisibility() {
             const isEnabled = enableElement.is(':checked');
-            adjElem.find('.adjActive').prop("disabled", !isEnabled);
+            adjBody.find('.adjActive').prop("disabled", !isEnabled);
             if (isEnabled) {
-                adjElem.find('.channel-slider').removeAttr("disabled");
+                adjBody.find('.channel-slider').removeAttr("disabled");
             } else {
-                adjElem.find('.channel-slider').attr("disabled", "disabled");
+                adjBody.find('.channel-slider').attr("disabled", "disabled");
             }
             const stepSize = parseInt(stepSizeElem.val());
-            adjElem.find('.IncLimit').toggle(stepSize > 0);
-            adjElem.find('.DecLimit').toggle(stepSize > 0);
-            adjElem.find('.inc-slider').toggle(stepSize > 0);
-            adjElem.find('.ScaleLimit').toggle(stepSize == 0);
+            adjBody.find('.IncLimit').toggle(stepSize > 0);
+            adjBody.find('.DecLimit').toggle(stepSize > 0);
+            adjBody.find('.inc-slider').toggle(stepSize > 0);
+            adjBody.find('.ScaleLimit').toggle(stepSize == 0);
         }
 
         enableElement.change(updateVisibility);
@@ -236,9 +238,7 @@ TABS.adjustments.initialize = function (callback) {
         const isEnabled = (adjRange?.enaRange?.start < adjRange?.enaRange?.end);
         enableElement.prop("checked", isEnabled).change();
 
-        stepSizeElem.change(updateVisibility);
-
-        return adjElem;
+        return adjBody;
     }
 
     function formToData() {
@@ -289,11 +289,11 @@ TABS.adjustments.initialize = function (callback) {
                         start: incValues[0],
                         end: incValues[1],
                     },
-                    adjFunction: parseInt($(this).find('.functionSelection select').val()),
-                    adjChannel: parseInt($(this).find('.functionChannel select').val()),
-                    adjStep: parseInt($(this).find('.functionStepSize input').val()),
-                    adjMin: parseInt($(this).find('.functionMinValue input').val()),
-                    adjMax: parseInt($(this).find('.functionMaxValue input').val()),
+                    adjFunction: parseInt($(this).find('select.function').val()),
+                    adjChannel: parseInt($(this).find('select.adjChannel').val()),
+                    adjStep: parseInt($(this).find('input.functionStepSize').val()),
+                    adjMin: parseInt($(this).find('input.functionMinValue').val()),
+                    adjMax: parseInt($(this).find('input.functionMaxValue').val()),
                 };
                 FC.ADJUSTMENT_RANGES.push(adjRange);
             } else {
@@ -307,12 +307,12 @@ TABS.adjustments.initialize = function (callback) {
     }
 
     function dataToForm() {
-        const selectFunction = $('#tab-adjustments-templates .adjustment select.function');
+        const selectFunction = $('#tab-adjustments-templates .adjustmentBody select.function');
         self.FUNCTIONS.forEach(function(value, key) {
             selectFunction.append(new Option(i18n.getMessage('adjustmentsFunction' + value), key));
         });
 
-        const channelList = $('#tab-adjustments-templates .adjustment select.channel');
+        const channelList = $('#tab-adjustments-templates .adjustmentBody select.channel');
         let autoOption = new Option(i18n.getMessage('auxiliaryAutoChannelSelect'), -1);
         channelList.append(autoOption);
 
@@ -322,9 +322,9 @@ TABS.adjustments.initialize = function (callback) {
             channelList.append(option);
         }
 
-        const adjTableBody = $('.tab-adjustments .adjustments tbody');
+        const adjTable = $('.tab-adjustments table.adjustments');
         for (let index = 0; index < FC.ADJUSTMENT_RANGES.length; index++) {
-            adjTableBody.append(newAdjustment(index));
+            adjTable.append(newAdjustment(index));
         }
     }
 
