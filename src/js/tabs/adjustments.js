@@ -219,7 +219,6 @@ TABS.adjustments.initialize = function (callback) {
         decSlider.Link('lower').to(adjBody.find('.lowerDecValue'));
         decSlider.Link('upper').to(adjBody.find('.upperDecValue'));
 
-        if (false) {
         adjBody.find(".pips-channel-range").noUiSlider_pips({
             mode: 'values',
             values: [ 900, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2100 ],
@@ -227,7 +226,8 @@ TABS.adjustments.initialize = function (callback) {
             stepped: true
         });
 
-        // Element visibility
+        if (false) {
+            // Element visibility
         const enableElement = adjBody.find('input.enable');
 
         function updateVisibility() {

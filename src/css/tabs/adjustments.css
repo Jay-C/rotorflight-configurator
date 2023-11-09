@@ -2,10 +2,6 @@
     display: none;
 }
 
-.tab-adjustments .channel-slider .noUi-connect {
-    background: var(--accent);
-}
-
 .noUi-target {
     border-radius: 4px;
 }
@@ -61,6 +57,7 @@
     width: 50px;
     height: 50px;
     padding: 10px;
+    border-right: 1px solid white;
 }
 
 .tab-adjustments .adjustmentBody .adjTypeOption {
@@ -79,12 +76,13 @@
 }
 
 .tab-adjustments .adjustmentBody td.adjFunction {
-    padding: 0 10px 0 10px;
-    vertical-align: middle;
+    padding: 10px;
+    vertical-align: top;
 }
 
 .tab-adjustments .adjustmentBody td.adjChannels {
     width: 80px;
+    padding: 10px;
 }
 
 .tab-adjustments .adjustmentBody td.adjRanges {
@@ -112,56 +110,77 @@
     padding: 0 3px;
 }
 
-.tab-adjustments .adjustmentBody .adjSliders .channel-slider {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    height: 16px;
-    marker-start: 10px;
-}
-
-.tab-adjustments .adjustmentBody .adjSliders .pips-channel-range {
+.tab-adjustments .pips-channel-range {
     margin-bottom: 35px;
 }
 
-.tab-adjustments .adjustmentBody .adjSliders .marker {
+.tab-adjustments .adj-slider {
+    height: 16px;
+}
+
+.tab-adjustments .ena-slider {
+    margin-top: 14px;
+    margin-bottom: 55px;
+}
+
+.tab-adjustments .inc-slider {
+    margin-top: 14px;
+    margin-bottom: 14px;
+}
+
+.tab-adjustments .dec-slider {
+    margin-top: 14px;
+    margin-bottom: 14px;
+}
+
+.tab-adjustments .val-slider {
+    margin-top: 14px;
+    margin-bottom: 55px;
+}
+
+.tab-adjustments .adj-slider .marker {
     position: absolute;
     left: 50%;
     top: 0px;
-    height: 10px;
+    height: 14px;
     width: 5px;
     margin-left: -3px;
     border-radius: 3px;
     z-index: 1000;
 }
 
-.tab-adjustments .adjustmentBody .adjSliders .noUi-horizontal .noUi-handle {
+.tab-adjustments .adj-slider .noUi-connect {
+    background: var(--accent);
+}
+
+.tab-adjustments .adj-slider .noUi-horizontal .noUi-handle {
     background: var(--sideBackground);
     border-color: var(--subtleAccent);
     border-radius: 15px;
     box-shadow: none;
-    width: 24px;
-    height: 24px;
-    left: -16px;
-    top: -5px;
+    width: 22px;
+    height: 22px;
+    left: -11px;
+    top: -4px;
 }
 
-.tab-adjustments .adjustmentBody .adjSliders .noUi-handle:before,
-.tab-adjustments .adjustmentBody .adjSliders .noUi-handle:after {
+.tab-adjustments .adj-slider .noUi-handle:before,
+.tab-adjustments .adj-slider .noUi-handle:after {
     border-color: var(--subtleAccent);
     background-color: var(--subtleAccent);
-    height: 12px;
+    height: 14px;
     width: 4px;
-    top: 11px;
-    left: 9px;
+    top: 3px;
+    left: 8px;
     border: 1px;
     border-radius: 2px;
 }
 
-.tab-adjustments .adjustmentBody .adjSliders .enaMarker {
+.tab-adjustments .adj-slider .enaMarker {
     background: rgba(255, 0, 0, 0.6);
 }
 
-.tab-adjustments .adjustmentBody .adjSliders .adjMarker {
+.tab-adjustments .adj-slider .adjMarker {
     background: rgba(0, 255, 0, 0.6);
 }
 
