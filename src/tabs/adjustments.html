@@ -43,13 +43,13 @@
             <tr>
                 <td rowspan="2" class="adjType">
                     <div class="adjTypeOption">
-                        <input type="radio" id="adjOff" class="adjType" /><span i18n="adjustmentsTypeOff">Off</span>
+                        <input type="radio" id="adjOff" class="adjTypeInput"/><span i18n="adjustmentsTypeOff">Off</span>
                     </div>
                     <div class="adjTypeOption">
-                        <input type="radio" id="adjMapped" class="adjType" /><span i18n="adjustmentsTypeMapped">Mapped</span>
+                        <input type="radio" id="adjMapped" class="adjTypeInput"/><span i18n="adjustmentsTypeMapped">Mapped</span>
                     </div>
                     <div class="adjTypeOption">
-                        <input type="radio" id="adjStepped" class="adjType" /><span i18n="adjustmentsTypeStepped">Stepped</span>
+                        <input type="radio" id="adjStepped" class="adjTypeInput"/><span i18n="adjustmentsTypeStepped">Stepped</span>
                     </div>
                 </td>
                 <td class="adjChannels">
@@ -64,10 +64,10 @@
                     </div>
                 </td>
                 <td class="adjRanges">
-                    <div>
-                        <span class="rangeLabel" i18n="adjustmentRangeEnable">Ena:</span>
+                    <div class="adjRangeLine">
+                        <span class="range-label" i18n="adjustmentRangeEnable"></span>
                         <input type="number" class="lowerLimitValue range-input input-element"/>
-                        <span class="dash">-</span>
+                        <span class="range-dash">-</span>
                         <input type="number" class="upperLimitValue range-input input-element"/>
                     </div>
                 </td>
@@ -88,16 +88,16 @@
                     </div>
                 </td>
                 <td class="adjRanges">
-                    <div>
-                        <span class="rangeLabel" i18n="adjustmentRangeInc">Inc:</span>
+                    <div class="adjRangeLine">
+                        <span class="range-label" i18n="adjustmentRangeInc"></span>
                         <input type="number" class="lowerIncValue range-input input-element"/>
-                        <span class="dash">-</span>
+                        <span class="range-dash">-</span>
                         <input type="number" class="upperIncValue range-input input-element"/>
                     </div>
-                    <div>
-                        <span class="rangeLabel" i18n="adjustmentRangeDec">Dec:</span>
+                    <div class="adjRangeLine">
+                        <span class="range-label" i18n="adjustmentRangeDec"></span>
                         <input type="number" class="lowerDecValue range-input input-element"/>
-                        <span class="dash">-</span>
+                        <span class="range-dash">-</span>
                         <input type="number" class="upperDecValue range-input input-element"/>
                     </div>
                 </td>
@@ -109,18 +109,19 @@
                     </select>
                 </td>
                 <td class="adjSliders">
-                    <div class="value-slider pips-channel-range">
+                    <div class="channel-slider val-slider pips-channel-range">
                         <div class="marker valMarker"></div>
                     </div>
                 </td>
                 <td class="adjRanges">
-                    <div>
-                        <span class="rangeLabel" i18n="adjustmentRangeResult">Val:</span>
+                    <div class="adjRangeLine">
+                        <span class="range-label" i18n="adjustmentRangeValue"></span>
                         <input type="number" class="functionMinValue range-input input-element"/>
-                        <span class="dash">-</span>
+                        <span class="range-dash">-</span>
                         <input type="number" class="functionMaxValue range-input input-element"/>
                     </div>
-                    <div>
+                    <div class="adjRangeLine">
+                        <span class="range-label" i18n="adjustmentRangeStep"></span>
                         <input type="number" class="functionStepSize range-input input-element" min="0" />
                     </div>
                 </td>
