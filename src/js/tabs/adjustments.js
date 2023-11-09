@@ -159,10 +159,10 @@ TABS.adjustments.initialize = function (callback) {
             decValues = [adjRange.adjRange1.start, adjRange.adjRange1.end];
         }
 
-        if (false) {
         const enaSlider = adjBody.find('.ena-slider');
         const incSlider = adjBody.find('.inc-slider');
         const decSlider = adjBody.find('.dec-slider');
+        const valSlider = adjBody.find('.val-slider');
 
         enaSlider.noUiSlider({
             start: enaValues,
@@ -200,6 +200,18 @@ TABS.adjustments.initialize = function (callback) {
             })
         });
 
+        valSlider.noUiSlider({
+            start: decValues,
+            behaviour: 'snap-drag',
+            margin: 2,
+            step: 1,
+            connect: true,
+            range: channelRange,
+            format: wNumb({
+                decimals: 0
+            })
+        });
+
         enaSlider.Link('lower').to(adjBody.find('.lowerLimitValue'));
         enaSlider.Link('upper').to(adjBody.find('.upperLimitValue'));
         incSlider.Link('lower').to(adjBody.find('.lowerIncValue'));
@@ -207,13 +219,13 @@ TABS.adjustments.initialize = function (callback) {
         decSlider.Link('lower').to(adjBody.find('.lowerDecValue'));
         decSlider.Link('upper').to(adjBody.find('.upperDecValue'));
 
+        if (false) {
         adjBody.find(".pips-channel-range").noUiSlider_pips({
             mode: 'values',
             values: [ 900, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2100 ],
             density: 4,
             stepped: true
         });
-        }
 
         // Element visibility
         const enableElement = adjBody.find('input.enable');
@@ -237,6 +249,8 @@ TABS.adjustments.initialize = function (callback) {
 
         const isEnabled = (adjRange?.enaRange?.start < adjRange?.enaRange?.end);
         enableElement.prop("checked", isEnabled).change();
+
+        }
 
         return adjBody;
     }

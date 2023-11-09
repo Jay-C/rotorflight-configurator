@@ -33,10 +33,15 @@
 }
 
 .tab-adjustments .adjustments tbody:nth-child(odd) {
-    background-color: #f4f4f4;
+    background-color: #f0f0f0;
 }
 
-.tab-adjustments .adjustments tbody tr:last-child td {
+.tab-adjustments .adjustments tbody tr:nth-child(2) td {
+    border-top: 1px solid white;
+}
+
+.tab-adjustments .adjustments tbody tr:nth-child(3) td {
+    border-top: 1px solid white;
     border-bottom: 1px solid var(--subtleAccent);
 }
 
@@ -55,6 +60,27 @@
 .tab-adjustments .adjustmentBody td.adjType {
     width: 50px;
     height: 50px;
+    padding: 10px;
+}
+
+.tab-adjustments .adjustmentBody .adjTypeOption {
+    padding: 3px 0;
+}
+
+.tab-adjustments .adjustmentBody .adjTypeOption input {
+    vertical-align: middle;
+    padding: 0 10px;
+}
+
+.tab-adjustments .adjustmentBody .adjTypeOption span {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 5px;
+}
+
+.tab-adjustments .adjustmentBody td.adjFunction {
+    padding: 0 10px 0 10px;
+    vertical-align: middle;
 }
 
 .tab-adjustments .adjustmentBody td.adjChannels {
@@ -62,29 +88,42 @@
 }
 
 .tab-adjustments .adjustmentBody td.adjRanges {
-    width: 150px;
+    width: 210px;
+}
+
+.tab-adjustments .adjustmentBody .adjRangeLine {
+    margin: 3px 5px 3px 10px;
 }
 
 .tab-adjustments .adjustmentBody .range-input {
     width: 60px;
+    height: 18px;
+    font-size: 12px;
+    text-align: right;
 }
 
-.tab-adjustments .adjustmentBody .rangeSliders {
-    width: 60%;
+.tab-adjustments .adjustmentBody .range-label {
+    display: inline-block;
+    width: 50px;
 }
 
-.tab-adjustments .adjustmentBody .rangeSliders .channel-slider {
-    margin-top: 5px;
+.tab-adjustments .adjustmentBody .range-dash {
+    display: inline-block;
+    padding: 0 3px;
+}
+
+.tab-adjustments .adjustmentBody .adjSliders .channel-slider {
+    margin-top: 10px;
     margin-bottom: 10px;
-    height: 13px;
+    height: 16px;
     marker-start: 10px;
 }
 
-.tab-adjustments .adjustmentBody .rangeSliders .pips-channel-range {
+.tab-adjustments .adjustmentBody .adjSliders .pips-channel-range {
     margin-bottom: 35px;
 }
 
-.tab-adjustments .adjustmentBody .rangeSliders .marker {
+.tab-adjustments .adjustmentBody .adjSliders .marker {
     position: absolute;
     left: 50%;
     top: 0px;
@@ -95,34 +134,34 @@
     z-index: 1000;
 }
 
-.tab-adjustments .adjustmentBody .rangeSliders .noUi-horizontal .noUi-handle {
+.tab-adjustments .adjustmentBody .adjSliders .noUi-horizontal .noUi-handle {
     background: var(--sideBackground);
     border-color: var(--subtleAccent);
     border-radius: 15px;
     box-shadow: none;
-    width: 20px;
-    height: 20px;
-    left: -14px;
+    width: 24px;
+    height: 24px;
+    left: -16px;
     top: -5px;
 }
 
-.tab-adjustments .adjustmentBody .rangeSliders .noUi-handle:before,
-.tab-adjustments .adjustmentBody .rangeSliders .noUi-handle:after {
+.tab-adjustments .adjustmentBody .adjSliders .noUi-handle:before,
+.tab-adjustments .adjustmentBody .adjSliders .noUi-handle:after {
     border-color: var(--subtleAccent);
     background-color: var(--subtleAccent);
-    height: 8px;
+    height: 12px;
     width: 4px;
     top: 11px;
-    left: 7px;
+    left: 9px;
     border: 1px;
     border-radius: 2px;
 }
 
-.tab-adjustments .adjustmentBody .rangeSliders .enaMarker {
+.tab-adjustments .adjustmentBody .adjSliders .enaMarker {
     background: rgba(255, 0, 0, 0.6);
 }
 
-.tab-adjustments .adjustmentBody .rangeSliders .adjMarker {
+.tab-adjustments .adjustmentBody .adjSliders .adjMarker {
     background: rgba(0, 255, 0, 0.6);
 }
 
@@ -132,7 +171,7 @@
         overflow: auto;
     }
 
-    .tab-adjustments .rangeSliders {
+    .tab-adjustments .adjSliders {
         min-width: 300px;
     }
 }
