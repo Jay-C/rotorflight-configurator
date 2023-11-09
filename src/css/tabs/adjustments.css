@@ -85,12 +85,19 @@
     padding: 12px 15px;
 }
 
+.tab-adjustments .adjustmentBody td.adjSliders {
+    padding: 10px;
+    vertical-align: top;
+}
+
 .tab-adjustments .adjustmentBody td.adjRanges {
     width: 210px;
+    padding: 12px;
+    vertical-align: top;
 }
 
 .tab-adjustments .adjustmentBody .adjRangeLine {
-    margin: 3px 5px 3px 10px;
+    margin: 3px 5px;
 }
 
 .tab-adjustments .adjustmentBody .range-input {
@@ -119,53 +126,53 @@
 }
 
 .tab-adjustments .ena-slider {
-    margin-top: 14px;
-    margin-bottom: 55px;
+    margin-top: 5px;
+    margin-bottom: 45px;
 }
 
 .tab-adjustments .inc-slider {
-    margin-top: 14px;
-    margin-bottom: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .tab-adjustments .dec-slider {
-    margin-top: 14px;
-    margin-bottom: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .tab-adjustments .val-slider {
-    margin-top: 14px;
-    margin-bottom: 55px;
+    margin-top: 5px;
+    margin-bottom: 45px;
 }
 
-.tab-adjustments .adj-slider .marker {
+.tab-adjustments .adjSliders .marker {
     position: absolute;
     left: 50%;
     top: 0px;
     height: 14px;
     width: 5px;
     margin-left: -3px;
-    border-radius: 3px;
+    border-radius: 2px;
     z-index: 1000;
 }
 
-.tab-adjustments .adj-slider .noUi-connect {
+.tab-adjustments .adjSliders .noUi-connect {
     background: var(--accent);
 }
 
-.tab-adjustments .adj-slider .noUi-horizontal .noUi-handle {
+.tab-adjustments .adjSliders .noUi-horizontal .noUi-handle {
     background: var(--sideBackground);
     border-color: var(--subtleAccent);
     border-radius: 15px;
     box-shadow: none;
-    width: 22px;
-    height: 22px;
+    width: 28px;
+    height: 28px;
     left: -14px;
     top: -7px;
 }
 
-.tab-adjustments .adj-slider .noUi-handle:before,
-.tab-adjustments .adj-slider .noUi-handle:after {
+.tab-adjustments .adjSliders .noUi-handle:before,
+.tab-adjustments .adjSliders .noUi-handle:after {
     border-color: var(--subtleAccent);
     background-color: var(--subtleAccent);
     height: 14px;
@@ -176,11 +183,11 @@
     border-radius: 2px;
 }
 
-.tab-adjustments .adj-slider .enaMarker {
+.tab-adjustments .adjSliders .enaMarker {
     background: rgba(255, 0, 0, 0.6);
 }
 
-.tab-adjustments .adj-slider .adjMarker {
+.tab-adjustments .adjSliders .adjMarker {
     background: rgba(0, 255, 0, 0.6);
 }
 
