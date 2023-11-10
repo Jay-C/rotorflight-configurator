@@ -43,20 +43,22 @@
             <tr>
                 <td rowspan="2" class="adjType">
                     <div class="adjTypeOption">
-                        <input type="radio" id="adjOff" class="adjTypeInput"/><span i18n="adjustmentsTypeOff">Off</span>
+                        <input type="radio" id="adjOff" class="adjTypeOptionInput"/><div class="adjTypeOptionLabel" i18n="adjustmentsTypeOff">Off</div>
                     </div>
                     <div class="adjTypeOption">
-                        <input type="radio" id="adjMapped" class="adjTypeInput"/><span i18n="adjustmentsTypeMapped">Mapped</span>
+                        <input type="radio" id="adjMapped" class="adjTypeOptionInput"/><div class="adjTypeOptionLabel" i18n="adjustmentsTypeMapped">Mapped</div>
                     </div>
                     <div class="adjTypeOption">
-                        <input type="radio" id="adjStepped" class="adjTypeInput"/><span i18n="adjustmentsTypeStepped">Stepped</span>
+                        <input type="radio" id="adjStepped" class="adjTypeOptionInput"/><div class="adjTypeOptionLabel" i18n="adjustmentsTypeStepped">Stepped</div>
                     </div>
                 </td>
                 <td class="adjChannels">
+                    <div class="channel-label" i18n="adjustmentEnableChannel"></div>
                     <div>
                         <select class="enaChannel channel input-element">
                         </select>
                     </div>
+                    <div class="channel-value">215</div>
                 </td>
                 <td class="adjSliders">
                     <div class="adj-slider ena-slider pips-channel-range">
@@ -65,39 +67,40 @@
                 </td>
                 <td class="adjRanges">
                     <div class="adjRangeLine">
-                        <span class="range-label" i18n="adjustmentRangeEnable"></span>
+                        <!--div class="range-label" i18n="adjustmentRangeEnable"></div-->
                         <input type="number" class="lowerLimitValue range-input input-element"/>
-                        <span class="range-dash">-</span>
+                        <div class="range-dash">-</div>
                         <input type="number" class="upperLimitValue range-input input-element"/>
                     </div>
                 </td>
             </tr>
             <tr>
                 <td class="adjChannels">
+                    <div class="channel-label" i18n="adjustmentValueChannel"></div>
                     <div>
                         <select class="channel adjChannel input-element">
                         </select>
                     </div>
+                    <div class="channel-value">215</div>
                 </td>
                 <td class="adjSliders">
                     <div class="adj-slider inc-slider">
-                        <div class="marker adjMarker"></div>
                     </div>
-                    <div class="adj-slider dec-slider">
+                    <div class="adj-slider dec-slider pips-channel-range">
                         <div class="marker adjMarker"></div>
                     </div>
                 </td>
                 <td class="adjRanges">
                     <div class="adjRangeLine">
-                        <span class="range-label" i18n="adjustmentRangeInc"></span>
+                        <!--div class="range-label" i18n="adjustmentRangeInc"></div-->
                         <input type="number" class="lowerIncValue range-input input-element"/>
-                        <span class="range-dash">-</span>
+                        <div class="range-dash">-</div>
                         <input type="number" class="upperIncValue range-input input-element"/>
                     </div>
                     <div class="adjRangeLine">
-                        <span class="range-label" i18n="adjustmentRangeDec"></span>
+                        <!--div class="range-label" i18n="adjustmentRangeDec"></div-->
                         <input type="number" class="lowerDecValue range-input input-element"/>
-                        <span class="range-dash">-</span>
+                        <div class="range-dash">-</div>
                         <input type="number" class="upperDecValue range-input input-element"/>
                     </div>
                 </td>
@@ -107,6 +110,10 @@
                     <select class="function input-element">
                         <!--  Generated values go here -->
                     </select>
+                    <div class="value-line">
+                        <div class="value-label" i18n="adjustmentFunctionValue"></div>
+                        <div class="function-value">215</div>
+                    </div>
                 </td>
                 <td class="adjSliders">
                     <div class="adj-slider val-slider pips-channel-range">
@@ -115,13 +122,13 @@
                 </td>
                 <td class="adjRanges">
                     <div class="adjRangeLine">
-                        <span class="range-label" i18n="adjustmentRangeValue"></span>
+                        <!--div class="range-label" i18n="adjustmentRangeValue"></div-->
                         <input type="number" class="functionMinValue range-input input-element"/>
-                        <span class="range-dash">-</span>
+                        <div class="range-dash">-</div>
                         <input type="number" class="functionMaxValue range-input input-element"/>
                     </div>
-                    <div class="adjRangeLine">
-                        <span class="range-label" i18n="adjustmentRangeStep"></span>
+                    <div class="adjRangeLine adjRangeStep">
+                        <div class="step-label" i18n="adjustmentRangeStep"></div>
                         <input type="number" class="functionStepSize range-input input-element" min="0" />
                     </div>
                 </td>

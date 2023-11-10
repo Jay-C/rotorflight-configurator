@@ -38,7 +38,7 @@
 
 .tab-adjustments .adjustments tbody tr:nth-child(3) td {
     border-top: 1px solid white;
-    border-bottom: 1px solid var(--subtleAccent);
+    border-bottom: 2px solid var(--subtleAccent);
 }
 
 .tab-adjustments .adjustmentBody select {
@@ -47,14 +47,27 @@
     padding: 1px 0;
 }
 
+.tab-adjustments .adjustmentBody select.channel {
+    width: 100%;
+}
+
+.tab-adjustments .adjustmentBody select.function {
+    width: 100%;
+}
+
 .tab-adjustments .adjustmentBody input {
     border: 1px solid var(--subtleAccent);
     border-radius: 3px;
     text-align: right;
 }
 
+
+.tab-adjustments .adjustmentBody td {
+    vertical-align: top;
+}
+
 .tab-adjustments .adjustmentBody td.adjType {
-    width: 50px;
+    width: 75px;
     height: 50px;
     padding: 15px;
     border-right: 1px solid white;
@@ -64,40 +77,39 @@
     padding: 3px 0;
 }
 
-.tab-adjustments .adjustmentBody .adjTypeOption input {
+.tab-adjustments .adjustmentBody .adjTypeOptonInput {
     vertical-align: middle;
     padding: 0 10px;
 }
 
-.tab-adjustments .adjustmentBody .adjTypeOption span {
-    display: inline-block;
+.tab-adjustments .adjustmentBody .adjTypeOptionLabel {
     vertical-align: middle;
+    display: inline-block;
     padding: 0 5px;
 }
 
 .tab-adjustments .adjustmentBody td.adjFunction {
     padding: 12px 15px;
-    vertical-align: top;
 }
 
 .tab-adjustments .adjustmentBody td.adjChannels {
     width: 80px;
-    padding: 12px 15px;
+    padding: 5px 15px;
 }
 
 .tab-adjustments .adjustmentBody td.adjSliders {
-    padding: 10px;
-    vertical-align: top;
+    padding: 12px 8px;
 }
 
 .tab-adjustments .adjustmentBody td.adjRanges {
-    width: 210px;
-    padding: 12px;
-    vertical-align: top;
+    width: 145px;
+    padding: 12px 8px;
 }
 
 .tab-adjustments .adjustmentBody .adjRangeLine {
-    margin: 3px 5px;
+    float: right;
+    margin-top: 3px;
+    margin-bottom: 8px;
 }
 
 .tab-adjustments .adjustmentBody .range-input {
@@ -107,14 +119,56 @@
     text-align: right;
 }
 
-.tab-adjustments .adjustmentBody .range-label {
+.tab-adjustments .adjustmentBody .step-label {
     display: inline-block;
-    width: 50px;
+    text-align: right;
+    margin-right: 15px;
 }
 
 .tab-adjustments .adjustmentBody .range-dash {
     display: inline-block;
     padding: 0 3px;
+}
+
+.tab-adjustments .adjustmentBody .channel-label {
+    margin: 3px 1px 6px 1px;
+}
+
+.tab-adjustments .adjustmentBody .value-line {
+    margin: 5px 0;
+    float: right;
+}
+
+.tab-adjustments .adjustmentBody .value-label {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.tab-adjustments .adjustmentBody .function-value {
+    width: 90px;
+    padding: 2px 4px;
+    text-align: right;
+    font-size: 13px;
+    font-family: monospace;
+    color: #f0f0f0;
+    background: #505050;
+    border: 1px;
+    border-radius: 3px;
+    display: inline-block;
+}
+
+.tab-adjustments .adjustmentBody .channel-value {
+    width: 90px;
+    margin: 5px 0;
+    padding: 1px 3px;
+    text-align: right;
+    font-size: 14px;
+    font-family: monospace;
+    color: #f0f0f0;
+    background: #404040;
+    border: 1px;
+    border-radius: 3px;
+    display: inline-block;
 }
 
 .tab-adjustments .pips-channel-range {
@@ -127,30 +181,30 @@
 
 .tab-adjustments .ena-slider {
     margin-top: 5px;
-    margin-bottom: 45px;
+    margin-bottom: 35px;
 }
 
 .tab-adjustments .inc-slider {
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .tab-adjustments .dec-slider {
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 35px;
 }
 
 .tab-adjustments .val-slider {
     margin-top: 5px;
-    margin-bottom: 45px;
+    margin-bottom: 35px;
 }
 
 .tab-adjustments .adjSliders .marker {
     position: absolute;
     left: 50%;
-    top: 0px;
-    height: 14px;
-    width: 5px;
+    top: 22px;
+    height: 12px;
+    width: 6px;
     margin-left: -3px;
     border-radius: 2px;
     z-index: 1000;
@@ -171,13 +225,21 @@
     top: -7px;
 }
 
+.tab-adjustments .adjSliders .noUi-marker-large {
+    height: 12px;
+}
+
+.tab-adjustments .adjSliders .noUi-value-horizontal {
+    padding-top: 15px;
+}
+
 .tab-adjustments .adjSliders .noUi-handle:before,
 .tab-adjustments .adjSliders .noUi-handle:after {
     border-color: var(--subtleAccent);
     background-color: var(--subtleAccent);
-    height: 14px;
+    height: 10px;
     width: 3px;
-    top: 6px;
+    top: 17px;
     left: 11.5px;
     border: 1px;
     border-radius: 2px;
@@ -189,6 +251,10 @@
 
 .tab-adjustments .adjSliders .adjMarker {
     background: rgba(0, 255, 0, 0.6);
+}
+
+.tab-adjustments .adjSliders .valMarker {
+    background: rgba(0, 0, 255, 0.6);
 }
 
 
