@@ -423,6 +423,8 @@ TABS.adjustments.initialize = function (callback) {
             setDirty();
         });
 
+        if (false) {
+
         // enable data pulling
         GUI.interval_add('rc_pull', function () {
             MSP.send_message(MSPCodes.MSP_RC, false, false, update_ui);
@@ -432,6 +434,8 @@ TABS.adjustments.initialize = function (callback) {
         GUI.interval_add('status_pull', function () {
             MSP.send_message(MSPCodes.MSP_STATUS);
         }, 500, true);
+
+        }
 
         GUI.content_ready(callback);
     }
