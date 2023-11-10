@@ -144,7 +144,7 @@
     margin-right: 15px;
 }
 
-.tab-adjustments .adjustmentBody .function-value {
+.tab-adjustments .adjustmentBody .value-box {
     width: 90px;
     padding: 2px 4px;
     text-align: right;
@@ -157,18 +157,12 @@
     display: inline-block;
 }
 
+.tab-adjustments .adjustmentBody .function-value {
+    margin: 0;
+}
+
 .tab-adjustments .adjustmentBody .channel-value {
-    width: 90px;
     margin: 5px 0;
-    padding: 1px 3px;
-    text-align: right;
-    font-size: 14px;
-    font-family: monospace;
-    color: #f0f0f0;
-    background: #404040;
-    border: 1px;
-    border-radius: 3px;
-    display: inline-block;
 }
 
 .tab-adjustments .pips-channel-range {
