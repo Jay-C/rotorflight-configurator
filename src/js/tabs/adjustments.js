@@ -115,10 +115,31 @@ TABS.adjustments.initialize = function (callback) {
         const adjBody = $('#tab-adjustments-templates .adjustmentBody').clone();
         const adjRange = FC.ADJUSTMENT_RANGES[adjustmentIndex];
 
-        adjBody.attr('id', 'adjustment-' + adjustmentIndex);
-        adjBody.data('index', adjustmentIndex);
-
         adjBody.find('.adjType').attr('name', `adjType${adjustmentIndex}`);
+
+        const enaMinInput = adjBody.find('.lowerEnaValue');
+        enaMinInput.val(adjRange.enaRange.start);
+
+        const enaMaxInput = adjBody.find('.upperEnaValue');
+        enaMaxInput.val(adjRange.enaRange.end);
+
+        const decMinInput = adjBody.find('.lowerDecValue');
+        decMinInput.val(adjRange.adjRange1.start);
+
+        const decMaxInput = adjBody.find('.upperDecValue');
+        decMaxInput.val(adjRange.adjRange1.end);
+
+        const incMinInput = adjBody.find('.lowerIncValue');
+        incMinInput.val(adjRange.adjRange2.start);
+
+        const incMaxInput = adjBody.find('.upperIncValue');
+        incMaxInput.val(adjRange.adjRange2.end);
+
+        const funcMinInput = adjBody.find('.functionMinValue');
+        funcMinInput.val(adjRange.adjMin);
+
+        const funcMaxInput = adjBody.find('.functionMaxValue');
+        funcMaxInput.val(adjRange.adjMax);
 
         const enaChannelList = adjBody.find('select.enaChannel');
         enaChannelList.val(adjRange.enaChannel);
@@ -138,20 +159,19 @@ TABS.adjustments.initialize = function (callback) {
         const maxValueElem = adjBody.find('input.functionMaxValue');
         maxValueElem.val(adjRange.adjMax);
 
-        // configure ranges
+        const enaSlider = adjBody.find('.ena-slider');
+        const incSlider = adjBody.find('.inc-slider');
+        const decSlider = adjBody.find('.dec-slider');
+        const valSlider = adjBody.find('.val-slider');
+
         const channelRange = {
-                'min': [  900 ],
-                'max': [ 2100 ]
-            };
+            'min': [  900 ],
+            'max': [ 2100 ]
+        };
 
         let enaValues = [ 1300, 1700 ];
         if (adjRange.enaRange != undefined) {
             enaValues = [adjRange.enaRange.start, adjRange.enaRange.end];
-        }
-
-        let incValues = [ 1800, 1900 ];
-        if (adjRange.adjRange2 != undefined) {
-            incValues = [adjRange.adjRange2.start, adjRange.adjRange2.end];
         }
 
         let decValues = [ 1100, 1200 ];
@@ -159,10 +179,10 @@ TABS.adjustments.initialize = function (callback) {
             decValues = [adjRange.adjRange1.start, adjRange.adjRange1.end];
         }
 
-        const enaSlider = adjBody.find('.ena-slider');
-        const incSlider = adjBody.find('.inc-slider');
-        const decSlider = adjBody.find('.dec-slider');
-        const valSlider = adjBody.find('.val-slider');
+        let incValues = [ 1800, 1900 ];
+        if (adjRange.adjRange2 != undefined) {
+            incValues = [adjRange.adjRange2.start, adjRange.adjRange2.end];
+        }
 
         enaSlider.noUiSlider({
             start: enaValues,
@@ -212,12 +232,14 @@ TABS.adjustments.initialize = function (callback) {
             })
         });
 
-        enaSlider.Link('lower').to(adjBody.find('.lowerLimitValue'));
-        enaSlider.Link('upper').to(adjBody.find('.upperLimitValue'));
+        enaSlider.Link('lower').to(adjBody.find('.lowerEnaValue'));
+        enaSlider.Link('upper').to(adjBody.find('.upperEnaValue'));
         incSlider.Link('lower').to(adjBody.find('.lowerIncValue'));
         incSlider.Link('upper').to(adjBody.find('.upperIncValue'));
         decSlider.Link('lower').to(adjBody.find('.lowerDecValue'));
         decSlider.Link('upper').to(adjBody.find('.upperDecValue'));
+        valSlider.Link('lower').to(adjBody.find('.functionMinValue'));
+        valSlider.Link('upper').to(adjBody.find('.functionMaxValue'));
 
         adjBody.find(".pips-channel-range").noUiSlider_pips({
             mode: 'values',
@@ -225,6 +247,16 @@ TABS.adjustments.initialize = function (callback) {
             density: 4,
             stepped: true
         });
+
+        function enaChange() {
+            const enaMin = enaMinInput.val();
+            const enaMax = enaMaxInput.val();
+            enaSlider.val([enaMin, enaMax]);
+        }
+
+        enaMinInput.change(enaChange);
+        enaMaxInput.change(enaChange);
+
 
         if (false) {
             // Element visibility
