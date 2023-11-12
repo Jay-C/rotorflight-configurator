@@ -67,7 +67,6 @@
                 </td>
                 <td class="adjRanges">
                     <div class="adjRangeLine">
-                        <!--div class="range-label" i18n="adjustmentRangeEnable"></div-->
                         <input type="number" class="lowerEnaValue range-input input-element" min="875" max="2125" step="5"/>
                         <div class="range-dash">-</div>
                         <input type="number" class="upperEnaValue range-input input-element" min="875" max="2125" step="5"/>
@@ -84,21 +83,19 @@
                     <div class="value-box channel-value adj-channel-value">215</div>
                 </td>
                 <td class="adjSliders">
-                    <div class="adj-slider inc-slider">
+                    <div class="adj-slider inc-slider stepped-only">
                     </div>
                     <div class="adj-slider dec-slider pips-channel-range">
                         <div class="marker adjMarker"></div>
                     </div>
                 </td>
                 <td class="adjRanges">
-                    <div class="adjRangeLine">
-                        <!--div class="range-label" i18n="adjustmentRangeInc"></div-->
+                    <div class="adjRangeLine stepped-only">
                         <input type="number" class="lowerIncValue range-input input-element" min="875" max="2125" step="5"/>
                         <div class="range-dash">-</div>
                         <input type="number" class="upperIncValue range-input input-element" min="875" max="2125" step="5"/>
                     </div>
                     <div class="adjRangeLine">
-                        <!--div class="range-label" i18n="adjustmentRangeDec"></div-->
                         <input type="number" class="lowerDecValue range-input input-element" min="875" max="2125" step="5"/>
                         <div class="range-dash">-</div>
                         <input type="number" class="upperDecValue range-input input-element" min="875" max="2125" step="5"/>
@@ -122,12 +119,11 @@
                 </td>
                 <td class="adjRanges">
                     <div class="adjRangeLine">
-                        <!--div class="range-label" i18n="adjustmentRangeValue"></div-->
                         <input type="number" class="functionMinValue range-input input-element"/>
                         <div class="range-dash">-</div>
                         <input type="number" class="functionMaxValue range-input input-element"/>
                     </div>
-                    <div class="adjRangeLine adjRangeStep">
+                    <div class="adjRangeLine adjRangeStep stepped-only">
                         <div class="step-label" i18n="adjustmentRangeStep"></div>
                         <input type="number" class="functionStepSize range-input input-element" min="0" />
                     </div>
