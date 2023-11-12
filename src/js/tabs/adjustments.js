@@ -216,6 +216,9 @@ TABS.adjustments.initialize = function (callback) {
         const funcStepInput = adjBody.find('.functionStepSize');
         funcStepInput.val(adjRange.adjStep);
 
+        const funcSelect = adjBody.find('.function');
+        funcSelect.val(adjRange.adjFunction);
+
         enaSlider.on('slide', function() {
             const value = enaSlider.val();
             adjRange.enaRange.start = value[0];
@@ -284,24 +287,49 @@ TABS.adjustments.initialize = function (callback) {
             adjRange.adjStep = funcStepInput.val();
         });
 
+        var adjType = 0;
+        if (adjRange.adjFunction > 0) {
+            if (adjRange.adjStep > 0) {
+                adjType = 2;
+            }
+            else {
+                adjType = 1;
+            }
+        }
+
         const adjOffElem = adjBody.find('#adjOff');
         const adjMappedElem = adjBody.find('#adjMapped');
         const adjSteppedElem = adjBody.find('#adjStepped');
 
-        function updateVisibility() {
+        adjOffElem.prop('checked', adjType == 0);
+        adjMappedElem.prop('checked', adjType == 1);
+        adjSteppedElem.prop('checked', adjType == 2);
+
+        function updateVisibility(initial) {
             const adjOff = adjOffElem.prop('checked');
             const adjMapped = adjMappedElem.prop('checked');
             const adjStepped = adjSteppedElem.prop('checked');
 
+            if (adjOff) {
+                adjBody.find('.adj-slider').attr("disabled", "disabled");
+                funcSelect.val(0);
+                adjBody.find('.marker').hide();
+            } else {
+                adjBody.find('.adj-slider').removeAttr("disabled");
+                adjBody.find('.marker').show();
+            }
+
+            if (adjMapped) {
+                funcStepInput.val(0).trigger('change');
+            }
+
             adjBody.find('.input-element').prop('disabled', adjOff);
             adjBody.find('.stepped-only').toggle(adjStepped);
-
-            if (adjOff)
-                adjBody.find('.adj-slider').attr("disabled", "disabled");
-            else
-                adjBody.find('.adj-slider').removeAttr("disabled");
+            adjBody.find('.mapped-only').toggle(adjMapped);
         }
         adjBody.find('.adjTypeOptionInput').on('change', updateVisibility);
+
+        updateVisibility(true);
 
         return adjBody;
     }
