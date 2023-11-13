@@ -319,10 +319,14 @@ TABS.adjustments.initialize = function (callback) {
         });
 
         function enaChange() {
+            const min = parseInt(enaMinInput.val()).clamp(self.AUX_MIN, self.AUX_MAX);
+            const max = parseInt(enaMaxInput.val()).clamp(min, self.AUX_MAX);
+            enaMinInput.val(min);
+            enaMaxInput.val(max);
+            enaSlider.val([min,max]);
             adjRange.dirty = true;
-            adjRange.enaRange.start = parseInt(enaMinInput.val());
-            adjRange.enaRange.end = parseInt(enaMaxInput.val());
-            enaSlider.val([adjRange.enaRange.start, adjRange.enaRange.end]);
+            adjRange.enaRange.start = min;
+            adjRange.enaRange.end   = max;
         }
         enaMinInput.on('change', enaChange);
         enaMaxInput.on('change', enaChange);
@@ -337,10 +341,14 @@ TABS.adjustments.initialize = function (callback) {
         });
 
         function decChange() {
+            const min = parseInt(decMinInput.val()).clamp(self.AUX_MIN, self.AUX_MAX);
+            const max = parseInt(decMaxInput.val()).clamp(min, self.AUX_MAX);
+            decMinInput.val(min);
+            decMaxInput.val(max);
+            decSlider.val([min,max]);
             adjRange.dirty = true;
-            adjRange.adjRange1.start = parseInt(decMinInput.val());
-            adjRange.adjRange1.end = parseInt(decMaxInput.val());
-            decSlider.val([adjRange.adjRange1.start, adjRange.adjRange1.end]);
+            adjRange.adjRange1.start = min;
+            adjRange.adjRange1.end   = max;
         }
         decMinInput.on('change', decChange);
         decMaxInput.on('change', decChange);
@@ -355,10 +363,14 @@ TABS.adjustments.initialize = function (callback) {
         });
 
         function incChange() {
+            const min = parseInt(incMinInput.val()).clamp(self.AUX_MIN, self.AUX_MAX);
+            const max = parseInt(incMaxInput.val()).clamp(min, self.AUX_MAX);
+            incMinInput.val(min);
+            incMaxInput.val(max);
+            incSlider.val([min,max]);
             adjRange.dirty = true;
-            adjRange.adjRange2.start = parseInt(incMinInput.val());
-            adjRange.adjRange2.end = parseInt(incMaxInput.val());
-            incSlider.val([adjRange.adjRange2.start, adjRange.adjRange2.end]);
+            adjRange.adjRange2.start = min;
+            adjRange.adjRange2.end   = max;
         }
         incMinInput.on('change', incChange);
         incMaxInput.on('change', incChange);
@@ -373,10 +385,14 @@ TABS.adjustments.initialize = function (callback) {
         });
 
         function valChange() {
+            const min = parseInt(funcMinInput.val()).clamp(self.AUX_MIN, self.AUX_MAX);
+            const max = parseInt(funcMaxInput.val()).clamp(min, self.AUX_MAX);
+            funcMinInput.val(min);
+            funcMaxInput.val(max);
+            valSlider.val([min,max]);
             adjRange.dirty = true;
-            adjRange.adjMin = parseInt(funcMinInput.val());
-            adjRange.adjMax = parseInt(funcMaxInput.val());
-            valSlider.val([adjRange.adjMin, adjRange.adjMax]);
+            adjRange.adjMin = min;
+            adjRange.adjMax = max;
         }
         funcMinInput.on('change', valChange);
         funcMaxInput.on('change', valChange);
