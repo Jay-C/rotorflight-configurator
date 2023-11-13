@@ -11,70 +11,70 @@ TABS.adjustments = {
     PRIMARY_CHANNEL_COUNT: 5,
 
     FUNCTIONS: [
-        'None',
-        'RateProfile',
-        'PIDProfile',
-        'LEDProfile',
-        'OSDProfile',
-        'PitchRate',
-        'RollRate',
-        'YawRate',
-        'PitchRCRate',
-        'RollRCRate',
-        'YawRCRate',
-        'PitchRCExpo',
-        'RollRCExpo',
-        'YawRCExpo',
-        'PitchP',
-        'PitchI',
-        'PitchD',
-        'PitchF',
-        'RollP',
-        'RollI',
-        'RollD',
-        'RollF',
-        'YawP',
-        'YawI',
-        'YawD',
-        'YawF',
-        'YawCWStopGain',
-        'YawCCWStopGain',
-        'YawCyclicFF',
-        'YawCollectiveFF',
-        'YawCollectiveDyn',
-        'YawCollectiveDecay',
-        'PitchCollectiveFF',
-        'PitchGyroCutoff',
-        'RollGyroCutoff',
-        'YawGyroCutoff',
-        'PitchDtermCutoff',
-        'RollDtermCutoff',
-        'YawDtermCutoff',
-        'RescueClimbCollective',
-        'RescueHoverCollective',
-        'RescueHoverAltitude',
-        'RescueAltP',
-        'RescueAltI',
-        'RescueAltD',
-        'AngleLevelGain',
-        'HorizonLevelGain',
-        'AcroTrainerGain',
-        'GovernorGain',
-        'GovernorP',
-        'GovernorI',
-        'GovernorD',
-        'GovernorF',
-        'GovernorTTA',
-        'GovernorCyclicFF',
-        'GovernorCollectiveFF',
-        'PitchB',
-        'RollB',
-        'YawB',
-        'PitchO',
-        'RollO',
-        'CrossCouplingGain',
-        'CrossCouplingRatio',
-        'CrossCouplingCutoff',
+        { id: 0,    name: 'None',                       min: 0,     max: 100,   },
+        { id: 1,    name: 'RateProfile',                min: 1,     max: 6,     },
+        { id: 2,    name: 'PIDProfile',                 min: 1,     max: 6,     },
+        { id: 3,    name: 'LEDProfile',                 min: 1,     max: 4,     },
+        { id: 4,    name: 'OSDProfile',                 min: 1,     max: 3,     },
+        { id: 5,    name: 'PitchRate',                  min: 0,     max: 255,   },
+        { id: 6,    name: 'RollRate',                   min: 0,     max: 255,   },
+        { id: 7,    name: 'YawRate',                    min: 0,     max: 255,   },
+        { id: 8,    name: 'PitchRCRate',                min: 0,     max: 255,   },
+        { id: 9,    name: 'RollRCRate',                 min: 0,     max: 255,   },
+        { id: 10,   name: 'YawRCRate',                  min: 0,     max: 255,   },
+        { id: 11,   name: 'PitchRCExpo',                min: 0,     max: 100,   },
+        { id: 12,   name: 'RollRCExpo',                 min: 0,     max: 100,   },
+        { id: 13,   name: 'YawRCExpo',                  min: 0,     max: 100,   },
+        { id: 14,   name: 'PitchP',                     min: 0,     max: 1000,  },
+        { id: 15,   name: 'PitchI',                     min: 0,     max: 1000,  },
+        { id: 16,   name: 'PitchD',                     min: 0,     max: 1000,  },
+        { id: 17,   name: 'PitchF',                     min: 0,     max: 1000,  },
+        { id: 18,   name: 'RollP',                      min: 0,     max: 1000,  },
+        { id: 19,   name: 'RollI',                      min: 0,     max: 1000,  },
+        { id: 20,   name: 'RollD',                      min: 0,     max: 1000,  },
+        { id: 21,   name: 'RollF',                      min: 0,     max: 1000,  },
+        { id: 22,   name: 'YawP',                       min: 0,     max: 1000,  },
+        { id: 23,   name: 'YawI',                       min: 0,     max: 1000,  },
+        { id: 24,   name: 'YawD',                       min: 0,     max: 1000,  },
+        { id: 25,   name: 'YawF',                       min: 0,     max: 1000,  },
+        { id: 26,   name: 'YawCWStopGain',              min: 25,    max: 250,   },
+        { id: 27,   name: 'YawCCWStopGain',             min: 25,    max: 250,   },
+        { id: 28,   name: 'YawCyclicFF',                min: 0,     max: 250,   },
+        { id: 29,   name: 'YawCollectiveFF',            min: 0,     max: 250,   },
+        { id: 30,   name: 'YawCollectiveDyn',           min: -125,  max: 125,   },
+        { id: 31,   name: 'YawCollectiveDecay',         min: 1,     max: 250,   },
+        { id: 32,   name: 'PitchCollectiveFF',          min: 0,     max: 250,   },
+        { id: 33,   name: 'PitchGyroCutoff',            min: 0,     max: 250,   },
+        { id: 34,   name: 'RollGyroCutoff',             min: 0,     max: 250,   },
+        { id: 35,   name: 'YawGyroCutoff',              min: 0,     max: 250,   },
+        { id: 36,   name: 'PitchDtermCutoff',           min: 0,     max: 250,   },
+        { id: 37,   name: 'RollDtermCutoff',            min: 0,     max: 250,   },
+        { id: 38,   name: 'YawDtermCutoff',             min: 0,     max: 250,   },
+        { id: 39,   name: 'RescueClimbCollective',      min: 0,     max: 1000,  },
+        { id: 40,   name: 'RescueHoverCollective',      min: 0,     max: 1000,  },
+        { id: 41,   name: 'RescueHoverAltitude',        min: 0,     max: 2500,  },
+        { id: 42,   name: 'RescueAltP',                 min: 0,     max: 1000,  },
+        { id: 43,   name: 'RescueAltI',                 min: 0,     max: 1000,  },
+        { id: 44,   name: 'RescueAltD',                 min: 0,     max: 1000,  },
+        { id: 45,   name: 'AngleLevelGain',             min: 0,     max: 200,   },
+        { id: 46,   name: 'HorizonLevelGain',           min: 0,     max: 200,   },
+        { id: 47,   name: 'AcroTrainerGain',            min: 25,    max: 255,   },
+        { id: 48,   name: 'GovernorGain',               min: 0,     max: 250,   },
+        { id: 49,   name: 'GovernorP',                  min: 0,     max: 250,   },
+        { id: 50,   name: 'GovernorI',                  min: 0,     max: 250,   },
+        { id: 51,   name: 'GovernorD',                  min: 0,     max: 250,   },
+        { id: 52,   name: 'GovernorF',                  min: 0,     max: 250,   },
+        { id: 53,   name: 'GovernorTTA',                min: 0,     max: 250,   },
+        { id: 54,   name: 'GovernorCyclicFF',           min: 0,     max: 250,   },
+        { id: 55,   name: 'GovernorCollectiveFF',       min: 0,     max: 250,   },
+        { id: 56,   name: 'PitchB',                     min: 0,     max: 1000,  },
+        { id: 57,   name: 'RollB',                      min: 0,     max: 1000,  },
+        { id: 58,   name: 'YawB',                       min: 0,     max: 1000,  },
+        { id: 59,   name: 'PitchO',                     min: 0,     max: 1000,  },
+        { id: 60,   name: 'RollO',                      min: 0,     max: 1000,  },
+        { id: 61,   name: 'CrossCouplingGain',          min: 0,     max: 250,   },
+        { id: 62,   name: 'CrossCouplingRatio',         min: 0,     max: 250,   },
+        { id: 63,   name: 'CrossCouplingCutoff',        min: 0,     max: 250,   },
     ],
 };
 
@@ -126,12 +126,17 @@ TABS.adjustments.initialize = function (callback) {
         }
     }
 
-    function newAdjustment(adjustmentIndex) {
+    function newAdjustment(index) {
 
         const adjBody = $('#tab-adjustments-templates .adjustmentBody').clone();
-        const adjRange = FC.ADJUSTMENT_RANGES[adjustmentIndex];
+        const adjRange = FC.ADJUSTMENT_RANGES[index];
 
         adjRange.dirty = false;
+
+        if (adjRange.adjFunction >= self.FUNCTIONS.length)
+            adjRange.adjFunction = 0;
+
+        const adjConfig = self.FUNCTIONS[adjRange.adjFunction];
 
         var adjType = 0;
         if (adjRange.adjFunction > 0) {
@@ -143,11 +148,11 @@ TABS.adjustments.initialize = function (callback) {
 
         adjBody.attr('data', adjRange);
 
-        adjBody.find('.adjTypeOptionInput').attr('name', `adjTypeOptionInput${adjustmentIndex}`);
+        adjBody.find('.adjTypeOptionInput').attr('name', `adjTypeOptionInput${index}`);
 
         const channelRange = {
-            'min': [ self.AUX_MIN ],
-            'max': [ self.AUX_MAX ]
+            'min': self.AUX_MIN,
+            'max': self.AUX_MAX,
         };
 
         const channelPips = [ 900, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2100 ];
@@ -193,17 +198,21 @@ TABS.adjustments.initialize = function (callback) {
             })
         });
 
-        valSlider.noUiSlider({
+        const valSliderConfig = {
             start: [ adjRange.adjMin, adjRange.adjMax ],
             behaviour: 'snap-drag',
             margin: 1,
             step: 1,
             connect: true,
-            range: channelRange,
+            range: {
+                'min': adjConfig.min,
+                'max': adjConfig.max,
+            },
             format: wNumb({
                 decimals: 0
             })
-        });
+        };
+        valSlider.noUiSlider(valSliderConfig);
 
         adjBody.find(".pips-channel-range").noUiSlider_pips({
             mode: 'values',
@@ -247,9 +256,6 @@ TABS.adjustments.initialize = function (callback) {
 
         const funcStepInput = adjBody.find('.functionStepSize');
         funcStepInput.val(adjRange.adjStep);
-
-        const funcSelect = adjBody.find('.function');
-        funcSelect.val(adjRange.adjFunction);
 
         enaSlider.on('slide', function() {
             const range = enaSlider.val();
@@ -328,9 +334,14 @@ TABS.adjustments.initialize = function (callback) {
             adjRange.adjStep = funcStepInput.val();
         });
 
-        funcSelect.on('change', function () {
+        adjFuncList.on('change', function () {
+            const index = adjFuncList.val();
+            const func = self.FUNCTIONS[index];
             adjRange.dirty = true;
-            adjRange.adjFunction = funcSelect.val();
+            adjRange.adjFunction = func.id;
+            valSliderConfig.range.min = func.min;
+            valSliderConfig.range.max = func.max;
+            valSlider.noUiSlider(valSliderConfig, true);
         });
 
         enaChannelList.on('change', function () {
@@ -354,8 +365,8 @@ TABS.adjustments.initialize = function (callback) {
 
             if (adjType == 0) {
                 adjBody.find('.adj-slider').attr("disabled", "disabled");
-                if (adjRange.function > 0) {
-                    funcSelect.val(0).trigger('change');
+                if (adjRange.adjFunction > 0) {
+                    adjFuncList.val(0).trigger('change');
                 }
             } else {
                 adjBody.find('.adj-slider').removeAttr("disabled");
@@ -394,8 +405,9 @@ TABS.adjustments.initialize = function (callback) {
 
     function initAdjustments() {
         const selectFunction = $('#tab-adjustments-templates .adjustmentBody select.function');
-        self.FUNCTIONS.forEach(function(value, key) {
-            selectFunction.append(new Option(i18n.getMessage('adjustmentsFunction' + value), key));
+        self.FUNCTIONS.forEach(function(fun, index) {
+            const opt = new Option(i18n.getMessage('adjustmentsFunction' + fun.name), index);
+            selectFunction.append(opt);
         });
 
         const enaChannel = $('#tab-adjustments-templates .adjustmentBody select.enaChannel');
