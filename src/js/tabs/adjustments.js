@@ -140,19 +140,15 @@ TABS.adjustments.initialize = function (callback) {
         const result = { active: false, value: 0, string: '-' };
         if (adjRange.adjType == 1) {
             if (adjRange.enaChannel == self.ALWAYS_ON_CH || isRange(adjRange.enaChannelPos, adjRange.enaRange)) {
-                if (isRange(adjRange.adjChannelPos,adjRange.adjRange1)) {
-                    const adjWidth = adjRange.adjMax - adjRange.adjMin;
-                    const chWidth = adjRange.adjRange1.end - adjRange.adjRange1.start;
-                    const chMargin = Math.floor(chWidth / adjWidth / 2);
-                    const chStart = adjRange.adjRange1.start - chMargin;
-                    const chEnd = adjRange.adjRange1.end + chMargin;
-                    if (adjRange.adjChannelPos > chStart && adjRange.adjChannelPos < chEnd) {
-                        const percent = (adjRange.adjChannelPos - chStart) / chWidth;
-                        result.value = Math.floor(adjRange.adjMin + adjWidth * percent);
-                        result.string = result.value.toFixed(0);
-                        result.active = true;
-                    }
-                }
+                const adjWidth = adjRange.adjMax - adjRange.adjMin;
+                const chWidth = adjRange.adjRange1.end - adjRange.adjRange1.start;
+                const chMargin = Math.floor(chWidth / adjWidth / 2);
+                const chStart = adjRange.adjRange1.start - chMargin;
+                const chEnd = adjRange.adjRange1.end + chMargin;
+                const percent = (adjRange.adjChannelPos - chStart) / chWidth;
+                result.value = Math.floor(adjRange.adjMin + adjWidth * percent).clamp(adjRange.adjMin, adjRange.adjMax);
+                result.string = result.value.toFixed(0);
+                result.active = true;
             }
         }
         else if (adjRange.adjType == 2) {
@@ -183,7 +179,7 @@ TABS.adjustments.initialize = function (callback) {
         if (adjRange.adjFunction >= self.FUNCTIONS.length)
             adjRange.adjFunction = 0;
 
-        const adjConfig = self.FUNCTIONS[adjRange.adjFunction];
+        var adjConfig = self.FUNCTIONS[adjRange.adjFunction];
 
         if (adjRange.adjFunction > 0) {
             if (adjRange.adjStep > 0)
@@ -385,8 +381,8 @@ TABS.adjustments.initialize = function (callback) {
         });
 
         function valChange() {
-            const min = parseInt(funcMinInput.val()).clamp(self.AUX_MIN, self.AUX_MAX);
-            const max = parseInt(funcMaxInput.val()).clamp(min, self.AUX_MAX);
+            const min = parseInt(funcMinInput.val()).clamp(adjConfig.min, adjConfig.max);
+            const max = parseInt(funcMaxInput.val()).clamp(min, adjConfig.max);
             funcMinInput.val(min);
             funcMaxInput.val(max);
             valSlider.val([min,max]);
@@ -405,6 +401,7 @@ TABS.adjustments.initialize = function (callback) {
         adjFuncList.on('change', function () {
             const index = adjFuncList.val();
             const func = self.FUNCTIONS[index];
+            adjConfig = self.FUNCTIONS[func.id];
             adjRange.dirty = true;
             adjRange.adjFunction = func.id;
             valSliderConfig.range.min = func.min;
@@ -412,6 +409,8 @@ TABS.adjustments.initialize = function (callback) {
             valSlider.noUiSlider(valSliderConfig, true);
             valPipsConfig.values = func.pips;
             valPips.noUiSlider_pips(valPipsConfig, true);
+            funcMinInput.trigger('change');
+            funcMaxInput.trigger('change');
         });
 
         enaChannelList.on('change', function () {
