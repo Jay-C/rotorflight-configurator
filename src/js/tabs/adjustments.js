@@ -421,7 +421,7 @@ TABS.adjustments.initialize = function (callback) {
 
         decSlider.find('.noUi-handle-lower').on('dblclick', function () {
             if (adjRange.adjType == 1) {
-                const pos = xround(adjRange.adjChannelPos + 4, 5);
+                const pos = xround(adjRange.adjChannelPos, 5);
                 decMinInput.val(pos).trigger('change');
             }
             else if (adjRange.adjType == 2) {
@@ -434,7 +434,7 @@ TABS.adjustments.initialize = function (callback) {
 
         decSlider.find('.noUi-handle-upper').on('dblclick', function () {
             if (adjRange.adjType == 1) {
-                const pos = xround(adjRange.adjChannelPos, 5);
+                const pos = xround(adjRange.adjChannelPos + 4, 5);
                 decMaxInput.val(pos).trigger('change');
             }
             else if (adjRange.adjType == 2) {
