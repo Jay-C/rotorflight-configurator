@@ -132,32 +132,37 @@ TABS.adjustments.initialize = function (callback) {
         return step * Math.floor(value / step);
     }
 
-    function isRange(value, range) {
+    function isWithin(value, range) {
         return value >= range.start && value <= range.end;
     }
 
-    function calcValue(adjRange, adjConfig) {
+    function calcAdjValue(adjRange, adjConfig) {
         const result = { active: false, value: 0, string: '-' };
         if (adjRange.adjType == 1) {
-            if (adjRange.enaChannel == self.ALWAYS_ON_CH || isRange(adjRange.enaChannelPos, adjRange.enaRange)) {
+            if (adjRange.enaChannel == self.ALWAYS_ON_CH || isWithin(adjRange.enaChannelPos, adjRange.enaRange)) {
                 const adjWidth = adjRange.adjMax - adjRange.adjMin;
                 const chWidth = adjRange.adjRange1.end - adjRange.adjRange1.start;
-                const chMargin = Math.floor(chWidth / adjWidth / 2);
-                const chStart = adjRange.adjRange1.start - chMargin;
-                const chEnd = adjRange.adjRange1.end + chMargin;
-                const percent = (adjRange.adjChannelPos - chStart) / chWidth;
-                result.value = Math.floor(adjRange.adjMin + adjWidth * percent).clamp(adjRange.adjMin, adjRange.adjMax);
+                if (adjWidth > 0 && chWidth > 0) {
+                    const chMargin = Math.floor(chWidth / adjWidth / 2);
+                    const chStart = adjRange.adjRange1.start - chMargin;
+                    const chEnd = adjRange.adjRange1.end + chMargin;
+                    const percent = (adjRange.adjChannelPos - chStart) / chWidth;
+                    result.value = Math.floor(adjRange.adjMin + adjWidth * percent).clamp(adjRange.adjMin, adjRange.adjMax);
+                }
+                else {
+                    result.value = adjRange.adjMin;
+                }
                 result.string = result.value.toFixed(0);
                 result.active = true;
             }
         }
         else if (adjRange.adjType == 2) {
-            if (isRange(adjRange.enaChannelPos, adjRange.enaRange)) {
-                if (isRange(adjRange.adjChannelPos, adjRange.adjRange1)) {
+            if (isWithin(adjRange.enaChannelPos, adjRange.enaRange)) {
+                if (isWithin(adjRange.adjChannelPos, adjRange.adjRange1)) {
                     result.string = '-' + adjRange.adjStep.toFixed(0);
                     result.active = true;
                 }
-                else if (isRange(adjRange.adjChannelPos, adjRange.adjRange2)) {
+                else if (isWithin(adjRange.adjChannelPos, adjRange.adjRange2)) {
                     result.string = '+' + adjRange.adjStep.toFixed(0);
                     result.active = true;
                 }
@@ -195,7 +200,7 @@ TABS.adjustments.initialize = function (callback) {
             'max': self.AUX_MAX,
         };
 
-        const channelPips = [ 900, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2100 ];
+        const channelPips = [ 900, 1000, 1250, 1500, 1750, 2000, 2100 ];
 
         const enaSlider = adjBody.find('.ena-slider');
         const incSlider = adjBody.find('.inc-slider');
@@ -407,10 +412,11 @@ TABS.adjustments.initialize = function (callback) {
             valSliderConfig.range.min = func.min;
             valSliderConfig.range.max = func.max;
             valSlider.noUiSlider(valSliderConfig, true);
+            valSlider.prepend('<div class="marker valMarker"></div>'); // Bug in noUiSlider
             valPipsConfig.values = func.pips;
             valPips.noUiSlider_pips(valPipsConfig, true);
-            funcMinInput.trigger('change');
-            funcMaxInput.trigger('change');
+            funcMinInput.val(func.min).trigger('change');
+            funcMaxInput.val(func.max).trigger('change');
         });
 
         enaChannelList.on('change', function () {
@@ -507,6 +513,10 @@ TABS.adjustments.initialize = function (callback) {
                 funcStepInput.val(1).trigger('change');
             }
 
+            if (adjRange.enaChannel == self.ALWAYS_ON_CH) {
+                adjBody.find('.ena-channel-value').text('-');
+            }
+
             adjBody.find('.input-element').prop('disabled', adjRange.adjType == 0);
             adjBody.find('.enaChannelRanges input').prop('disabled', adjRange.adjType == 0 || adjRange.enaChannel == self.ALWAYS_ON_CH);
 
@@ -539,7 +549,7 @@ TABS.adjustments.initialize = function (callback) {
                     adjBody.find('.adj-channel-value').text(adjChannelPos + 'µs');
                     adjRange.adjChannelPos = adjChannelPos;
                 }
-                const result = calcValue(adjRange, adjConfig);
+                const result = calcAdjValue(adjRange, adjConfig);
                 adjBody.find('.function-value').text(result.string);
                 if (result.active) {
                     const valPercentage = (result.value - adjConfig.min) / (adjConfig.max - adjConfig.min) * 100;
