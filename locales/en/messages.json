@@ -1773,6 +1773,9 @@
     "auxiliaryAddLink": {
         "message": "Add Link"
     },
+    "auxiliaryAlwaysChannelSelect": {
+        "message": "ALWAYS"
+    },
     "auxiliaryAutoChannelSelect": {
         "message": "AUTO"
     },

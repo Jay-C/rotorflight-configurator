@@ -853,7 +853,6 @@ MspHelper.prototype.process_data = function(dataHandler) {
                         adjMin: data.read16(),
                         adjMax: data.read16(),
                         adjStep: data.readU8(),
-                        dirty: false,
                     };
                     FC.ADJUSTMENT_RANGES.push(adjustmentRange);
                 }

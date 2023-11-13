@@ -3,6 +3,11 @@
 TABS.adjustments = {
     isDirty: false,
 
+    AUX_MIN: 875,
+    AUX_MAX: 2125,
+
+    ALWAYS_ON_CH: 255,
+
     PRIMARY_CHANNEL_COUNT: 5,
 
     FUNCTIONS: [
@@ -126,11 +131,23 @@ TABS.adjustments.initialize = function (callback) {
         const adjBody = $('#tab-adjustments-templates .adjustmentBody').clone();
         const adjRange = FC.ADJUSTMENT_RANGES[adjustmentIndex];
 
+        adjRange.dirty = false;
+
+        var adjType = 0;
+        if (adjRange.adjFunction > 0) {
+            if (adjRange.adjStep > 0)
+                adjType = 2;
+            else
+                adjType = 1;
+        }
+
+        adjBody.attr('data', adjRange);
+
         adjBody.find('.adjTypeOptionInput').attr('name', `adjTypeOptionInput${adjustmentIndex}`);
 
         const channelRange = {
-            'min': [  875 ],
-            'max': [ 2125 ]
+            'min': [ self.AUX_MIN ],
+            'max': [ self.AUX_MAX ]
         };
 
         const channelPips = [ 900, 1000, 1200, 1400, 1500, 1600, 1800, 2000, 2100 ];
@@ -316,59 +333,77 @@ TABS.adjustments.initialize = function (callback) {
             adjRange.adjFunction = funcSelect.val();
         });
 
-        var adjType = 0;
-        if (adjRange.adjFunction > 0) {
-            if (adjRange.adjStep > 0)
-                adjType = 2;
-            else
-                adjType = 1;
-        }
+        enaChannelList.on('change', function () {
+            const channel = enaChannelList.val();
+            adjRange.dirty = true;
+            adjRange.enaChannel = channel;
+        });
+
+        adjChannelList.on('change', function () {
+            const channel = adjChannelList.val();
+            adjRange.dirty = true;
+            adjRange.adjChannel = channel;
+        });
 
         const adjTypeElems = adjBody.find('.adjTypeOptionInput');
 
         adjTypeElems.filter(`[value="${adjType}"]`).prop('checked', true);
 
         function updateVisibility(event) {
-            adjType = adjTypeElems.filter(':checked').val();
+            const adjType = adjTypeElems.filter(':checked').val();
 
             if (adjType == 0) {
                 adjBody.find('.adj-slider').attr("disabled", "disabled");
-                adjBody.find('.marker').hide();
-                funcSelect.val(0).trigger('change');
+                if (adjRange.function > 0) {
+                    funcSelect.val(0).trigger('change');
+                }
             } else {
                 adjBody.find('.adj-slider').removeAttr("disabled");
-                adjBody.find('.marker').show();
             }
 
-            if (event !== undefined) {
-                if (adjType == 1 && adjRange.adjStep != 0) {
-                    funcStepInput.val(0).trigger('change');
-                }
-                else if (adjType == 2 && adjRange.adjStep == 0) {
-                    funcStepInput.val(1).trigger('change');
-                }
+            if (adjType == 0 || adjRange.enaChannel == self.ALWAYS_ON_CH)
+                adjBody.find('.ena-slider').attr("disabled", "disabled");
+            else
+                adjBody.find('.ena-slider').removeAttr("disabled");
+
+            if (adjType == 1 && adjRange.adjStep != 0) {
+                funcStepInput.val(0).trigger('change');
+            }
+            else if (adjType == 2 && adjRange.adjStep == 0) {
+                funcStepInput.val(1).trigger('change');
             }
 
             adjBody.find('.input-element').prop('disabled', adjType == 0);
+            adjBody.find('.enaChannelRanges input').prop('disabled', adjType == 0 || adjRange.enaChannel == self.ALWAYS_ON_CH);
 
             adjBody.find('.mapped-only').toggle(adjType == 1);
             adjBody.find('.stepped-only').toggle(adjType == 2);
+
+            adjBody.find('.enaMarker').toggle(adjType > 0 && adjRange.enaChannel != self.ALWAYS_ON_CH);
+            adjBody.find('.adjMarker').toggle(adjType > 0);
+            adjBody.find('.valMarker').toggle(adjType == 1);
         }
+
         adjTypeElems.on('change', updateVisibility);
+        enaChannelList.on('change', updateVisibility);
 
         updateVisibility();
 
         return adjBody;
     }
 
-    function dataToForm() {
+    function initAdjustments() {
         const selectFunction = $('#tab-adjustments-templates .adjustmentBody select.function');
         self.FUNCTIONS.forEach(function(value, key) {
             selectFunction.append(new Option(i18n.getMessage('adjustmentsFunction' + value), key));
         });
 
+        const enaChannel = $('#tab-adjustments-templates .adjustmentBody select.enaChannel');
+        const alwaysOption = new Option(i18n.getMessage('auxiliaryAlwaysChannelSelect'), self.ALWAYS_ON_CH);
+        enaChannel.append(alwaysOption);
+
         const channelList = $('#tab-adjustments-templates .adjustmentBody select.channel');
-        let autoOption = new Option(i18n.getMessage('auxiliaryAutoChannelSelect'), -1);
+        const autoOption = new Option(i18n.getMessage('auxiliaryAutoChannelSelect'), -1);
         channelList.append(autoOption);
 
         const auxChannelCount = FC.RC.active_channels - self.PRIMARY_CHANNEL_COUNT;
@@ -383,64 +418,70 @@ TABS.adjustments.initialize = function (callback) {
         }
     }
 
+    function update_markers() {
+        $('.tab-adjustments .adjustment').each( function () {
+            const enaChannelInput = $(this).find('.enaChannel').val();
+            if (enaChannelInput >= 0 && enaChannelInput < self.ALWAYS_ON_CH) {
+                const enaChannelIndex = enaChannelInput + self.PRIMARY_CHANNEL_COUNT;
+                const enaChannelPos = FC.RC.channels[enaChannelIndex ].clamp(self.AUX_MIN, self.AUX_MAX);
+                const enaPercentage = (enaChannelPos - self.AUX_MIN) / (self.AUX_MAX-self.AUX_MIN) * 100;
+                $(this).find('.enaMarker').css('left', enaPercentage + '%');
+                $(this).find('.ena-channel-value').val(enaChannelPos);
+            }
+
+            const adjChannelInput = $(this).find('.adjChannel').val();
+            if (adjChannelInput >= 0) {
+                const adjChannelIndex = adjChannelInput + self.PRIMARY_CHANNEL_COUNT;
+                const adjChannelPos = FC.RC.channels[adjChannelIndex].clamp(self.AUX_MIN, self.AUX_MAX);
+                const adjPercentage = (adjChannelPos - self.AUX_MIN) / (self.AUX_MAX-self.AUX_MIN) * 100;
+                $(this).find('.adjMarker').css('left', adjPercentage + '%');
+                $(this).find('.adj-channel-value').val(adjChannelPos);
+            }
+        });
+    }
+
+    function auto_select_channel() {
+        const auto_option = $('.tab-adjustments select.channel option[value="-1"]:selected');
+        if (auto_option.length > 0) {
+            const RCchannels = FC.RC.channels.slice(self.PRIMARY_CHANNEL_COUNT, FC.RC.active_channels);
+            if (self.RCchannels) {
+                let channel = undefined;
+                let chDelta = 100;
+                for (let index = 0; index < RCchannels.length; index++) {
+                    let delta = Math.abs(RCchannels[index] - self.RCchannels[index]);
+                    if (delta > chDelta) {
+                        channel = index;
+                        chDelta = delta;
+                    }
+                }
+                if (channel !== undefined) {
+                    auto_option.parent().val(channel).trigger('change');
+                    self.RCchannels = null;
+                }
+            } else {
+                self.RCchannels = RCchannels;
+            }
+        } else {
+            self.RCchannels = null;
+        }
+    }
+
     function process_html() {
 
         // translate to user-selected language
         i18n.localizePage();
 
-        // UI Hooks
-        dataToForm();
+        // Create UI
+        initAdjustments();
 
         // Hide the buttons toolbar
         $('.tab-adjustments').addClass('toolbar_hidden');
 
         self.isDirty = false;
 
-        function update_markers() {
-            $('.tab-adjustments .adjustment').each( function () {
-                const enaChannelIndex = $(this).find('.enaChannel').val() + self.PRIMARY_CHANNEL_COUNT;
-                const enaChannelPos = FC.RC.channels[enaChannelIndex].clamp(900, 2100);
-                const enaPercentage = (enaChannelPos - 900) / (2100-900) * 100;
-                $(this).find('.enaMarker').css('left', enaPercentage + '%');
-
-                const adjChannelIndex = $(this).find('.adjChannel').val() + self.PRIMARY_CHANNEL_COUNT;
-                const adjChannelPos = FC.RC.channels[adjChannelIndex].clamp(900, 2100);
-                const adjPercentage = (adjChannelPos - 900) / (2100-900) * 100;
-                $(this).find('.adjMarker').css('left', adjPercentage + '%');
-            });
-        }
-
-        function auto_select_channel() {
-
-            const auto_option = $('.tab-adjustments select.channel option[value="-1"]:selected');
-
-            if (auto_option.length > 0) {
-                const RCchannels = FC.RC.channels.slice(self.PRIMARY_CHANNEL_COUNT, FC.RC.active_channels);
-                if (self.RCchannels) {
-                    let channel = -1;
-                    let chDelta = 100;
-                    for (let index = 0; index < RCchannels.length; index++) {
-                        let delta = Math.abs(RCchannels[index] - self.RCchannels[index]);
-                        if (delta > chDelta) {
-                            channel = index;
-                            chDelta = delta;
-                        }
-                    }
-                    if (channel != -1) {
-                        auto_option.parent().val(channel);
-                        self.RCchannels = null;
-                    }
-                } else {
-                    self.RCchannels = RCchannels;
-                }
-            } else {
-                self.RCchannels = null;
-            }
-        }
-
         function update_ui() {
-            auto_select_channel();
             update_markers();
+            auto_select_channel();
         }
 
         self.save = function (callback) {
@@ -463,19 +504,9 @@ TABS.adjustments.initialize = function (callback) {
             setDirty();
         });
 
-        if (false) {
-
-        // enable data pulling
         GUI.interval_add('rc_pull', function () {
             MSP.send_message(MSPCodes.MSP_RC, false, false, update_ui);
         }, 250, true);
-
-        // status data pulled via separate timer with static speed
-        GUI.interval_add('status_pull', function () {
-            MSP.send_message(MSPCodes.MSP_STATUS);
-        }, 500, true);
-
-        }
 
         GUI.content_ready(callback);
     }
