@@ -128,35 +128,45 @@ TABS.adjustments.initialize = function (callback) {
         }
     }
 
+    function xround(value, step) {
+        return step * Math.floor(value / step);
+    }
+
+    function isRange(value, range) {
+        return value >= range.start && value <= range.end;
+    }
+
     function calcValue(adjRange, adjConfig) {
         const result = { active: false, value: 0, string: '-' };
-
         if (adjRange.adjType == 1) {
-            if (adjRange.enaChannel == self.ALWAYS_ON_CH || (
-                adjRange.enaChannelPos >= adjRange.enaRange.start &&
-                adjRange.enaChannelPos <= adjRange.enaRange.end)) {
-                    if (adjRange.adjChannelPos >= adjRange.adjRange1.start &&
-                        adjRange.adjChannelPos <= adjRange.adjRange1.end) {
-                            const adjWidth = adjRange.adjMax - adjRange.adjMin;
-                            const chWidth = adjRange.adjRange1.end - adjRange.adjRange1.start;
-                            const chMargin = Math.floor(chWidth / adjWidth / 2);
-                            const chStart = adjRange.adjRange1.start - chMargin;
-                            const chEnd = adjRange.adjRange1.end + chMargin;
-                            if (adjRange.adjChannelPos > chStart && adjRange.adjChannelPos < chEnd) {
-                                const percent = (adjRange.adjChannelPos - chStart) / chWidth;
-                                result.value = Math.floor(adjRange.adjMin + adjWidth * percent);
-                                result.string = result.value.toFixed(0);
-                                result.active = true;
-                            }
+            if (adjRange.enaChannel == self.ALWAYS_ON_CH || isRange(adjRange.enaChannelPos, adjRange.enaRange)) {
+                if (isRange(adjRange.adjChannelPos,adjRange.adjRange1)) {
+                    const adjWidth = adjRange.adjMax - adjRange.adjMin;
+                    const chWidth = adjRange.adjRange1.end - adjRange.adjRange1.start;
+                    const chMargin = Math.floor(chWidth / adjWidth / 2);
+                    const chStart = adjRange.adjRange1.start - chMargin;
+                    const chEnd = adjRange.adjRange1.end + chMargin;
+                    if (adjRange.adjChannelPos > chStart && adjRange.adjChannelPos < chEnd) {
+                        const percent = (adjRange.adjChannelPos - chStart) / chWidth;
+                        result.value = Math.floor(adjRange.adjMin + adjWidth * percent);
+                        result.string = result.value.toFixed(0);
+                        result.active = true;
                     }
-
+                }
             }
         }
         else if (adjRange.adjType == 2) {
-
-
+            if (isRange(adjRange.enaChannelPos, adjRange.enaRange)) {
+                if (isRange(adjRange.adjChannelPos, adjRange.adjRange1)) {
+                    result.string = '-' + adjRange.adjStep.toFixed(0);
+                    result.active = true;
+                }
+                else if (isRange(adjRange.adjChannelPos, adjRange.adjRange2)) {
+                    result.string = '+' + adjRange.adjStep.toFixed(0);
+                    result.active = true;
+                }
+            }
         }
-
         return result;
     }
 
@@ -165,7 +175,10 @@ TABS.adjustments.initialize = function (callback) {
         const adjBody = $('#tab-adjustments-templates .adjustmentBody').clone();
 
         adjRange.dirty = false;
+
         adjRange.adjType = 0;
+        adjRange.enaChannelPos = 0;
+        adjRange.adjChannelPos = 0;
 
         if (adjRange.adjFunction >= self.FUNCTIONS.length)
             adjRange.adjFunction = 0;
@@ -240,7 +253,6 @@ TABS.adjustments.initialize = function (callback) {
         const valSliderConfig = {
             start: [ adjRange.adjMin, adjRange.adjMax ],
             behaviour: 'snap-drag',
-            //margin: 1,
             step: 1,
             connect: true,
             range: {
@@ -396,6 +408,59 @@ TABS.adjustments.initialize = function (callback) {
             const channel = parseInt(adjChannelList.val());
             adjRange.dirty = true;
             adjRange.adjChannel = channel;
+        });
+
+        function enaSliderAuto() {
+            const min = xround(adjRange.enaChannelPos - 25, 5);
+            const max = xround(adjRange.enaChannelPos + 25, 5);
+            enaMinInput.val(min);
+            enaMaxInput.val(max).trigger('change');
+        }
+        enaSlider.find('.noUi-handle-lower').on('dblclick', enaSliderAuto);
+        enaSlider.find('.noUi-handle-upper').on('dblclick', enaSliderAuto);
+
+        decSlider.find('.noUi-handle-lower').on('dblclick', function () {
+            if (adjRange.adjType == 1) {
+                const pos = xround(adjRange.adjChannelPos + 4, 5);
+                decMinInput.val(pos).trigger('change');
+            }
+            else if (adjRange.adjType == 2) {
+                const min = xround(adjRange.adjChannelPos - 10, 5);
+                const max = xround(adjRange.adjChannelPos + 10, 5);
+                decMinInput.val(min);
+                decMaxInput.val(max).trigger('change');
+            }
+        });
+
+        decSlider.find('.noUi-handle-upper').on('dblclick', function () {
+            if (adjRange.adjType == 1) {
+                const pos = xround(adjRange.adjChannelPos, 5);
+                decMaxInput.val(pos).trigger('change');
+            }
+            else if (adjRange.adjType == 2) {
+                const min = xround(adjRange.adjChannelPos - 10, 5);
+                const max = xround(adjRange.adjChannelPos + 10, 5);
+                decMinInput.val(min);
+                decMaxInput.val(max).trigger('change');
+            }
+        });
+
+        incSlider.find('.noUi-handle-lower').on('dblclick', function () {
+            if (adjRange.adjType == 2) {
+                const min = xround(adjRange.adjChannelPos - 10, 5);
+                const max = xround(adjRange.adjChannelPos + 10, 5);
+                incMinInput.val(min);
+                incMaxInput.val(max).trigger('change');
+            }
+        });
+
+        incSlider.find('.noUi-handle-upper').on('dblclick', function () {
+            if (adjRange.adjType == 2) {
+                const min = xround(adjRange.adjChannelPos - 10, 5);
+                const max = xround(adjRange.adjChannelPos + 10, 5);
+                incMinInput.val(min);
+                incMaxInput.val(max).trigger('change');
+            }
         });
 
         const adjTypeElems = adjBody.find('.adjTypeOptionInput');
