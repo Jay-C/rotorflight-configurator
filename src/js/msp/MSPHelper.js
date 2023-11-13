@@ -835,6 +835,7 @@ MspHelper.prototype.process_data = function(dataHandler) {
 
                 for (let i = 0; i < adjustmentRangeCount; i++) {
                     const adjustmentRange = {
+                        adjIndex: i,
                         adjFunction: data.readU8(),
                         enaChannel: data.readU8(),
                         enaRange: {

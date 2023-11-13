@@ -128,10 +128,41 @@ TABS.adjustments.initialize = function (callback) {
         }
     }
 
-    function newAdjustment(index) {
+    function calcValue(adjRange, adjConfig) {
+        const result = { active: false, value: 0, string: '-' };
+
+        if (adjRange.adjType == 1) {
+            if (adjRange.enaChannel == self.ALWAYS_ON_CH || (
+                adjRange.enaChannelPos >= adjRange.enaRange.start &&
+                adjRange.enaChannelPos <= adjRange.enaRange.end)) {
+                    if (adjRange.adjChannelPos >= adjRange.adjRange1.start &&
+                        adjRange.adjChannelPos <= adjRange.adjRange1.end) {
+                            const adjWidth = adjRange.adjMax - adjRange.adjMin;
+                            const chWidth = adjRange.adjRange1.end - adjRange.adjRange1.start;
+                            const chMargin = Math.floor(chWidth / adjWidth / 2);
+                            const chStart = adjRange.adjRange1.start - chMargin;
+                            const chEnd = adjRange.adjRange1.end + chMargin;
+                            if (adjRange.adjChannelPos > chStart && adjRange.adjChannelPos < chEnd) {
+                                const percent = (adjRange.adjChannelPos - chStart) / chWidth;
+                                result.value = Math.floor(adjRange.adjMin + adjWidth * percent);
+                                result.string = result.value.toFixed(0);
+                                result.active = true;
+                            }
+                    }
+
+            }
+        }
+        else if (adjRange.adjType == 2) {
+
+
+        }
+
+        return result;
+    }
+
+    function newAdjustment(adjRange) {
 
         const adjBody = $('#tab-adjustments-templates .adjustmentBody').clone();
-        const adjRange = FC.ADJUSTMENT_RANGES[index];
 
         adjRange.dirty = false;
         adjRange.adjType = 0;
@@ -148,7 +179,7 @@ TABS.adjustments.initialize = function (callback) {
                 adjRange.adjType = 1;
         }
 
-        adjBody.find('.adjTypeOptionInput').attr('name', `adjTypeOptionInput${index}`);
+        adjBody.find('.adjTypeOptionInput').attr('name', `adjTypeOptionInput${adjRange.adjIndex}`);
 
         const channelRange = {
             'min': self.AUX_MIN,
@@ -161,6 +192,7 @@ TABS.adjustments.initialize = function (callback) {
         const incSlider = adjBody.find('.inc-slider');
         const decSlider = adjBody.find('.dec-slider');
         const valSlider = adjBody.find('.val-slider');
+        const valPips = adjBody.find('.pips-value-range');
 
         enaSlider.noUiSlider({
             start: [ adjRange.enaRange.start, adjRange.enaRange.end ],
@@ -208,7 +240,7 @@ TABS.adjustments.initialize = function (callback) {
         const valSliderConfig = {
             start: [ adjRange.adjMin, adjRange.adjMax ],
             behaviour: 'snap-drag',
-            margin: 0,
+            //margin: 1,
             step: 1,
             connect: true,
             range: {
@@ -221,14 +253,13 @@ TABS.adjustments.initialize = function (callback) {
         };
         valSlider.noUiSlider(valSliderConfig);
 
-        const valSliderPips = adjBody.find('.pips-value-range');
         const valPipsConfig = {
             mode: 'values',
             values: adjConfig.pips,
             density: 4,
             stepped: true
         };
-        valSliderPips.noUiSlider_pips(valPipsConfig);
+        valPips.noUiSlider_pips(valPipsConfig);
 
         const enaChannelList = adjBody.find('select.enaChannel');
         enaChannelList.val(adjRange.enaChannel);
@@ -269,10 +300,10 @@ TABS.adjustments.initialize = function (callback) {
         enaSlider.on('slide', function() {
             const range = enaSlider.val();
             adjRange.dirty = true;
-            adjRange.enaRange.start = range[0];
-            adjRange.enaRange.end = range[1];
-            enaMinInput.val(range[0]);
-            enaMaxInput.val(range[1]);
+            adjRange.enaRange.start = parseInt(range[0]);
+            adjRange.enaRange.end = parseInt(range[1]);
+            enaMinInput.val(adjRange.enaRange.start);
+            enaMaxInput.val(adjRange.enaRange.end);
         });
 
         function enaChange() {
@@ -287,10 +318,10 @@ TABS.adjustments.initialize = function (callback) {
         decSlider.on('slide', function() {
             const range = decSlider.val();
             adjRange.dirty = true;
-            adjRange.adjRange1.start = range[0];
-            adjRange.adjRange1.end = range[1];
-            decMinInput.val(range[0]);
-            decMaxInput.val(range[1]);
+            adjRange.adjRange1.start = parseInt(range[0]);
+            adjRange.adjRange1.end = parseInt(range[1]);
+            decMinInput.val(adjRange.adjRange1.start);
+            decMaxInput.val(adjRange.adjRange1.end);
         });
 
         function decChange() {
@@ -305,10 +336,10 @@ TABS.adjustments.initialize = function (callback) {
         incSlider.on('slide', function() {
             const range = incSlider.val();
             adjRange.dirty = true;
-            adjRange.adjRange2.start = range[0];
-            adjRange.adjRange2.end = range[1];
-            incMinInput.val(range[0]);
-            incMaxInput.val(range[1]);
+            adjRange.adjRange2.start = parseInt(range[0]);
+            adjRange.adjRange2.end = parseInt(range[1]);
+            incMinInput.val(adjRange.adjRange2.start);
+            incMaxInput.val(adjRange.adjRange2.end);
         });
 
         function incChange() {
@@ -323,10 +354,10 @@ TABS.adjustments.initialize = function (callback) {
         valSlider.on('slide', function() {
             const range = valSlider.val();
             adjRange.dirty = true;
-            adjRange.adjMin = range[0];
-            adjRange.adjMax = range[1];
-            funcMinInput.val(range[0]);
-            funcMaxInput.val(range[1]);
+            adjRange.adjMin = parseInt(range[0]);
+            adjRange.adjMax = parseInt(range[1]);
+            funcMinInput.val(adjRange.adjMin);
+            funcMaxInput.val(adjRange.adjMax);
         });
 
         function valChange() {
@@ -352,7 +383,7 @@ TABS.adjustments.initialize = function (callback) {
             valSliderConfig.range.max = func.max;
             valSlider.noUiSlider(valSliderConfig, true);
             valPipsConfig.values = func.pips;
-            valSliderPips.noUiSlider_pips(valPipsConfig, true);
+            valPips.noUiSlider_pips(valPipsConfig, true);
         });
 
         enaChannelList.on('change', function () {
@@ -416,7 +447,7 @@ TABS.adjustments.initialize = function (callback) {
                     const enaChannelIndex = adjRange.enaChannel + self.PRIMARY_CHANNEL_COUNT;
                     const enaChannelPos = FC.RC.channels[enaChannelIndex];
                     const enaPercentage = (enaChannelPos - self.AUX_MIN) / (self.AUX_MAX-self.AUX_MIN) * 100;
-                    adjBody.find('.enaMarker').css('left', enaPercentage.clamp(0,100) + '%');
+                    adjBody.find('.enaMarker').css('left', enaPercentage.clamp(0,100).toFixed(2) + '%');
                     adjBody.find('.ena-channel-value').text(enaChannelPos + 'µs');
                     adjRange.enaChannelPos = enaChannelPos;
                 }
@@ -424,17 +455,23 @@ TABS.adjustments.initialize = function (callback) {
                     const adjChannelIndex = adjRange.adjChannel + self.PRIMARY_CHANNEL_COUNT;
                     const adjChannelPos = FC.RC.channels[adjChannelIndex];
                     const adjPercentage = (adjChannelPos - self.AUX_MIN) / (self.AUX_MAX-self.AUX_MIN) * 100;
-                    adjBody.find('.adjMarker').css('left', adjPercentage.clamp(0,100) + '%');
+                    adjBody.find('.adjMarker').css('left', adjPercentage.clamp(0,100).toFixed(2) + '%');
                     adjBody.find('.adj-channel-value').text(adjChannelPos + 'µs');
                     adjRange.adjChannelPos = adjChannelPos;
+                }
+                const result = calcValue(adjRange, adjConfig);
+                adjBody.find('.function-value').text(result.string);
+                if (result.active) {
+                    const valPercentage = (result.value - adjConfig.min) / (adjConfig.max - adjConfig.min) * 100;
+                    adjBody.find('.valMarker').css('left', valPercentage.clamp(0,100).toFixed(2) + '%');
                 }
             }
         }
 
+        self.callback_stack.push(updateMarkers);
+
         updateVisibility();
         updateMarkers();
-
-        self.callback_stack.push(updateMarkers);
 
         return adjBody;
     }
@@ -461,8 +498,8 @@ TABS.adjustments.initialize = function (callback) {
         }
 
         const adjTable = $('.tab-adjustments table.adjustments');
-        for (let index = 0; index < FC.ADJUSTMENT_RANGES.length; index++) {
-            adjTable.append(newAdjustment(index));
+        for (const adjRange of FC.ADJUSTMENT_RANGES) {
+            adjTable.append(newAdjustment(adjRange));
         }
     }
 
@@ -506,9 +543,9 @@ TABS.adjustments.initialize = function (callback) {
         self.isDirty = false;
 
         function update_ui() {
-            self.callback_stack.forEach(function (callback) {
+            for (const callback of self.callback_stack) {
                 callback();
-            });
+            }
             autoSelectChannel();
         }
 
@@ -517,7 +554,7 @@ TABS.adjustments.initialize = function (callback) {
         };
 
         self.revert = function (callback) {
-            callback();
+            callback?.();
         };
 
         $('a.save').click(function () {
@@ -534,7 +571,7 @@ TABS.adjustments.initialize = function (callback) {
 
         GUI.interval_add('rc_pull', function () {
             MSP.send_message(MSPCodes.MSP_RC, false, false, update_ui);
-        }, 250, true);
+        }, 200, true);
 
         GUI.content_ready(callback);
     }
@@ -543,5 +580,5 @@ TABS.adjustments.initialize = function (callback) {
 TABS.adjustments.cleanup = function (callback) {
     this.isDirty = false;
 
-    if (callback) callback();
+    callback?.();
 };
