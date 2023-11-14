@@ -204,19 +204,18 @@
     z-index: 1000;
 }
 
-.tab-adjustments .adjSliders .noUi-connect {
-    background: var(--accent);
-}
-
-.tab-adjustments .adjSliders .noUi-horizontal .noUi-handle {
-    background: var(--sideBackground);
-    border-color: var(--subtleAccent);
+.tab-adjustments .adjSliders .noUi-handle {
     border-radius: 15px;
     box-shadow: none;
     width: 28px;
     height: 28px;
     left: -14px;
     top: -7px;
+    vertical-align: middle;
+    font-family: monospace;
+    font-size: 18px;
+    text-align: center;
+    color: #999;
 }
 
 .tab-adjustments .adjSliders .noUi-marker-large {
@@ -229,8 +228,6 @@
 
 .tab-adjustments .adjSliders .noUi-handle:before,
 .tab-adjustments .adjSliders .noUi-handle:after {
-    border-color: var(--subtleAccent);
-    background-color: var(--subtleAccent);
     height: 10px;
     width: 3px;
     top: 17px;
@@ -239,18 +236,9 @@
     border-radius: 2px;
 }
 
-.tab-adjustments .adjSliders .enaMarker {
+.tab-adjustments .adjSliders .marker {
     background: rgba(255, 0, 0, 0.6);
 }
-
-.tab-adjustments .adjSliders .adjMarker {
-    background: rgba(0, 255, 0, 0.6);
-}
-
-.tab-adjustments .adjSliders .valMarker {
-    background: rgba(0, 0, 255, 0.6);
-}
-
 
 @media all and (max-width: 575px) {
     .tab-adjustments .overflow {

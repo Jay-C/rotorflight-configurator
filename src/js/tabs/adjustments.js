@@ -171,7 +171,7 @@ TABS.adjustments.initialize = function (callback) {
         return result;
     }
 
-    function newAdjustment(adjRange) {
+    function newAdjustment(adjIndex, adjRange) {
 
         const adjBody = $('#tab-adjustments-templates .adjustmentBody').clone();
 
@@ -193,7 +193,7 @@ TABS.adjustments.initialize = function (callback) {
                 adjRange.adjType = 1;
         }
 
-        adjBody.find('.adjTypeOptionInput').attr('name', `adjTypeOptionInput${adjRange.adjIndex}`);
+        adjBody.find('.adjTypeOptionInput').attr('name', `adjTypeOptionInput${adjIndex}`);
 
         const channelRange = {
             'min': self.AUX_MIN,
@@ -413,6 +413,7 @@ TABS.adjustments.initialize = function (callback) {
             valSliderConfig.range.max = func.max;
             valSlider.noUiSlider(valSliderConfig, true);
             valSlider.prepend('<div class="marker valMarker"></div>'); // Bug in noUiSlider
+            valSlider.find('.marker').toggle(func.id > 0);
             valPipsConfig.values = func.pips;
             valPips.noUiSlider_pips(valPipsConfig, true);
             funcMinInput.val(func.min).trigger('change');
@@ -423,6 +424,19 @@ TABS.adjustments.initialize = function (callback) {
             const channel = parseInt(enaChannelList.val());
             adjRange.dirty = true;
             adjRange.enaChannel = channel;
+            if (channel == self.ALWAYS_ON_CH) {
+                enaMinInput.val(1500);
+                enaMaxInput.val(1500).trigger('change');
+                adjBody.find('.ena-channel-value').text('-');
+                adjBody.find('.ena-slider').attr("disabled", "disabled");
+                adjBody.find('.enaChannelRanges input').prop('disabled', true);
+                adjBody.find('.enaMarker').hide();
+            }
+            else {
+                adjBody.find('.ena-slider').removeAttr("disabled");
+                adjBody.find('.enaChannelRanges input').prop('disabled', false);
+                adjBody.find('.enaMarker').show();
+            }
         });
 
         adjChannelList.on('change', function () {
@@ -492,44 +506,55 @@ TABS.adjustments.initialize = function (callback) {
             adjRange.adjType = parseInt(adjTypeElems.filter(':checked').val());
 
             if (adjRange.adjType == 0) {
+                adjBody.find('.input-element').prop('disabled', true);
                 adjBody.find('.adj-slider').attr("disabled", "disabled");
                 adjBody.find('.value-box').text('-');
-                if (adjRange.adjFunction > 0) {
+                adjBody.find('.marker').hide();
+                incSlider.find('.noUi-handle').text('');
+                decSlider.find('.noUi-handle').text('');
+                if (adjRange.adjFunction != 0) {
                     adjFuncList.val(0).trigger('change');
                 }
-            } else {
+                if (adjRange.adjMin != 0 || adjRange.adjMax != 100) {
+                    funcMinInput.val(0);
+                    funcMaxInput.val(100).trigger('change');
+                }
+            }
+            else if (adjRange.adjType == 1) {
+                adjBody.find('.input-element').prop('disabled', false);
                 adjBody.find('.adj-slider').removeAttr("disabled");
+                adjBody.find('.enaMarker').toggle(adjRange.enaChannel != self.ALWAYS_ON_CH);
+                adjBody.find('.adjMarker').show();
+                adjBody.find('.valMarker').show();
+                incSlider.find('.noUi-handle').text('');
+                decSlider.find('.noUi-handle').text('');
+                if (adjRange.adjStep > 0) {
+                    funcStepInput.val(0).trigger('change');
+                }
             }
-
-            if (adjRange.adjType == 0 || adjRange.enaChannel == self.ALWAYS_ON_CH)
-                adjBody.find('.ena-slider').attr("disabled", "disabled");
-            else
-                adjBody.find('.ena-slider').removeAttr("disabled");
-
-            if (adjRange.adjType == 1 && adjRange.adjStep != 0) {
-                funcStepInput.val(0).trigger('change');
-            }
-            else if (adjRange.adjType == 2 && adjRange.adjStep == 0) {
-                funcStepInput.val(1).trigger('change');
+            else if (adjRange.adjType == 2) {
+                adjBody.find('.input-element').prop('disabled', false);
+                adjBody.find('.adj-slider').removeAttr("disabled");
+                adjBody.find('.enaMarker').toggle(adjRange.enaChannel != self.ALWAYS_ON_CH);
+                adjBody.find('.adjMarker').show();
+                adjBody.find('.valMarker').hide();
+                incSlider.find('.noUi-handle').text('+');
+                decSlider.find('.noUi-handle').text('-');
+                if (adjRange.adjStep == 0) {
+                    funcStepInput.val(1).trigger('change');
+                }
             }
 
             if (adjRange.enaChannel == self.ALWAYS_ON_CH) {
-                adjBody.find('.ena-channel-value').text('-');
+                adjBody.find('.ena-slider').attr("disabled", "disabled");
+                adjBody.find('.enaChannelRanges input').prop('disabled', true);
             }
-
-            adjBody.find('.input-element').prop('disabled', adjRange.adjType == 0);
-            adjBody.find('.enaChannelRanges input').prop('disabled', adjRange.adjType == 0 || adjRange.enaChannel == self.ALWAYS_ON_CH);
 
             adjBody.find('.mapped-only').toggle(adjRange.adjType == 1);
             adjBody.find('.stepped-only').toggle(adjRange.adjType == 2);
-
-            adjBody.find('.enaMarker').toggle(adjRange.adjType > 0 && adjRange.enaChannel != self.ALWAYS_ON_CH);
-            adjBody.find('.adjMarker').toggle(adjRange.adjType > 0);
-            adjBody.find('.valMarker').toggle(adjRange.adjType == 1);
         }
 
         adjTypeElems.on('change', updateVisibility);
-        enaChannelList.on('change', updateVisibility);
 
         function updateMarkers() {
             if (adjRange.adjType > 0) {
@@ -588,9 +613,9 @@ TABS.adjustments.initialize = function (callback) {
         }
 
         const adjTable = $('.tab-adjustments table.adjustments');
-        for (const adjRange of FC.ADJUSTMENT_RANGES) {
-            adjTable.append(newAdjustment(adjRange));
-        }
+        FC.ADJUSTMENT_RANGES.forEach(function (adjRange, adjIndex) {
+            adjTable.append(newAdjustment(adjIndex, adjRange));
+        });
     }
 
     function autoSelectChannel() {
