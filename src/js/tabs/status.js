@@ -302,6 +302,44 @@ TABS.status.initialize = function (callback) {
         GUI.interval_add('status_data_pull_fast', get_fast_data, 50, true);   // 20 fps
         GUI.interval_add('status_data_pull_slow', get_slow_data, 250, true);  // 4 fps
 
+        const enableArmingTitle = $('.arming');
+        const enableArmingWarning = $('.arm-danger-row');
+        const enableArmingSwitch = $('input[id="statusEnableArming"]');
+        const dialogConfirmArming = $('.dialogConfirmArming')[0];
+
+        function updateArming(active) {
+            enableArmingSwitch.prop('checked', active);
+            enableArmingWarning.toggle(active);
+            if (active)
+                enableArmingTitle.addClass('gui_warning');
+            else
+                enableArmingTitle.removeClass('gui_warning');
+            FC.CONFIG.enableArmingFlag = active;
+            mspHelper.setArmingEnabled(active);
+        }
+
+        enableArmingSwitch.change(function () {
+            if (enableArmingSwitch.prop('checked')) {
+                dialogConfirmArming.showModal();
+            }
+            else {
+                updateArming(false);
+            }
+        });
+
+        $('.dialogConfirmArming-cancelbtn').click(function() {
+            dialogConfirmArming.close();
+            updateArming(false);
+        });
+
+        $('.dialogConfirmArming-confirmbtn').click(function() {
+            dialogConfirmArming.close();
+            updateArming(true);
+        });
+
+        updateArming(FC.CONFIG.enableArmingFlag);
+
+
         GUI.content_ready(callback);
     }
 };
