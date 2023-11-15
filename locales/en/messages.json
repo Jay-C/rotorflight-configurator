@@ -924,6 +924,18 @@
         "message": "One of the others disarm flags is active when arming",
         "description": "Message that pops up to describe the ARM_SWITCH arming disable flag"
     },
+    "statusArmingDanger": {
+        "message": "<strong class=\"message-negative\">WARNING! </strong><strong>ARMING</strong> is now <strong>ENABLED. </strong>In order to prevent injury <strong>REMOVE ALL ROTOR BLADES</strong> before arming the craft. <br><br><strong>NEVER fly your craft with the CONFIGURATOR CONNECTED!</strong>"
+    },
+    "statusArmingTitle": {
+        "message": "Arming"
+    },
+    "statusEnableArming": {
+        "message": "<strong>Enable Arming</strong>"
+    },
+    "statusEnableArmingText": {
+        "message": "Enable arming the craft while the Configurator is connected. Arming enables the motors to start."
+    },
     "statusGPSHead": {
         "message": "GPS"
     },
@@ -6450,7 +6462,7 @@
         "message": "Confirm Arming"
     },
     "dialogConfirmArmingNote": {
-        "message": "WARNING: Are you sure you want to <strong>enable arming</strong> while Configurator is connected?<br /><br /><span class=\"message-negative\">NOTE:</span> While armed, all changes to settings, including saving settings, are ignored!"
+        "message": "WARNING: Are you sure you want to <strong>enable arming</strong> while the Configurator is connected?"
     },
     "dialogConfirmArmingConfirm": {
         "message": "Enable"

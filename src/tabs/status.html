@@ -6,6 +6,14 @@
             <a id="button-documentation" href="" target="_blank"></a>
         </div>
 
+        <div class="grid-row margin-bottom arm-danger-row">
+            <div class="grid-col full-width">
+                <div class="note arm-danger-note">
+                    <p i18n="statusArmingDanger"></p>
+                </div>
+            </div>
+        </div>
+
         <div class="grid-row margin-bottom">
             <div class="grid-col col3">
                 <div class="gui_box grey full_height">
@@ -137,7 +145,44 @@
             </div>
         </div>
 
+        <div class="grid-row">
+            <div class="grid-col full-width">
+                <div class="gui_box arming">
+                    <div class="gui_box_titlebar">
+                        <div class="spacer_box_title" i18n="statusArmingTitle"></div>
+                    </div>
+                    <div class="spacer_box">
+                        <table>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="statusEnableArming" class="toggle" />
+                                </td>
+                                <td>
+                                    <span i18n="statusEnableArming"></span>
+                                </td>
+                                <td>
+                                    <span class="description" i18n="statusEnableArmingText"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <dialog class="dialogConfirmArming">
+        <h3 i18n="dialogConfirmArmingTitle"></h3>
+        <div class="content">
+            <div i18n="dialogConfirmArmingNote" style="margin-top: 10px"></div>
+        </div>
+        <div class="buttons">
+            <a href="#" class="dialogConfirmArming-confirmbtn regular-button" i18n="dialogConfirmArmingConfirm"></a>
+            <a href="#" class="dialogConfirmArming-cancelbtn regular-button" i18n="dialogConfirmArmingClose"></a>
+        </div>
+    </dialog>
+
 </div>
 
 <div id="tab-status-templates">
