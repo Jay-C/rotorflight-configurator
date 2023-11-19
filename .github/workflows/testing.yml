@@ -21,6 +21,11 @@ jobs:
       with:
         node-version: 16.17.0
 
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+
     - name: Set build variables
       run: |
         echo "GIT_VER=${GITHUB_REF##*/}" >> ${GITHUB_ENV}
