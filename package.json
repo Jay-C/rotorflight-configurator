@@ -47,7 +47,7 @@
   "author": "The Rotorflight open source project.",
   "license": "GPL-3.0",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
@@ -128,7 +128,7 @@
     "through2": "^4.0.2",
     "vinyl-source-stream": "^2.0.0",
     "vue-template-compiler": "^2.6.12",
-    "yarn": "^1.22.17"
+    "yarn": "^1.22.21"
   },
   "optionalDependencies": {
     "appdmg": "^0.6.4"
