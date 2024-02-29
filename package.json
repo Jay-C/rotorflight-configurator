@@ -131,5 +131,8 @@
   },
   "optionalDependencies": {
     "appdmg": "^0.6.4"
+  },
+  "resolutions": {
+    "libxmljs2": "0.32.0"
   }
 }
