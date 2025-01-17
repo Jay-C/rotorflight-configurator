@@ -1,4 +1,4 @@
-# 2.1.0-20250115
+# 2.1.0-ANDROID-1
 
 This is an _unofficial snapshot_ of the Rotorflight 2.1.0 Configurator for Android.
 
